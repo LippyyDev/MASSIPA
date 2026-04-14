@@ -100,8 +100,8 @@
                                     <input type="text" name="no_sk" class="form-control" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Upload File SK (PDF, opsional)</label>
-                                    <input type="file" name="file_sk" class="form-control" accept="application/pdf">
+                                    <label class="form-label">Upload File SK <span class="text-muted" style="font-size:0.88em;">(PDF, maks. 1MB, opsional)</span></label>
+                                    <input type="file" name="file_sk" id="file_sk" class="form-control" accept="application/pdf">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label">Tgl Mulai</label>
@@ -194,6 +194,27 @@
         </div>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+        // Validasi frontend: max 1MB untuk file SK (sebelum submit ke server)
+        const MAX_SK_SIZE = 1 * 1024 * 1024; // 1MB
+        function validateFileSKSize(inputEl) {
+            if (inputEl.files.length > 0) {
+                const file = inputEl.files[0];
+                if (file.size > MAX_SK_SIZE) {
+                    Swal.fire({ icon: 'error', title: 'File Terlalu Besar', text: 'Ukuran file SK maksimal 1MB. File Anda: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB', confirmButtonText: 'OK' });
+                    inputEl.value = '';
+                    return false;
+                }
+                if (file.type !== 'application/pdf') {
+                    Swal.fire({ icon: 'error', title: 'Format Salah', text: 'Hanya file PDF yang diperbolehkan untuk berkas SK.', confirmButtonText: 'OK' });
+                    inputEl.value = '';
+                    return false;
+                }
+            }
+            return true;
+        }
+        document.getElementById('file_sk')?.addEventListener('change', function() { validateFileSKSize(this); });
+        </script>
     </div>
 
     <?php include(APPPATH . 'Views/components/bottom_nav_user.php'); ?>

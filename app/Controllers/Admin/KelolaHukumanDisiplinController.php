@@ -80,9 +80,28 @@ class KelolaHukumanDisiplinController extends BaseController
         ];
         $file = $this->request->getFile('file_sk');
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            $ext = $file->getClientExtension();
+            // Validasi keamanan: hanya PDF yang diizinkan untuk berkas SK
+            $allowedMimes = ['application/pdf'];
+            $allowedExts  = ['pdf'];
+            $mime = $file->getMimeType();
+            $ext  = strtolower($file->guessExtension() ?: $file->getClientExtension());
+            
+            // Cek MIME type (dari konten file, bukan dari klien)
+            if (!in_array($mime, $allowedMimes) || !in_array($ext, $allowedExts)) {
+                $session->setFlashdata('msg', 'Tipe file tidak diizinkan! Hanya file PDF yang diperbolehkan untuk berkas SK.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
+            }
+            
+            // Cek ukuran file max 1MB
+            if ($file->getSize() > 1 * 1024 * 1024) {
+                $session->setFlashdata('msg', 'Ukuran file terlalu besar! Maksimal 1MB.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
+            }
+            
             $newName = 'sk_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-            $file->move(FCPATH . 'writable/uploads/', $newName);
+            $file->move(WRITEPATH . 'uploads/sk/', $newName);
             $data['file_sk'] = $newName;
         }
         $hukumanModel->insert($data);
@@ -141,9 +160,34 @@ class KelolaHukumanDisiplinController extends BaseController
         
         $file = $this->request->getFile('file_sk');
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            $ext = $file->getClientExtension();
+            // Validasi keamanan: hanya PDF yang diizinkan untuk berkas SK
+            $allowedMimes = ['application/pdf'];
+            $allowedExts  = ['pdf'];
+            $mime = $file->getMimeType();
+            $ext  = strtolower($file->guessExtension() ?: $file->getClientExtension());
+            
+            // Cek MIME type (dari konten file, bukan dari klien)
+            if (!in_array($mime, $allowedMimes) || !in_array($ext, $allowedExts)) {
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Tipe file tidak diizinkan! Hanya file PDF yang diperbolehkan untuk berkas SK.']);
+                }
+                $session->setFlashdata('msg', 'Tipe file tidak diizinkan! Hanya file PDF yang diperbolehkan untuk berkas SK.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
+            }
+            
+            // Cek ukuran file max 1MB
+            if ($file->getSize() > 1 * 1024 * 1024) {
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Ukuran file terlalu besar! Maksimal 1MB.']);
+                }
+                $session->setFlashdata('msg', 'Ukuran file terlalu besar! Maksimal 1MB.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
+            }
+            
             $newName = 'sk_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-            $file->move(FCPATH . 'writable/uploads/', $newName);
+            $file->move(WRITEPATH . 'uploads/sk/', $newName);
             $data['file_sk'] = $newName;
         }
         
@@ -180,7 +224,7 @@ class KelolaHukumanDisiplinController extends BaseController
         $hukuman = $hukumanModel->find($id);
         if ($hukuman) {
             if (!empty($hukuman['file_sk'])) {
-                $file_path = FCPATH . 'writable/uploads/' . $hukuman['file_sk'];
+                $file_path = WRITEPATH . 'uploads/sk/' . $hukuman['file_sk'];
                 if (file_exists($file_path)) {
                     @unlink($file_path);
                 }
@@ -205,7 +249,7 @@ class KelolaHukumanDisiplinController extends BaseController
         // Decode dan bersihkan filename (prevent directory traversal)
         $filename = basename(rawurldecode($filename));
 
-        $file_path = FCPATH . 'writable/uploads/' . $filename;
+        $file_path = WRITEPATH . 'uploads/sk/' . $filename;
         if (!file_exists($file_path)) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('File tidak ditemukan');
         }

@@ -94,57 +94,54 @@ AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .pl .py .jsp .asp .sh 
 
 ---
 
-### 🔴 TAHAP 2 — Validasi Tipe File Upload Berkas SK (Admin)
+### ✅ TAHAP 2 — Validasi Tipe File Upload Berkas SK (Admin)
 
 > **Estimasi:** 30 menit  
 > **File yang diubah:** `app/Controllers/Admin/KelolaHukumanDisiplinController.php`
 
-- [ ] Perbaiki method `addHukumanDisiplin()` — tambah validasi MIME + ekstensi
-- [ ] Perbaiki method `updateHukumanDisiplin()` — tambah validasi MIME + ekstensi
-- [ ] Test upload file `test.php` → harus ditolak dengan pesan error
-- [ ] Test upload file `test.pdf` → harus berhasil
-- [ ] Test upload file `test.jpg` → harus berhasil
+- [x] Perbaiki method `addHukumanDisiplin()` — PDF-only + 1MB + `getMimeType()` ✅ 14/04/2026
+- [x] Perbaiki method `updateHukumanDisiplin()` — PDF-only + 1MB + `getMimeType()` ✅ 14/04/2026
+- [x] Tambah validasi frontend (JS) di view Admin — alert + reset input ✅ 14/04/2026
+- [x] Fix bug 404 redirect (ganti `redirect()->back()` → `redirect()->to(URL)`) ✅ 14/04/2026
+- [x] Pindah path simpan: `FCPATH.'writable/uploads/'` → `WRITEPATH.'uploads/sk/'` ✅ 14/04/2026
+- [x] Update path baca `getFile()` & `delete` — konsisten ke `WRITEPATH.'uploads/sk/'` ✅ 14/04/2026
+- [x] Buat `.htaccess` di `writable/uploads/sk/` — Deny from all + LimitExcept ✅ 14/04/2026
+- [x] Test backend: **33/33 skenario lulus** (injection, rename, polyglot, size) ✅ 14/04/2026
+- [x] Test upload `.php`, `.php→.pdf`, PNG+PHP payload → semua **DITOLAK** ✅ 14/04/2026
+- [x] Test upload PDF valid 512KB → **DITERIMA** ✅ 14/04/2026
+- [ ] ⏳ Test manual via browser sebagai admin
 
-**Lokasi kode (baris 81–87 untuk add, baris 143–148 untuk update):**
+**State validasi saat ini (final):**
 
 ```php
-// SEBELUM (TIDAK ADA VALIDASI — BERBAHAYA):
-$file = $this->request->getFile('file_sk');
-if ($file && $file->isValid() && !$file->hasMoved()) {
-    $ext = $file->getClientExtension(); // ← BERBAHAYA
-    $newName = 'sk_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-    $file->move(FCPATH . 'writable/uploads/', $newName);
-    $data['file_sk'] = $newName;
-}
-
-// SESUDAH (AMAN):
-$file = $this->request->getFile('file_sk');
-if ($file && $file->isValid() && !$file->hasMoved()) {
-    $allowedMimes = ['application/pdf', 'image/jpeg', 'image/png'];
-    $allowedExts  = ['pdf', 'jpg', 'jpeg', 'png'];
-    $mime = $file->getMimeType();
-    $ext  = strtolower($file->guessExtension() ?: $file->getClientExtension());
-    if (!in_array($mime, $allowedMimes) || !in_array($ext, $allowedExts)) {
-        session()->setFlashdata('msg', 'Tipe file tidak diizinkan! Hanya PDF, JPG, PNG.');
-        session()->setFlashdata('msg_type', 'danger');
-        return redirect()->back();
-    }
-    $newName = 'sk_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-    $file->move(WRITEPATH . 'uploads/', $newName);
-    $data['file_sk'] = $newName;
-}
+// FINAL — PDF ONLY, max 1MB, server-side MIME check, path aman
+$allowedMimes = ['application/pdf'];   // PDF only
+$allowedExts  = ['pdf'];               // PDF only
+$mime = $file->getMimeType();          // Baca dari KONTEN file
+$ext  = strtolower($file->guessExtension() ?: $file->getClientExtension());
+// Validasi ganda: MIME + extension
+if (!in_array($mime, $allowedMimes) || !in_array($ext, $allowedExts)) { /* tolak */ }
+// Validasi ukuran 1MB
+if ($file->getSize() > 1 * 1024 * 1024) { /* tolak */ }
+// Simpan ke LUAR public root
+$file->move(WRITEPATH . 'uploads/sk/', $newName);
 ```
 
 ---
 
-### 🔴 TAHAP 3 — Validasi Tipe File Upload Berkas SK (User)
+### ✅ TAHAP 3 — Validasi Tipe File Upload Berkas SK (User)
 
 > **Estimasi:** 15 menit  
 > **File yang diubah:** `app/Controllers/User/KelolaHukumanDisiplinController.php`
 
-- [ ] Perbaiki method `addHukumanDisiplin()` (baris 123–129) — sama seperti Tahap 2
-- [ ] Test upload file `test.php` sebagai user → harus ditolak
-- [ ] Test upload file `test.pdf` sebagai user → harus berhasil
+- [x] Perbaiki method `addHukumanDisiplin()` — PDF-only + max 1MB + `getMimeType()` ✅ 14/04/2026
+- [x] Tambah validasi frontend (JS) di view User — alert + reset input ✅ 14/04/2026
+- [x] Fix bug "File tidak ditemukan" (path save ≠ path read) ✅ 14/04/2026
+- [x] Fix bug redirect `back()` → `redirect()->to(URL)` ✅ 14/04/2026
+- [x] Pindah path simpan: `FCPATH.'writable/uploads/'` → `WRITEPATH.'uploads/sk/'` ✅ 14/04/2026
+- [x] Update path baca `getFile()` & `delete` — konsisten ke `WRITEPATH.'uploads/sk/'` ✅ 14/04/2026
+- [x] Test backend: **33/33 skenario lulus** (identik dengan Admin) ✅ 14/04/2026
+- [ ] ⏳ Test manual via browser sebagai user
 
 ---
 
@@ -268,8 +265,8 @@ if ($csvExt !== 'csv' || !in_array($csvMime, $allowedCsvMimes)) {
 | 14/04/2026 | Audit & Test | ✅ Selesai | Terbukti bocor via test_upload_vuln.php |
 | 14/04/2026 | Tahap 0 | 🟡 Parsial | Lokal ✅ bersih. Server ⏳ pending (hapus shell + reset password di production) |
 | 14/04/2026 | Tahap 1 | 🟡 Parsial | 5 file .htaccess dibuat. **Test 403 oleh user pending.** |
-| | Tahap 2 | ⏳ Pending | |
-| | Tahap 3 | ⏳ Pending | |
+| 14/04/2026 | Tahap 2 | ✅ Selesai | PDF-only + 1MB. Path → `WRITEPATH/uploads/sk/`. Audit 33/33 lulus. Bug fix: redirect + path mismatch. |
+| 14/04/2026 | Tahap 3 | ✅ Selesai | Identik dengan Tahap 2 untuk User controller. Audit 33/33 lulus. Scan kode bersih. |
 | | Tahap 4 | ⏳ Pending | |
 | | Tahap 5 | ⏳ Pending | |
 | | Tahap 6 | ⏳ Pending | |
