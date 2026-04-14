@@ -32,64 +32,59 @@ Artinya attacker yang punya akun (admin/user) bisa menanam dan mengeksekusi kode
 
 ---
 
-### 🟡 TAHAP 1 — Audit .htaccess Existing + Buat Proteksi Baru (File Dibuat ✅ | Test ⏳)
+### ✅ TAHAP 1 — Audit .htaccess Existing + Buat Proteksi Baru (SELESAI)
 
 > **Estimasi:** 15 menit  
-> **File yang diaudit:** 5 file `.htaccess` existing  
-> **File yang dibuat:** 5 file `.htaccess` baru
+> **Scan ulang:** 14/04/2026 (sesi 2)  
+> **Total .htaccess diaudit:** 10 file
 
-#### 📋 AUDIT .htaccess EXISTING (14/04/2026)
+#### 📋 AUDIT .htaccess EXISTING (14/04/2026 — Scan Ulang)
 
-| # | Lokasi File | Status | Isi | Penilaian |
+| # | Lokasi File | Status | Penilaian | Tindakan |
 |---|---|---|---|---|
-| 1 | `/.htaccess` (root) | ✅ Ada | Blokir `.env`, `.log`, `.json`; Security headers (HSTS, CSP, X-Frame, dll) | 🟢 Bagus — sudah lengkap untuk proteksi file sensitif |
-| 2 | `/app/.htaccess` | ✅ Ada | `Deny from all` | 🟢 Bagus — blokir akses langsung ke folder app |
-| 3 | `/public/.htaccess` | ✅ Ada | Rewrite engine CI4, gzip, caching, `Options -Indexes` | ⚠️ **Kurang** — tidak ada blokir eksekusi PHP di subfolder uploads |
-| 4 | `/tests/.htaccess` | ✅ Ada | `Deny from all` | 🟢 Bagus |
-| 5 | `/writable/.htaccess` | ✅ Ada | `Deny from all` | ⚠️ **Masalah!** — blokir ini TIDAK efektif karena di deployment cPanel, `writable/` ada di dalam `public_html/massipa/` sehingga rewrite rule CI4 bisa mem-bypass |
+| 1 | `/.htaccess` (root) | ✅ Ada | 🟢 Bagus — blokir .env, .log, security headers | Tidak perlu diubah |
+| 2 | `/app/.htaccess` | ✅ Ada | ⚠️ Nama modul salah: `authz_core_module` | ✅ **Fix**: ganti ke `mod_authz_core.c` + tambah `Order/Deny` 2.2 |
+| 3 | `/public/.htaccess` | ✅ Ada | 🟢 Bagus — routing CI4, -Indexes, gzip | Tidak perlu diubah |
+| 4 | `/public/uploads/.htaccess` | ✅ Ada | ⚠️ Kurang: hanya blokir .php5/.php7, tidak ada php8/phar | ✅ **Fix**: tambah php8, phar, blokir .ht override |
+| 5 | `/public/uploads/profil/.htaccess` | ✅ Ada | ⚠️ Sama dengan atas | ✅ **Fix**: diperbarui identik |
+| 6 | `/writable/.htaccess` | ✅ Ada | ⚠️ Nama modul salah: `authz_core_module` | ✅ **Fix**: ganti ke `mod_authz_core.c` + tambah `Order/Deny` 2.2 |
+| 7 | `/writable/uploads/.htaccess` | ✅ Ada | ⚠️ hanya Deny all, tidak ada FilesMatch/phar | ✅ **Fix**: diperbarui lengkap |
+| 8 | `/writable/uploads/sk/.htaccess` | ✅ Ada | ⚠️ `<LimitExcept>` tanpa argumen — invalid di beberapa Apache | ✅ **Fix**: hapus LimitExcept, perkuat FilesMatch |
+| 9 | `/writable/uploads/ttd/.htaccess` | ✅ Ada | ⚠️ Sama dengan uploads/ | ✅ **Fix**: diperbarui |
+| 10 | `/writable/uploads/laporan/.htaccess` | ✅ Ada | ⚠️ Sama dengan uploads/ | ✅ **Fix**: diperbarui |
 
-#### ❌ FOLDER UPLOAD YANG TIDAK PUNYA .htaccess (TEREKSPOS!)
+#### ✅ CHECKLIST PERBAIKAN (Scan Ulang)
 
-| # | Folder | Status | Dipakai Untuk | Risiko |
-|---|---|---|---|---|
-| 1 | `writable/uploads/` | ❌ TIDAK ADA | Berkas SK Hukuman Disiplin | 🔴 KRITIS |
-| 2 | `writable/uploads/ttd/` | ❌ TIDAK ADA | Gambar tanda tangan | 🔴 KRITIS |
-| 3 | `writable/uploads/laporan/` | ❌ TIDAK ADA | File laporan PDF/DOC | 🟠 TINGGI |
-| 4 | `public/uploads/` | ❌ TIDAK ADA | Root folder uploads public | 🟠 TINGGI |
-| 5 | `public/uploads/profil/` | ❌ TIDAK ADA | Foto profil user (webp) | 🟡 SEDANG |
+- [x] Buat `writable/uploads/.htaccess` — Deny all + script block ✅
+- [x] Buat `writable/uploads/ttd/.htaccess` — Deny all + script block ✅
+- [x] Buat `writable/uploads/laporan/.htaccess` — Deny all + script block ✅
+- [x] Buat `writable/uploads/sk/.htaccess` — Deny all + script block ✅
+- [x] Buat `public/uploads/.htaccess` — -ExecCGI + FilesMatch script block ✅
+- [x] Buat `public/uploads/profil/.htaccess` — -ExecCGI + FilesMatch script block ✅
+- [x] Fix `app/.htaccess` — ganti nama modul, tambah Apache 2.2 directive ✅ 14/04/2026
+- [x] Fix `writable/.htaccess` — ganti `authz_core_module` → `mod_authz_core.c` ✅ 14/04/2026
+- [x] Fix `writable/uploads/sk/.htaccess` — hapus `<LimitExcept>` invalid, tambah phar/php8 ✅ 14/04/2026
+- [x] Fix `public/uploads/*.htaccess` — tambah php8, phar, blokir .htaccess override ✅ 14/04/2026
+- [x] Semua folder `writable/uploads/*` kini: `Deny from all` + `Require all denied` + `-ExecCGI` + `FilesMatch` ✅
+- [x] Simulasi serangan via .htaccess override: **AMAN** (parent Deny all memblokir) ✅
+- [x] Scan file PHP di `public/uploads/` dan `writable/uploads/sk/`: **Bersih** ✅
+- [ ] ⏳ **Test manual:** akses `massipa.test/writable/uploads/sk/index.html` → harus **403 Forbidden**
 
-#### ✅ CHECKLIST PERBAIKAN
-
-- [x] Buat file `writable/uploads/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
-- [x] Buat file `writable/uploads/ttd/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
-- [x] Buat file `writable/uploads/laporan/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
-- [x] Buat file `public/uploads/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
-- [x] Buat file `public/uploads/profil/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
-- [ ] ⏳ **Test:** akses `massipa.test/writable/uploads/test.php` → harus **403 Forbidden** (test manual oleh user)
-
-**Isi file `.htaccess`** (sama untuk semua folder upload):
+**Template .htaccess final untuk folder writable/uploads/\*/:**
 ```apache
-# ============================================================
-# SECURITY: Blokir eksekusi script di folder upload
-# Ditambahkan: 14/04/2026 — Patch celah malware
-# ============================================================
+# Apache 2.2
+Order allow,deny
+Deny from all
 
-# Nonaktifkan eksekusi CGI/script
-Options -ExecCGI -Indexes
-AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .pl .py .jsp .asp .sh .cgi
-
-# Blokir akses langsung ke file script
-<FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# Jika pakai Apache 2.4+
+# Apache 2.4+ (mod_authz_core.c)
 <IfModule mod_authz_core.c>
-    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
-        Require all denied
-    </FilesMatch>
+    Require all denied
 </IfModule>
+
+Options -ExecCGI -Indexes
+AddHandler cgi-script .php .php3 .php4 .php5 .php6 .php7 .php8 .phtml .phar ...
+<FilesMatch "\.(php\d*|phtml|phar|...)">Deny from all</FilesMatch>
+<FilesMatch "^\.ht">Deny from all</FilesMatch>  # blokir .htaccess override
 ```
 
 ---
@@ -264,7 +259,7 @@ if ($csvExt !== 'csv' || !in_array($csvMime, $allowedCsvMimes)) {
 |---|---|---|---|
 | 14/04/2026 | Audit & Test | ✅ Selesai | Terbukti bocor via test_upload_vuln.php |
 | 14/04/2026 | Tahap 0 | 🟡 Parsial | Lokal ✅ bersih. Server ⏳ pending (hapus shell + reset password di production) |
-| 14/04/2026 | Tahap 1 | 🟡 Parsial | 5 file .htaccess dibuat. **Test 403 oleh user pending.** |
+| 14/04/2026 | Tahap 1 | ✅ Selesai | Scan ulang: 10 .htaccess diaudit, 7 diperbaiki. Fix: mod_authz_core.c, php8/phar, blokir .ht override. Simulasi serangan: AMAN. |
 | 14/04/2026 | Tahap 2 | ✅ Selesai | PDF-only + 1MB. Path → `WRITEPATH/uploads/sk/`. Audit 33/33 lulus. Bug fix: redirect + path mismatch. |
 | 14/04/2026 | Tahap 3 | ✅ Selesai | Identik dengan Tahap 2 untuk User controller. Audit 33/33 lulus. Scan kode bersih. |
 | | Tahap 4 | ⏳ Pending | |

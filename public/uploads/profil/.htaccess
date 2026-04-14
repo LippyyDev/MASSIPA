@@ -1,21 +1,39 @@
 # ============================================================
-# SECURITY: Blokir eksekusi script di folder upload
-# Ditambahkan: 14/04/2026 — Patch celah malware
+# SECURITY: Blokir eksekusi script di public/uploads/
+# Folder ini untuk aset publik (foto profil) — boleh diakses
+# via URL tapi DILARANG menjalankan script apapun
+# ============================================================
+# Ditambahkan oleh: MASSIPA Security Patch 14/04/2026
 # ============================================================
 
-# Nonaktifkan eksekusi CGI/script
+# Nonaktifkan eksekusi CGI dan directory listing
 Options -ExecCGI -Indexes
-AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .pl .py .jsp .asp .sh .cgi
 
-# Blokir akses langsung ke file script
-<FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+# Tandai semua ekstensi script sebagai CGI (lalu diblokir oleh -ExecCGI)
+<IfModule mod_cgi.c>
+    AddHandler cgi-script .php .php3 .php4 .php5 .php6 .php7 .php8 .phtml .phar .pl .py .jsp .asp .aspx .sh .cgi .shtml
+</IfModule>
+
+# Blokir akses langsung ke file script — Apache 2.2
+<FilesMatch "\.(php\d*|phtml|phar|pl|py|jsp|aspx?|sh|cgi|shtml)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
-# Jika pakai Apache 2.4+
+# Blokir akses langsung ke file script — Apache 2.4+
 <IfModule mod_authz_core.c>
-    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+    <FilesMatch "\.(php\d*|phtml|phar|pl|py|jsp|aspx?|sh|cgi|shtml)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Blokir akses ke file .htaccess itu sendiri jika ada yang upload
+<FilesMatch "^\.ht">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.ht">
         Require all denied
     </FilesMatch>
 </IfModule>

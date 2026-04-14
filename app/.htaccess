@@ -1,6 +1,15 @@
-<IfModule authz_core_module>
-	Require all denied
-</IfModule>
-<IfModule !authz_core_module>
-	Deny from all
+# ============================================================
+# SECURITY: Blokir akses HTTP langsung ke folder app/
+# Controller, model, config tidak boleh diakses via web
+# ============================================================
+# CI4 Default + diperkuat MASSIPA Security Patch 14/04/2026
+# ============================================================
+
+# Apache 2.2
+Order allow,deny
+Deny from all
+
+# Apache 2.4+ (mod_authz_core.c)
+<IfModule mod_authz_core.c>
+    Require all denied
 </IfModule>
