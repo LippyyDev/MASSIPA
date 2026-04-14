@@ -136,12 +136,49 @@ class InputTandaTanganAdminController extends BaseController
         }
         $file = $this->request->getFile('gambar_ttd');
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = 'ttd_' . time() . '_' . $file->getRandomName();
-            $dir = FCPATH . 'writable/uploads/ttd/';
-            if (!is_dir($dir)) {
-                mkdir($dir, 0777, true);
+            // Validasi keamanan: server-side MIME check + GD re-encoding
+            $allowedMimes = ['image/png', 'image/jpeg'];
+            $mime = $file->getMimeType();
+            if (!in_array($mime, $allowedMimes)) {
+                $session->setFlashdata("msg", "File harus berupa gambar PNG atau JPG yang valid!");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
             }
-            $file->move($dir, $newName);
+            if ($file->getSize() > 2 * 1024 * 1024) {
+                $session->setFlashdata("msg", "Ukuran file maksimal 2MB.");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
+            }
+            // GD re-encoding: hapus semua payload tersembunyi dalam gambar
+            $imgInfo = @getimagesize($file->getTempName());
+            if (!$imgInfo || !in_array($imgInfo['mime'], $allowedMimes)) {
+                $session->setFlashdata("msg", "File bukan gambar PNG/JPG yang valid!");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
+            }
+            $ext = ($imgInfo['mime'] === 'image/jpeg') ? 'jpg' : 'png';
+            if ($imgInfo['mime'] === 'image/jpeg') {
+                $img = @imagecreatefromjpeg($file->getTempName());
+            } else {
+                $img = @imagecreatefrompng($file->getTempName());
+            }
+            if (!$img) {
+                $session->setFlashdata("msg", "Gambar rusak atau tidak bisa diproses.");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
+            }
+            $newName = 'ttd_' . bin2hex(random_bytes(16)) . '.' . $ext;
+            $dir = WRITEPATH . 'uploads/ttd/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            if ($imgInfo['mime'] === 'image/jpeg') {
+                imagejpeg($img, $dir . $newName, 85);
+            } else {
+                imagesavealpha($img, true);
+                imagepng($img, $dir . $newName, 6);
+            }
+            imagedestroy($img);
             $this->ttdGambarModel->save([
                 'tempat' => $this->request->getVar('tempat'),
                 'tanggal' => $this->request->getVar('tanggal'),
@@ -175,7 +212,7 @@ class InputTandaTanganAdminController extends BaseController
         if (!$this->validate($rules)) {
             $session->setFlashdata("msg", $this->validator->listErrors());
             $session->setFlashdata("msg_type", "danger");
-            return redirect()->back()->withInput();
+            return redirect()->to(base_url("admin/input_tanda_tangan"));
         }
         $file = $this->request->getFile('gambar_ttd');
         $updateData = [
@@ -183,22 +220,53 @@ class InputTandaTanganAdminController extends BaseController
             'tanggal' => $this->request->getVar('tanggal'),
         ];
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg'])) {
-                $session->setFlashdata("msg", "File harus berupa gambar PNG atau JPG.");
+            // Validasi keamanan: server-side MIME check
+            $allowedMimes = ['image/png', 'image/jpeg'];
+            $mime = $file->getMimeType();
+            if (!in_array($mime, $allowedMimes)) {
+                $session->setFlashdata("msg", "File harus berupa gambar PNG atau JPG yang valid!");
                 $session->setFlashdata("msg_type", "danger");
-                return redirect()->back()->withInput();
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
             }
             if ($file->getSize() > 2 * 1024 * 1024) {
                 $session->setFlashdata("msg", "Ukuran file maksimal 2MB.");
                 $session->setFlashdata("msg_type", "danger");
-                return redirect()->back()->withInput();
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
             }
-            $old_path = FCPATH . 'writable/uploads/ttd/' . $ttd['file_path'];
+            // GD re-encoding: hapus payload tersembunyi
+            $imgInfo = @getimagesize($file->getTempName());
+            if (!$imgInfo || !in_array($imgInfo['mime'], $allowedMimes)) {
+                $session->setFlashdata("msg", "File bukan gambar PNG/JPG yang valid!");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
+            }
+            $ext = ($imgInfo['mime'] === 'image/jpeg') ? 'jpg' : 'png';
+            if ($imgInfo['mime'] === 'image/jpeg') {
+                $img = @imagecreatefromjpeg($file->getTempName());
+            } else {
+                $img = @imagecreatefrompng($file->getTempName());
+            }
+            if (!$img) {
+                $session->setFlashdata("msg", "Gambar rusak atau tidak bisa diproses.");
+                $session->setFlashdata("msg_type", "danger");
+                return redirect()->to(base_url("admin/input_tanda_tangan"));
+            }
+            // Hapus file lama
+            $old_path = WRITEPATH . 'uploads/ttd/' . $ttd['file_path'];
             if (file_exists($old_path)) {
-                unlink($old_path);
+                @unlink($old_path);
             }
-            $newName = 'ttd_' . time() . '_' . $file->getRandomName();
-            $file->move(FCPATH . 'writable/uploads/ttd/', $newName);
+            // Simpan gambar baru (re-encoded, payload hilang)
+            $newName = 'ttd_' . bin2hex(random_bytes(16)) . '.' . $ext;
+            $dir = WRITEPATH . 'uploads/ttd/';
+            if (!is_dir($dir)) mkdir($dir, 0755, true);
+            if ($imgInfo['mime'] === 'image/jpeg') {
+                imagejpeg($img, $dir . $newName, 85);
+            } else {
+                imagesavealpha($img, true);
+                imagepng($img, $dir . $newName, 6);
+            }
+            imagedestroy($img);
             $updateData['file_path'] = $newName;
         }
         $this->ttdGambarModel->update($id, $updateData);
@@ -212,7 +280,7 @@ class InputTandaTanganAdminController extends BaseController
         $session = session();
         $ttd = $this->ttdGambarModel->find($id);
         if ($ttd) {
-            $old_path = FCPATH . 'writable/uploads/ttd/' . $ttd['file_path'];
+            $old_path = WRITEPATH . 'uploads/ttd/' . $ttd['file_path'];
             if (file_exists($old_path)) {
                 @unlink($old_path);
             }
@@ -265,7 +333,7 @@ class InputTandaTanganAdminController extends BaseController
     {
         while (ob_get_level() > 0) ob_end_clean();
         $filename = basename(rawurldecode($filename));
-        $file_path = FCPATH . 'writable/uploads/ttd/' . $filename;
+        $file_path = WRITEPATH . 'uploads/ttd/' . $filename;
         if (!file_exists($file_path)) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('File tidak ditemukan');
         }
@@ -277,6 +345,7 @@ class InputTandaTanganAdminController extends BaseController
             ->setContentType($mime_type)
             ->setHeader('Content-Length', (string) $file_size)
             ->setHeader('Content-Disposition', 'inline; filename="' . $filename . '"; filename*=UTF-8\'\'' . $encodedName)
+            ->setHeader('X-Content-Type-Options', 'nosniff')
             ->setHeader('Cache-Control', 'private, max-age=86400')
             ->setBody($fileContent);
     }

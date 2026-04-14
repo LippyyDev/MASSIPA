@@ -567,7 +567,7 @@ public function drawTableRowHukumanDisiplin($data, $row_height = 12) {
                 $this->Cell($ttd_width, 5, $tanda_tangan['tempat'] . ', ' . tanggalIndo($tanda_tangan['tanggal']), 0, 1, 'C');
                 $this->Ln(2); // Kembalikan ke jarak semula
                 // Gambar PNG/JPG
-                $img_path = FCPATH . 'writable/uploads/ttd/' . $tanda_tangan['file_path'];
+                $img_path = WRITEPATH . 'uploads/ttd/' . $tanda_tangan['file_path'];
                 if (file_exists($img_path)) {
                     list($img_w, $img_h) = getimagesize($img_path);
                     $max_w = 65; // mm

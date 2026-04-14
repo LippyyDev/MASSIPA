@@ -338,7 +338,7 @@ class RekapPegawaiSatkerController extends BaseController
                                 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT,
                                 'lineHeight' => 1.0
                             ]);
-                            $img_path = FCPATH . 'writable/uploads/ttd/' . $tanda_tangan['file_path'];
+                            $img_path = WRITEPATH . 'uploads/ttd/' . $tanda_tangan['file_path'];
                             if (file_exists($img_path)) {
                                 list($img_w, $img_h) = getimagesize($img_path);
                                 $max_w = 180;
@@ -574,7 +574,7 @@ class RekapPegawaiSatkerController extends BaseController
                         'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT,
                         'lineHeight' => 1.0
                     ]);
-                    $img_path = FCPATH . 'writable/uploads/ttd/' . $tanda_tangan['file_path'];
+                    $img_path = WRITEPATH . 'uploads/ttd/' . $tanda_tangan['file_path'];
                     if (file_exists($img_path)) {
                         list($img_w, $img_h) = getimagesize($img_path);
                         $max_w = 180;
