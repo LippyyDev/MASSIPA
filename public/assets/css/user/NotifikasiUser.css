@@ -1,0 +1,325 @@
+﻿body {
+  background: #faf8ff !important;
+}
+.card {
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
+  transform: translateY(-2px);
+}
+#btnHapusSemua {
+  margin-top: 8px !important;
+  margin-bottom: 14px !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+  padding: 8px 20px !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  width: calc(100% - 20px) !important;
+}
+.notification-item {
+  transition:
+    all 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+  margin-bottom: 12px;
+  border: none !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+  padding: 12px !important;
+  position: relative !important;
+}
+.notification-item:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15);
+  transform: translateY(-2px);
+}
+.notification-item.unread {
+  background-color: #e8f4fd;
+  font-weight: bold;
+}
+.notification-item .notification-title {
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #5b21b6;
+  font-size: 1em;
+  letter-spacing: 0.01em;
+  padding-right: 100px;
+}
+.notification-item.unread .notification-title {
+  font-weight: 700;
+}
+.notification-item .notification-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  margin-top: 4px;
+}
+.notification-item .notification-time-top {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+  margin-top: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+.notification-item .notification-message {
+  margin-bottom: 12px;
+  margin-top: 8px;
+  color: #495057;
+  font-weight: normal;
+  font-size: 1em;
+}
+.notification-empty {
+  text-align: center;
+  padding: 30px;
+  color: #6c757d;
+}
+.list-group-item-action {
+  cursor: pointer;
+}
+.list-group-item {
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+}
+.list-group-item:first-child {
+  border-top: 0;
+}
+.list-group-item:last-child {
+  border-bottom: 0;
+}
+.notification-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+.notification-status:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+.status-uploaded {
+  background-color: #17a2b8 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.25);
+}
+.status-viewed {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.25);
+}
+.status-approved {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.25);
+}
+.status-rejected {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.25);
+}
+.status-system {
+  background-color: #6c757d !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.25);
+}
+html.dark-mode body {
+  background: #1a1824 !important;
+}
+html.dark-mode .main-content > .container-fluid {
+  background: transparent !important;
+}
+html.dark-mode .notification-item {
+  background: #232336 !important;
+  border: none !important;
+  color: #e0e6ed !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+}
+html.dark-mode .notification-item:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+html.dark-mode .notification-item.unread {
+  background: #1e2e3e !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+}
+html.dark-mode .notification-item.unread:hover {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3) !important;
+  transform: translateY(-2px);
+}
+html.dark-mode .notification-item .notification-title {
+  color: #e0e6ed !important;
+}
+html.dark-mode .notification-item .notification-time {
+  color: #b7aaff !important;
+}
+html.dark-mode .notification-item .notification-time-top {
+  color: #b7aaff !important;
+}
+html.dark-mode .notification-item .notification-message {
+  color: #c7bfff !important;
+}
+html.dark-mode .notification-empty {
+  color: #b7aaff !important;
+}
+html.dark-mode .status-uploaded {
+  background-color: #17a2b8 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.35) !important;
+}
+html.dark-mode .status-viewed {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.35) !important;
+}
+html.dark-mode .status-approved {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.35) !important;
+}
+html.dark-mode .status-rejected {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.35) !important;
+}
+html.dark-mode .status-system {
+  background-color: #6c757d !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.35) !important;
+}
+html.dark-mode .notification-status:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4) !important;
+}
+
+@media (max-width: 991px) {
+  #btnHapusSemua {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    padding: 6px 16px !important;
+    font-size: 13px !important;
+    width: calc(100% - 16px) !important;
+  }
+  .card {
+    width: 100% !important;
+    margin: 0 0 1rem 0 !important;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(0);
+  }
+  .card:hover,
+  .card:active {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.15),
+      0 3px 6px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  .notification-item {
+    width: 100% !important;
+    margin: 0 0 12px 0 !important;
+    padding: 10px !important;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(0);
+  }
+  .notification-item:hover,
+  .notification-item:active {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.15),
+      0 3px 6px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  .notification-item .notification-title {
+    font-size: 0.85rem !important;
+    padding-right: 80px !important;
+  }
+  .notification-item .notification-message {
+    font-size: 0.8rem !important;
+    margin-bottom: 12px !important;
+    margin-top: 8px !important;
+  }
+  .notification-item .notification-time {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+  }
+  .notification-item .notification-time-top {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    bottom: 10px !important;
+    right: 10px !important;
+  }
+
+  .notification-status {
+    font-size: 0.6rem !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    top: 10px !important;
+    right: 10px !important;
+  }
+
+  html.dark-mode .card {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.2),
+      0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(0);
+  }
+  html.dark-mode .card:hover,
+  html.dark-mode .card:active {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      0 3px 6px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  html.dark-mode .notification-item {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.2),
+      0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(0);
+  }
+  html.dark-mode .notification-item:hover,
+  html.dark-mode .notification-item:active {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      0 3px 6px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  html.dark-mode .notification-item.unread {
+    box-shadow:
+      0 4px 12px rgba(59, 130, 246, 0.25),
+      0 2px 4px rgba(59, 130, 246, 0.15) !important;
+  }
+  html.dark-mode .notification-item.unread:hover,
+  html.dark-mode .notification-item.unread:active {
+    box-shadow:
+      0 6px 20px rgba(59, 130, 246, 0.35),
+      0 3px 6px rgba(59, 130, 246, 0.25) !important;
+    transform: translateY(-3px) scale(1.01);
+  }
+}

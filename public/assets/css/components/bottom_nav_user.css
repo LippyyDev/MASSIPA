@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.bottom-nav-user {
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+    padding: 8px 0;
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .bottom-nav-user {
+        display: block;
+    }
+}
+
+.bottom-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 100%;
+    padding: 0 8px;
+    position: relative;
+}
+
+.bottom-nav-user .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #222;
+    flex: 1;
+    padding: 6px 4px;
+    transition: all 0.3s ease;
+    position: relative;
+    min-width: 0;
+}
+
+.bottom-nav-user .nav-item i {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.bottom-nav-user .nav-item .nav-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.bottom-nav-user .nav-item.active {
+    color: #7c3aed;
+}
+
+.bottom-nav-user .nav-item.active i,
+.bottom-nav-user .nav-item.active .nav-label {
+    color: #7c3aed;
+}
+
+
+html.dark-mode .bottom-nav-user {
+    background: #232336;
+    border-top-color: #2d2d44;
+}
+
+html.dark-mode .bottom-nav-user .nav-item {
+    color: #e0e0e0;
+}
+
+html.dark-mode .bottom-nav-user .nav-item.active {
+    color: #a78bfa;
+}
+
+html.dark-mode .bottom-nav-user .nav-item.active i,
+html.dark-mode .bottom-nav-user .nav-item.active .nav-label {
+    color: #a78bfa;
+}
+
+
+@media (max-width: 767px) {
+    .main-content {
+        padding-bottom: 80px !important;
+    }
+
+    html.dark-mode .main-content,
+    html.dark-mode body .main-content,
+    .dark-mode .main-content {
+        padding-bottom: 80px !important;
+    }
+}
+

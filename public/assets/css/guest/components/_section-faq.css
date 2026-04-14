@@ -1,0 +1,261 @@
+/* =============================================================
+   SECTION — FAQ (#faq)
+   ============================================================= */
+
+/* --- FAQ Minimal Card (Current Design) --- */
+.faq-minimal-item {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.faq-minimal-item:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 16px 48px rgba(111, 66, 193, 0.13),
+    0 0 0 0.5px rgba(111, 66, 193, 0.1) !important;
+  border-color: rgba(111, 66, 193, 0.42) !important;
+}
+
+.faq-icon {
+  transition: all 0.3s ease;
+}
+
+.faq-minimal-item:hover .faq-icon {
+  background: rgba(111, 66, 193, 0.2) !important;
+  transform: scale(1.1);
+}
+
+/* --- FAQ Illustration --- */
+.faq-illustration {
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 70px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 18px 70px rgba(139, 92, 246, 0.16));
+}
+
+/* --- FAQ Accordion (legacy style) --- */
+.faq-item {
+  border-bottom: 1px solid #eee;
+  padding: 18px 0;
+}
+
+.faq-question {
+  font-weight: 600;
+  color: #7367f0;
+}
+
+/* --- Landing Accordion Item --- */
+.landing-accordion-item {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.62) 55%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  border: 1px solid transparent;
+  box-shadow:
+    0 18px 60px rgba(17, 24, 39, 0.12),
+    0 18px 80px rgba(139, 92, 246, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.landing-accordion-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.55),
+    rgba(236, 72, 153, 0.26),
+    rgba(255, 255, 255, 0.18)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.75;
+}
+
+.landing-accordion-item::after {
+  content: "";
+  position: absolute;
+  inset: -35% -60%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 62%,
+    transparent 100%
+  );
+  transform: translateX(-30%) rotate(8deg);
+  opacity: 0;
+  filter: blur(0.2px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .landing-accordion-item:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 22px 78px rgba(17, 24, 39, 0.14),
+      0 26px 110px rgba(139, 92, 246, 0.16),
+      0 0 80px rgba(236, 72, 153, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.44) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+  }
+
+  .landing-accordion-item:hover::after {
+    opacity: 0.65;
+    animation: featureShimmer 1.35s ease-in-out both;
+  }
+}
+
+.landing-accordion-btn {
+  background: rgba(255, 255, 255, 0.58) !important;
+  color: var(--text-0) !important;
+  font-weight: 700;
+  font-size: 1.12rem;
+  padding: 1.1rem 1.5rem;
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
+
+.landing-accordion-btn:focus {
+  box-shadow: 0 0 0 0.25rem rgba(139, 92, 246, 0.18) !important;
+}
+
+.landing-accordion-btn:not(.collapsed) {
+  background: rgba(139, 92, 246, 0.22) !important;
+  color: rgba(17, 24, 39, 0.92) !important;
+}
+
+.landing-accordion-btn::after {
+  filter: none;
+  opacity: 0.85;
+  transform: scale(0.95);
+}
+
+.landing-accordion-body {
+  color: var(--text-1);
+  background: rgba(255, 255, 255, 0.54);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0 0 1rem 1rem;
+  font-size: 1.02rem;
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+}
+
+/* --- FAQ Responsive --- */
+@media (max-width: 768px) {
+  #faq h2 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  #faq .col-lg-4 img {
+    width: 200px !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  #faq.landing-section--faq {
+    padding-bottom: 0.85rem !important;
+  }
+
+  #faq > .container > .row.mb-5 {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .accordion-button {
+    font-size: 1rem !important;
+    padding: 0.8rem 1.2rem !important;
+  }
+
+  .accordion-body {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (min-width: 769px) {
+  #faq.landing-section--faq {
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #faq h2 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  #faq .col-lg-4 img {
+    width: 150px !important;
+  }
+
+  .accordion-button {
+    font-size: 0.9rem !important;
+    padding: 0.7rem 1rem !important;
+  }
+
+  .accordion-body {
+    font-size: 0.8rem !important;
+    padding: 0.8rem 1rem !important;
+  }
+}
+
+/* ---- Dark Mode FAQ ---- */
+html.guest-dark .faq-minimal-item {
+  background: #1a1a2e !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 0.5px rgba(139, 92, 246, 0.1) !important;
+}
+
+html.guest-dark .faq-minimal-item:hover {
+  border-color: rgba(139, 92, 246, 0.52) !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 0 0.5px rgba(139, 92, 246, 0.18) !important;
+}
+
+html.guest-dark .faq-minimal-item h4 {
+  color: rgba(238, 235, 255, 0.93) !important;
+}
+
+html.guest-dark .faq-minimal-item p {
+  color: rgba(195, 190, 230, 0.72) !important;
+}
+
+html.guest-dark .faq-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(111, 66, 193, 0.25),
+    rgba(167, 139, 250, 0.3)
+  ) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+}
+
+html.guest-dark .contact-item-divider {
+  border-color: rgba(139, 92, 246, 0.15) !important;
+}

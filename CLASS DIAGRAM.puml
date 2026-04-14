@@ -1,0 +1,173 @@
+@startuml Database Massipa - Class Diagram
+!theme plain
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+' Tabel Utama
+class pegawai {
+    + id : int (PK)
+    + nama : varchar(100)
+    + nip : varchar(30) (UNIQUE)
+    + pangkat : varchar(50)
+    + golongan : varchar(10)
+    + jabatan : varchar(100)
+    + status : enum('aktif','pensiun')
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class satker {
+    + id : int (PK)
+    + nama : varchar(100)
+    + alamat : text
+}
+
+class users {
+    + id : int (PK)
+    + username : varchar(50) (UNIQUE)
+    + password : varchar(255)
+    + nama_lengkap : varchar(100)
+    + email : varchar(100) (UNIQUE)
+    + role : enum('admin','user')
+    + foto_profil : varchar(255)
+    + created_at : timestamp
+    + updated_at : timestamp
+    + satker_id : int (FK)
+}
+
+class riwayat_mutasi {
+    + id : int (PK)
+    + pegawai_id : int (FK)
+    + satker_id : int (FK)
+    + tanggal_mulai : date
+    + tanggal_selesai : date
+}
+
+class kedisiplinan {
+    + id : int (PK)
+    + pegawai_id : int (FK)
+    + riwayat_mutasi_id : int (FK)
+    + bulan : int(2)
+    + tahun : int(4)
+    + terlambat : int(2)
+    + tidak_absen_masuk : int(2)
+    + pulang_awal : int(2)
+    + tidak_absen_pulang : int(2)
+    + keluar_tidak_izin : int(2)
+    + tidak_masuk_tanpa_ket : int(2)
+    + tidak_masuk_sakit : int(2)
+    + tidak_masuk_kerja : int(2)
+    + bentuk_pembinaan : text
+    + keterangan : text
+    + created_by : int (FK)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class hukuman_disiplin {
+    + id : int (PK)
+    + pegawai_id : int (FK)
+    + user_id : int (FK)
+    + jabatan : varchar(100)
+    + no_sk : varchar(100)
+    + tanggal_mulai : date
+    + tanggal_berakhir : date
+    + hukuman_dijatuhkan : varchar(255)
+    + peraturan_dilanggar : varchar(255)
+    + keterangan : text
+    + status : enum('pending','approved','rejected')
+    + file_sk : varchar(255)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class laporan_file {
+    + id : int (PK)
+    + nama_laporan : varchar(255)
+    + bulan : int(2)
+    + tahun : int(4)
+    + file_path : varchar(255)
+    + original_filename : text
+    + keterangan : text
+    + link_drive : varchar(500)
+    + kategori : enum('Laporan Disiplin','Laporan Apel')
+    + status : enum('terkirim','dilihat','diterima','ditolak')
+    + feedback : text
+    + rejected_at : datetime
+    + is_hidden_by_user : tinyint(1)
+    + created_by : int (FK)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class notifikasi {
+    + id : int (PK)
+    + user_id : int (FK)
+    + judul : varchar(100)
+    + pesan : text
+    + jenis : enum('laporan','status','feedback','sistem')
+    + referensi_id : int
+    + is_read : tinyint(1)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class tanda_tangan {
+    + id : int (PK)
+    + lokasi : varchar(100)
+    + tanggal : date
+    + nama_jabatan : varchar(100)
+    + nama_penandatangan : varchar(100)
+    + nip_penandatangan : varchar(30)
+    + is_aktif : tinyint(1)
+    + user_id : int (FK)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class tanda_tangan_gambar {
+    + id : int (PK)
+    + user_id : int (FK)
+    + tempat : varchar(255)
+    + tanggal : date
+    + file_path : varchar(255)
+    + is_aktif : tinyint(1)
+    + created_at : timestamp
+    + updated_at : timestamp
+}
+
+class allowed_origins {
+    + id : int (PK)
+    + origin : varchar(255)
+    + is_active : tinyint(1)
+    + created_at : datetime
+}
+
+class api_keys {
+    + id : int (PK)
+    + api_key : varchar(64)
+    + label : varchar(100)
+    + is_active : tinyint(1)
+    + created_at : datetime
+    + updated_at : datetime
+}
+
+' Relasi antar tabel
+pegawai ||--o{ riwayat_mutasi : "1..*"
+satker ||--o{ riwayat_mutasi : "1..*"
+pegawai ||--o{ kedisiplinan : "1..*"
+riwayat_mutasi ||--o{ kedisiplinan : "0..1"
+users ||--o{ kedisiplinan : "1..*"
+pegawai ||--o{ hukuman_disiplin : "1..*"
+users ||--o{ hukuman_disiplin : "0..1"
+users ||--o{ laporan_file : "1..*"
+users ||--o{ notifikasi : "1..*"
+users ||--o{ tanda_tangan : "1..*"
+users ||--o{ tanda_tangan_gambar : "1..*"
+satker ||--o{ users : "0..1"
+
+@enduml

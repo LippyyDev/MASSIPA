@@ -1,0 +1,312 @@
+﻿/* realtime_notifications.css - Styling untuk notifikasi realtime */
+
+/* ================================================
+   BADGE NOTIFIKASI (Navbar)
+   ================================================ */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.navbar .badge {
+  animation: pulse 2s infinite;
+  transition: all 0.3s ease;
+  background-color: #dc3545 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 0.65rem !important;
+  padding: 0.15rem 0.35rem !important;
+  border-radius: 0.375rem !important;
+  min-width: auto !important;
+  line-height: 1 !important;
+}
+
+.navbar .badge:hover {
+  animation: bounce 1s infinite;
+  transform: scale(1.1);
+  background-color: #c82333 !important;
+}
+
+.navbar a[href*="notifikasi"]:hover .badge {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  background-color: #c82333 !important;
+}
+
+/* ================================================
+   LOADING SPINNER
+   ================================================ */
+.notification-loading {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #dc3545;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ================================================
+   TOAST NOTIFICATION POP-UP (Muncul dari Atas)
+   ================================================ */
+.toast-notification-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 450px;
+  pointer-events: none;
+  align-items: center;
+}
+
+.toast-notification {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #2d3748;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  pointer-events: all;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(128, 90, 213, 0.2);
+}
+
+.toast-notification:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.12),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+  border-color: rgba(128, 90, 213, 0.6);
+}
+
+.toast-notification.dismissing {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.toast-notification-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  color: #805ad5;
+  background: rgba(128, 90, 213, 0.12);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-notification-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 2px 0;
+  line-height: 1.3;
+  color: #1a202c;
+  letter-spacing: -0.01em;
+}
+
+.toast-notification-message {
+  font-size: 13px;
+  margin: 0;
+  color: #4a5568;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.toast-notification-close {
+  background: transparent;
+  border: none;
+  color: #a0aec0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  margin-left: 4px;
+}
+
+.toast-notification-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #4a5568;
+}
+
+/* ================================================
+   ANIMASI
+   ================================================ */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 200px;
+    margin-bottom: 10px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* ================================================
+   DARK MODE
+   ================================================ */
+html.dark-mode .toast-notification {
+  background: rgba(30, 27, 50, 0.75);
+  border-color: rgba(167, 139, 250, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+}
+
+html.dark-mode .toast-notification:hover {
+  border-color: rgba(167, 139, 250, 0.7);
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.35),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+html.dark-mode .toast-notification-icon {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.18);
+}
+
+html.dark-mode .toast-notification-title {
+  color: #f1f5f9;
+}
+
+html.dark-mode .toast-notification-message {
+  color: #94a3b8;
+}
+
+html.dark-mode .toast-notification-close {
+  color: #64748b;
+}
+
+html.dark-mode .toast-notification-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+@media (max-width: 768px) {
+  .toast-notification-container {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    transform: none;
+    max-width: none;
+  }
+
+  .toast-notification {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .toast-notification-container {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .toast-notification {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .toast-notification-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .toast-notification-title {
+    font-size: 14px;
+  }
+
+  .toast-notification-message {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,285 @@
+/* =============================================================
+   SECTION — Hubungi Kami / Kontak (#hubungi)
+   ============================================================= */
+
+/* --- Contact Info Card --- */
+.contact-copy {
+  color: var(--text-1);
+  font-size: 1.08rem;
+}
+
+.contact-meta {
+  color: rgba(17, 24, 39, 0.68);
+  font-size: 1.02rem;
+}
+
+.contact-meta strong {
+  color: rgba(17, 24, 39, 0.88);
+}
+
+/* --- Contact Info Card Styling --- */
+.contact-info-card {
+  border: 1.5px solid rgba(111, 66, 193, 0.22) !important;
+  box-shadow:
+    0 8px 32px rgba(111, 66, 193, 0.08),
+    0 0 0 0.5px rgba(111, 66, 193, 0.06) !important;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.contact-info-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(111, 66, 193, 0.38) !important;
+  box-shadow:
+    0 16px 48px rgba(111, 66, 193, 0.12),
+    0 0 0 0.5px rgba(111, 66, 193, 0.1) !important;
+}
+
+/* --- Contact Item Divider --- */
+.contact-item-divider {
+  border: none;
+  border-top: 1px solid rgba(111, 66, 193, 0.1);
+  margin: 0;
+}
+
+/* --- Hover Effects for Contact Items --- */
+.group-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 0.5rem 0.25rem;
+  border-radius: 0.75rem;
+}
+
+.group-hover-lift:hover {
+  transform: translateX(8px);
+}
+
+.group-hover-lift:hover .contact-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(111, 66, 193, 0.2),
+    rgba(167, 139, 250, 0.25)
+  ) !important;
+  box-shadow: 0 8px 24px rgba(111, 66, 193, 0.22) !important;
+  transform: scale(1.1) rotate(5deg);
+}
+
+.group-hover-lift:hover a,
+.group-hover-lift:hover div[style*="color: #1e1e2d"] {
+  color: rgb(111, 66, 193) !important;
+}
+
+/* --- Contact Map Card --- */
+.contact-map-card {
+  position: relative;
+  border-radius: 1.35rem;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid transparent;
+  box-shadow:
+    0 22px 70px rgba(17, 24, 39, 0.14),
+    0 22px 90px rgba(139, 92, 246, 0.12);
+  backdrop-filter: blur(16px) saturate(1.18);
+  -webkit-backdrop-filter: blur(16px) saturate(1.18);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.contact-map-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.55),
+    rgba(236, 72, 153, 0.22),
+    rgba(255, 255, 255, 0.2)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.85;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-map-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 28px 92px rgba(17, 24, 39, 0.18),
+      0 30px 120px rgba(139, 92, 246, 0.18),
+      0 0 90px rgba(236, 72, 153, 0.08);
+  }
+}
+
+/* --- Contact Map (iframe) --- */
+.contact-map {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 60px rgba(17, 24, 39, 0.12);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.contact-map iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: saturate(1.04) contrast(1.02);
+}
+
+/* --- Legacy Contact Card --- */
+.contact-card {
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(90, 24, 154, 0.07);
+  border: 1px solid #eee;
+  background: #fff;
+}
+
+/* --- Contact Illustration --- */
+.contact-illustration {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.contact-illustration-wrap {
+  position: relative;
+  border-radius: 1.35rem;
+  padding: 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      900px 520px at 18% 18%,
+      rgba(139, 92, 246, 0.42),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 560px at 88% 22%,
+      rgba(109, 40, 217, 0.36),
+      transparent 64%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(17, 24, 39, 0.92) 0%,
+      rgba(46, 16, 101, 0.9) 45%,
+      rgba(17, 24, 39, 0.92) 100%
+    );
+  box-shadow:
+    0 22px 70px rgba(17, 24, 39, 0.14),
+    0 22px 90px rgba(139, 92, 246, 0.12);
+}
+
+.contact-illustration-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 24, 39, 0.72) 0%,
+    rgba(17, 24, 39, 0.58) 55%,
+    rgba(17, 24, 39, 0.68) 100%
+  );
+  opacity: 0.55;
+}
+
+.contact-illustration-wrap .contact-illustration {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Kontak Responsive --- */
+@media (max-width: 768px) {
+  .contact-illustration {
+    width: 100%;
+  }
+
+  .contact-illustration-wrap {
+    padding: 10px;
+    border-radius: 1.15rem;
+  }
+
+  #hubungi.landing-section--contact {
+    padding-top: 3rem !important;
+  }
+
+  #hubungi .row.g-5 {
+    --bs-gutter-y: 1.25rem !important;
+  }
+
+  #hubungi .row.g-5 > .col-lg-6.mb-4 {
+    margin-bottom: 0 !important;
+  }
+
+  #hubungi .contact-copy {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  #hubungi .contact-meta {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 769px) {
+  #hubungi.landing-section--contact {
+    padding-top: 3.5rem !important;
+  }
+}
+
+/* ---- Dark Mode Kontak ---- */
+html.guest-dark .contact-info-card {
+  background: #1a1a2e !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 0.5px rgba(139, 92, 246, 0.1) !important;
+}
+
+html.guest-dark .contact-info-card:hover {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 0 0 0.5px rgba(139, 92, 246, 0.18) !important;
+}
+
+html.guest-dark .contact-info-card h3,
+html.guest-dark .contact-info-card .fw-semibold,
+html.guest-dark .contact-info-card a {
+  color: rgba(238, 235, 255, 0.9) !important;
+}
+
+html.guest-dark .contact-info-card p {
+  color: rgba(195, 190, 230, 0.72) !important;
+}
+
+html.guest-dark .contact-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(111, 66, 193, 0.25),
+    rgba(167, 139, 250, 0.3)
+  ) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+}
+
+html.guest-dark .contact-item-divider {
+  border-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+html.guest-dark [style*="color: #a1a5b7"] {
+  color: rgba(167, 139, 250, 0.6) !important;
+}
+
+html.guest-dark [style*="color: #1e1e2d"] {
+  color: rgba(238, 235, 255, 0.9) !important;
+}

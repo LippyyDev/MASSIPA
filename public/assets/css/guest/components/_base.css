@@ -1,0 +1,287 @@
+/* =============================================================
+   BASE — CSS Variables, Reset, & Body
+   ============================================================= */
+
+:root {
+  --bg-0: #fbfbff;
+  --bg-1: #f6f8ff;
+  --bg-2: #faf7ff;
+  --surface-0: rgba(255, 255, 255, 0.6);
+  --surface-1: rgba(255, 255, 255, 0.78);
+  --border-0: rgba(17, 24, 39, 0.12);
+  --text-0: rgba(17, 24, 39, 0.92);
+  --text-1: rgba(17, 24, 39, 0.68);
+  --accent-0: #8b5cf6;
+  --accent-1: #6d28d9;
+  --accent-2: #a78bfa;
+  --shadow-0: 0 18px 60px rgba(17, 24, 39, 0.14);
+  --shadow-glow: 0 18px 80px rgba(139, 92, 246, 0.16);
+}
+
+/* ---- Dark Mode Variables ---- */
+html.guest-dark {
+  --bg-0: #0e0e1a;
+  --bg-1: #13131f;
+  --bg-2: #181828;
+  --surface-0: rgba(25, 25, 45, 0.72);
+  --surface-1: rgba(30, 30, 55, 0.88);
+  --border-0: rgba(139, 92, 246, 0.22);
+  --text-0: rgba(238, 235, 255, 0.93);
+  --text-1: rgba(195, 190, 230, 0.72);
+  --shadow-0: 0 18px 60px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 18px 80px rgba(139, 92, 246, 0.22);
+}
+
+html.guest-dark body {
+  background: var(--bg-0);
+  color: var(--text-0);
+}
+
+html.guest-dark body::before {
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.12) 1px, transparent 1px);
+}
+
+/* Smooth transition on dark/light toggle */
+body,
+.bento-card,
+.stat-glass-card,
+.faq-minimal-item,
+.contact-info-card,
+.navbar-floating {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    color 0.25s ease;
+}
+
+/* Override common hardcoded dark text inline styles */
+html.guest-dark [style*="color: #1e1e2d"],
+html.guest-dark [style*="color: #212529"],
+html.guest-dark [style*="color: #3f4254"] {
+  color: rgba(238, 235, 255, 0.92) !important;
+}
+
+html.guest-dark [style*="color: #5a6270"] {
+  color: rgba(195, 190, 230, 0.72) !important;
+}
+
+/* About section text dark mode */
+html.guest-dark .section-paragraph,
+html.guest-dark .section-paragraph strong {
+  color: var(--text-0) !important;
+}
+
+html {
+  background: #ffffff;
+}
+
+body {
+  font-family:
+    "Poppins",
+    "Inter",
+    "Public Sans",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  scroll-behavior: smooth;
+  background: var(--bg-0);
+  background-attachment: fixed;
+  color: var(--text-0);
+  overflow-x: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-size: 45px 45px;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-size: 45px 45px;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.25) 1px, transparent 1px);
+  mask-image: radial-gradient(
+    600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    black 0%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    black 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.landing-main {
+  background: transparent;
+}
+
+/* --- Shared Section Utilities --- */
+.landing-section {
+  position: relative;
+  overflow: visible;
+  background: transparent;
+}
+
+.landing-section::before {
+  content: none;
+}
+
+.landing-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.landing-section--features,
+.landing-section--faq,
+.landing-section--contact,
+.landing-section--about,
+.landing-section--stats {
+  background: transparent;
+}
+
+/* --- Shared Typography --- */
+.section-heading {
+  font-family: "Poppins", "Inter", sans-serif;
+  letter-spacing: -0.6px;
+  font-weight: 800;
+  color: var(--text-0);
+}
+
+.section-subtitle,
+.section-paragraph {
+  color: var(--text-1);
+  font-size: 1.08rem;
+}
+
+.section-kicker {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.78);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  box-shadow: 0 12px 36px rgba(17, 24, 39, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* --- Shared about-image --- */
+.about-image {
+  max-width: 100%;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-0);
+  box-shadow: var(--shadow-0);
+}
+
+.about-image--wide {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* --- Shared section-py utility --- */
+.section-py {
+  padding: 80px 0;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #7367f0;
+}
+
+@media (max-width: 991px) {
+  .section-py {
+    padding: 60px 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+
+  .container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .py-5 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 1rem !important;
+  }
+
+  .mb-5 {
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+/* ---- Dark Mode: Misc Global ---- */
+html.guest-dark {
+  background: #0e0e1a;
+}
+
+/* Marquee satker teks */
+html.guest-dark .marquee-text {
+  color: #a78bfa !important;
+}
+
+/* Section "Tentang" teks hitam besar */
+html.guest-dark .section-paragraph {
+  color: var(--text-1) !important;
+}
+
+html.guest-dark [style*="color: #212529"] {
+  color: rgba(238, 235, 255, 0.95) !important;
+}
+
+/* Badge "Terpusat" sudah ungu, tidak perlu diubah */
+
+/* Footer sudah gelap (#232336), tidak perlu diubah */

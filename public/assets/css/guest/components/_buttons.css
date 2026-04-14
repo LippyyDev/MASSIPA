@@ -1,0 +1,261 @@
+/* =============================================================
+   COMPONENT — Buttons (Landing Buttons & Shine Effect)
+   ============================================================= */
+
+/* --- Landing Buttons Base --- */
+.landing-btn {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.65rem 1.2rem;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.landing-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 18px 60px rgba(17, 24, 39, 0.16),
+    0 18px 80px rgba(139, 92, 246, 0.16);
+}
+
+/* --- Primary Button --- */
+.landing-btn-primary {
+  color: rgba(255, 255, 255, 0.95) !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(90deg, #2e1065, #4c1d95);
+  border: 1px solid rgba(46, 16, 101, 0.26);
+  box-shadow:
+    0 14px 46px rgba(46, 16, 101, 0.22),
+    0 0 0 1px rgba(196, 181, 253, 0.22),
+    0 0 18px rgba(167, 139, 250, 0.18),
+    0 0 42px rgba(139, 92, 246, 0.12);
+  backdrop-filter: blur(10px);
+  animation: landingBtnIdleGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes landingBtnIdleGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 14px 46px rgba(46, 16, 101, 0.22),
+      0 0 0 1px rgba(196, 181, 253, 0.2),
+      0 0 16px rgba(167, 139, 250, 0.16),
+      0 0 36px rgba(139, 92, 246, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 16px 56px rgba(46, 16, 101, 0.26),
+      0 0 0 1px rgba(196, 181, 253, 0.28),
+      0 0 22px rgba(167, 139, 250, 0.22),
+      0 0 54px rgba(139, 92, 246, 0.16);
+  }
+}
+
+.landing-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: -45% -70%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 62%,
+    transparent 100%
+  );
+  transform: translateX(-55%) rotate(10deg);
+  border-radius: inherit;
+  mix-blend-mode: overlay;
+  will-change: transform, opacity;
+}
+
+.landing-btn-primary::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.12) 35%,
+    transparent 70%
+  );
+  mix-blend-mode: overlay;
+}
+
+.landing-btn-primary:hover::before,
+.landing-btn-primary:focus-visible::before {
+  opacity: 0.8;
+  animation: landingBtnShimmer 1.15s ease-in-out both;
+}
+
+.landing-btn-primary:hover,
+.landing-btn-primary:focus-visible {
+  box-shadow:
+    0 18px 64px rgba(46, 16, 101, 0.28),
+    0 0 0 1px rgba(196, 181, 253, 0.34),
+    0 0 26px rgba(167, 139, 250, 0.26),
+    0 0 70px rgba(139, 92, 246, 0.18);
+}
+
+.landing-btn-primary:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 10px 28px rgba(46, 16, 101, 0.22);
+}
+
+.landing-btn-primary:active::after {
+  opacity: 1;
+  animation: landingBtnRipple 0.45s ease-out both;
+}
+
+@keyframes landingBtnRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(22);
+    opacity: 0;
+  }
+}
+
+@keyframes landingBtnShimmer {
+  0% {
+    transform: translateX(-55%) rotate(10deg);
+  }
+  100% {
+    transform: translateX(55%) rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-btn-primary {
+    animation: none !important;
+  }
+  .landing-btn-primary::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  .landing-btn-primary::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .landing-btn-primary:active {
+    transform: none;
+  }
+}
+
+/* --- Secondary Button --- */
+.landing-btn-secondary {
+  color: rgba(17, 24, 39, 0.82) !important;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  box-shadow: 0 12px 36px rgba(17, 24, 39, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+/* --- Outline Primary Button --- */
+.landing-btn-primary-outline {
+  color: #7c3aed !important;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #8b5cf6;
+  box-shadow: 0 12px 36px rgba(139, 92, 246, 0.15);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.landing-btn-primary-outline:hover,
+.landing-btn-primary-outline:focus-visible {
+  color: #6d28d9 !important;
+  background: rgba(255, 255, 255, 1);
+  border-color: #7c3aed;
+  box-shadow:
+    0 18px 60px rgba(139, 92, 246, 0.22),
+    0 0 0 1px rgba(139, 92, 246, 0.2);
+  transform: translateY(-2px);
+}
+
+.landing-btn-primary-outline:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.18);
+}
+
+/* --- Shine (CTA) Button --- */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  transition:
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s ease !important;
+}
+
+.btn-shine i,
+.btn-shine span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  z-index: 1;
+}
+
+.btn-shine:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-shine:hover::before {
+  left: 200%;
+}
+
+/* --- Responsive Buttons --- */
+@media (max-width: 768px) {
+  .btn-lg {
+    font-size: 1rem !important;
+    padding: 0.75rem 1.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-lg {
+    font-size: 0.9rem !important;
+    padding: 0.6rem 1.2rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn-lg {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.5rem !important;
+  }
+}

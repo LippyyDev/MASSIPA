@@ -1,0 +1,21 @@
+﻿.petunjuk-outline {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fff;
+    padding: 18px 20px;
+    font-size: 0.97em;
+}
+
+html.dark-mode .petunjuk-outline {
+    background: #232336 !important;
+    color: #e0e6ed !important;
+    border-color: #b7aaff !important;
+}
+html.dark-mode .petunjuk-outline .fw-semibold,
+html.dark-mode .petunjuk-outline span[style*="color:#5b21b6"] {
+    color: #b7aaff !important;
+}
+html.dark-mode .petunjuk-outline ul,
+html.dark-mode .petunjuk-outline li {
+    color: #e0e6ed !important;
+} 

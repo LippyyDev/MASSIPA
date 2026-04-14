@@ -1,0 +1,36 @@
+/* =============================================================
+   HalamanAwal.css — Main Entry Point
+   MASSIPA Guest Landing Page Stylesheet
+   Author: MUHAMMAD ALIF QADRI 2025
+   Licensed to: PTA MAKASSAR DAN SELURUH JAJARANNYA
+   =============================================================
+   
+   STRUKTUR FILE CSS:
+   ┌─ components/
+   │  ├─ _base.css              → CSS Variables, reset, body, utility
+   │  ├─ _navbar.css            → Floating navbar & navigation links
+   │  ├─ _buttons.css           → Landing buttons & shine effect
+   │  ├─ _footer.css            → Footer styling
+   │  ├─ _section-hero.css      → Section Hero / Beranda (#beranda)
+   │  ├─ _section-tentang.css   → Section Tentang MASSIPA (#tentang)
+   │  ├─ _section-statistik.css → Section Statistik (#statistik)
+   │  ├─ _section-keunggulan.css→ Section Keunggulan & Bento Grid (#keunggulan)
+   │  ├─ _section-faq.css       → Section FAQ (#faq)
+   │  └─ _section-kontak.css    → Section Hubungi Kami (#hubungi)
+   ============================================================= */
+
+/* 1. Base & Utilities */
+@import url("components/_base.css");
+
+/* 2. Components */
+@import url("components/_navbar.css");
+@import url("components/_buttons.css");
+@import url("components/_footer.css");
+
+/* 3. Sections */
+@import url("components/_section-hero.css");
+@import url("components/_section-tentang.css");
+@import url("components/_section-statistik.css");
+@import url("components/_section-keunggulan.css");
+@import url("components/_section-faq.css");
+@import url("components/_section-kontak.css");

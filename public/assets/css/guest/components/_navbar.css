@@ -1,0 +1,199 @@
+/* =============================================================
+   COMPONENT — Navbar / Floating Navigation
+   ============================================================= */
+
+.navbar-floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: 100% !important;
+  z-index: 1000;
+  border-radius: 0;
+  box-shadow: none;
+  background: #ffffff;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  min-height: 76px;
+  padding: 10px 40px;
+}
+
+.navbar-floating.is-scrolled {
+  background: #ffffff;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* ---- Dark Mode Navbar ---- */
+html.guest-dark .navbar-floating,
+html.guest-dark .navbar-floating.is-scrolled {
+  background: #13131f !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.15) !important;
+}
+
+html.guest-dark .nav-link-ungu {
+  color: rgba(220, 215, 255, 0.82) !important;
+}
+
+html.guest-dark .nav-link-ungu:hover {
+  color: #a78bfa !important;
+}
+
+html.guest-dark .text-dark {
+  color: rgba(220, 215, 255, 0.88) !important;
+}
+
+html.guest-dark .offcanvas {
+  background: #13131f !important;
+}
+
+html.guest-dark .offcanvas .nav-link-ungu {
+  color: rgba(220, 215, 255, 0.85) !important;
+}
+
+html.guest-dark #guestDarkToggle {
+  color: #a78bfa;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Tombol Masuk & Download di dark mode */
+html.guest-dark .navbar-floating .btn.bg-white,
+html.guest-dark .navbar-floating a.bg-white {
+  background-color: rgba(139, 92, 246, 0.12) !important;
+  border-color: rgba(139, 92, 246, 0.35) !important;
+  color: #c4b5fd !important;
+}
+
+html.guest-dark .navbar-floating .btn.bg-white:hover,
+html.guest-dark .navbar-floating a.bg-white:hover {
+  background-color: rgba(139, 92, 246, 0.22) !important;
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+/* Burger icon color */
+.navbar-burger-btn {
+  color: #111827;
+}
+
+html.guest-dark .navbar-burger-btn {
+  color: rgba(220, 215, 255, 0.9);
+}
+
+.landing-navbar__inner {
+  padding-left: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+  padding-right: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+}
+
+/* --- Nav Links --- */
+.nav-link-ungu {
+  color: rgba(17, 24, 39, 0.78) !important;
+  position: relative;
+  padding: 0.5rem 0.2rem;
+  transition: color 0.25s ease;
+}
+
+.nav-link-ungu::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-0), var(--accent-1));
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.nav-link-ungu:hover {
+  color: var(--accent-1) !important;
+}
+
+.nav-link-ungu:hover::after {
+  width: 100%;
+}
+
+.nav-link-ungu.nav-active::after,
+.nav-link-ungu.active::after {
+  width: 100%;
+}
+
+/* --- Button Hover Effects --- */
+.btn-hover-scale {
+  display: inline-block;
+}
+.btn-hover-scale:hover {
+  transform: translateY(-2px);
+  color: var(--accent-1) !important;
+}
+
+.btn-hover-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-hover-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  z-index: 1;
+}
+.btn-hover-shine:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4) !important;
+}
+.btn-hover-shine:hover::before {
+  left: 200%;
+}
+
+/* --- Navbar Responsive --- */
+@media (max-width: 768px) {
+  .navbar-floating {
+    top: 0;
+    min-height: 48px;
+    padding: 6px 12px;
+  }
+
+  .navbar-floating .navbar-brand {
+    font-size: 1.1rem !important;
+  }
+
+  .navbar-floating .navbar-brand img {
+    height: 24px !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-floating {
+    top: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-floating {
+    top: 0 !important;
+    min-height: 44px !important;
+    padding: 4px 12px !important;
+  }
+
+  .navbar-floating .navbar-brand {
+    font-size: 1rem !important;
+  }
+}

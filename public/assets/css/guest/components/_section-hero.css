@@ -1,0 +1,502 @@
+/* =============================================================
+   SECTION — Hero / Beranda (#beranda)
+   ============================================================= */
+
+/* --- Hero Container --- */
+.landing-hero {
+  padding-top: 40px;
+  min-height: calc(100vh - 120px);
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 40px;
+  margin: 100px 20px 20px 20px;
+  border-radius: 32px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: -50px;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(30, 15, 60, 0.95) 0%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  backdrop-filter: none;
+}
+
+/* --- Hero Typography --- */
+.home-title {
+  font-family: "Poppins", "Inter", sans-serif;
+  letter-spacing: -1px;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  line-height: 1.16;
+  padding-bottom: 0.06em;
+  display: inline-block;
+}
+
+.hero-lead {
+  color: var(--text-1);
+  max-width: 620px;
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.hero-sub-title {
+  font-size: 1.25rem;
+  color: var(--text-1);
+}
+
+.animated-gradient-text {
+  background: linear-gradient(
+    270deg,
+    #7c3aed,
+    #ec4899,
+    #f97316,
+    #7c3aed,
+    #ec4899
+  );
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: gradientMove 12s ease infinite;
+  font-weight: 700;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #7367f0;
+}
+
+.typing-cursor {
+  display: inline-block;
+  font-weight: 100 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  animation: blinkCursor 0.8s step-end infinite;
+}
+
+@keyframes blinkCursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- Hero CTA Buttons --- */
+.hero-buttons {
+  margin-top: 1.1rem;
+  gap: 0.85rem !important;
+}
+
+#beranda .js-hero-cta {
+  margin-top: 0;
+}
+
+/* --- Hero Image & Abstract BG --- */
+.hero-image {
+  opacity: 1;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+  max-width: 90%;
+  height: auto;
+  margin-left: auto;
+  margin-right: -12px;
+  filter: none;
+}
+
+.hero-abstract-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-abstract-bg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- Hero Background Slideshow --- */
+#hero-bg-slideshow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s;
+  transform: scale(1.06);
+  filter: saturate(1.05) contrast(1.03) brightness(0.95);
+}
+
+.hero-bg-img.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* --- Hero Section Layout (#beranda) --- */
+#beranda {
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+}
+
+#beranda .container {
+  text-align: left !important;
+}
+
+#beranda .d-flex {
+  justify-content: flex-start !important;
+}
+
+#beranda .text-center {
+  text-align: left !important;
+}
+
+#beranda .lead {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+/* --- Hero Glass Button (Scroll Down) --- */
+.hero-glass-button-wrapper {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-glass-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.85) !important;
+  text-decoration: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 8px 32px rgba(17, 24, 39, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: heroGlassButtonFloat 3s ease-in-out infinite;
+}
+
+.hero-glass-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.3),
+    rgba(236, 72, 153, 0.2)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hero-glass-button:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow:
+    0 12px 48px rgba(139, 92, 246, 0.18),
+    0 0 0 1px rgba(139, 92, 246, 0.2) inset,
+    0 0 24px rgba(139, 92, 246, 0.1);
+  color: rgba(17, 24, 39, 0.95) !important;
+  animation: none;
+}
+
+.hero-glass-button:hover::before {
+  opacity: 1;
+}
+
+.hero-glass-button span {
+  transition: none;
+}
+
+.hero-glass-button svg {
+  flex-shrink: 0;
+}
+
+@keyframes heroGlassButtonFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow:
+      0 8px 32px rgba(17, 24, 39, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+      0 0 20px rgba(139, 92, 246, 0.08);
+  }
+  50% {
+    transform: translateY(-8px);
+    box-shadow:
+      0 12px 40px rgba(17, 24, 39, 0.16),
+      0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+      0 0 32px rgba(139, 92, 246, 0.14),
+      0 0 48px rgba(139, 92, 246, 0.06);
+  }
+}
+
+/* --- Hero Responsive --- */
+@media (max-width: 768px) {
+  .hero-buttons {
+    margin-top: 0.9rem;
+    gap: 0.7rem !important;
+    flex-wrap: nowrap;
+  }
+
+  .hero-buttons .btn {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    justify-content: center;
+  }
+
+  #beranda {
+    padding-top: 80px !important;
+  }
+
+  #beranda h1.animated-gradient-text {
+    font-size: 1.85rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  #beranda h2.animated-gradient-text {
+    font-size: 1.85rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  #beranda .lead {
+    font-size: 0.9rem !important;
+    max-width: 100% !important;
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .landing-hero {
+    padding-bottom: 40px;
+    padding-top: 20px;
+    margin: 80px 16px 16px 16px;
+    border-radius: 24px;
+    min-height: calc(100vh - 100px);
+  }
+
+  #beranda .container {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .hero-glass-button-wrapper {
+    bottom: 30px;
+  }
+
+  .hero-glass-button {
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-glass-button span {
+    display: none;
+  }
+
+  .hero-glass-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  #beranda .row {
+    text-align: left;
+  }
+
+  #beranda .lead {
+    margin: 0 0 0.25rem 0 !important;
+    text-align: left !important;
+  }
+
+  #beranda .js-hero-content h1.home-title {
+    margin-bottom: 0.4rem !important;
+    text-align: left !important;
+  }
+
+  #beranda .js-hero-content h2.home-title {
+    margin-bottom: 0.75rem !important;
+    line-height: 1.35 !important;
+    text-align: left !important;
+  }
+
+  .js-hero-content {
+    text-align: left !important;
+  }
+
+  .hero-image {
+    display: block !important;
+    max-width: 85%;
+    width: 85%;
+    height: auto;
+    margin: 0.25rem auto 0 auto;
+    opacity: 1;
+  }
+
+  #beranda .col-lg-6:first-child {
+    width: 100% !important;
+    text-align: left !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #beranda .col-lg-6:last-child {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  #beranda .js-hero-content .hero-buttons {
+    display: flex !important;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-top: 1.2rem;
+  }
+
+  #beranda .js-hero-content .hero-buttons .btn {
+    padding: 10px 14px !important;
+    font-size: 0.85rem !important;
+    flex: 1;
+    justify-content: center;
+  }
+
+  #beranda .js-hero-content .hero-buttons .btn i {
+    font-size: 0.95rem !important;
+    margin-right: 5px !important;
+  }
+
+  #beranda h1.animated-gradient-text {
+    font-size: 2.35rem !important;
+  }
+
+  #beranda h2.animated-gradient-text {
+    font-size: 2.35rem !important;
+  }
+
+  #beranda .lead {
+    font-size: 1rem !important;
+    max-width: 600px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  #beranda .col-lg-6:last-child {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  #beranda .row.align-items-center > .col-lg-6:first-child {
+    padding-right: 2rem;
+  }
+
+  #beranda .row.align-items-center > .col-lg-6:last-child {
+    padding-left: 2rem;
+  }
+
+  .hero-image {
+    max-width: 98%;
+    margin-right: -28px;
+    transform: translateY(-12px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-image {
+    max-width: 104%;
+    margin-right: -36px;
+    transform: translateY(-16px);
+  }
+}
+
+@media (max-width: 576px) {
+  #beranda h1.animated-gradient-text {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #beranda h2.animated-gradient-text {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #beranda .lead {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+  }
+}

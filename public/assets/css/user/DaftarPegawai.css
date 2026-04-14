@@ -1,0 +1,1179 @@
+﻿.main-content {
+    overflow-x: hidden;
+    padding-right: 0;
+    padding-left: 0;
+    padding: 12px 0 0 0;
+    transition: margin-left 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.main-content .container-fluid {
+    overflow-x: hidden;
+    padding-right: 0;
+    padding-left: 0;
+    max-width: none;
+    width: 100%;
+}
+
+.navbar {
+    overflow: visible !important;
+}
+
+.navbar .container-fluid {
+    overflow: visible !important;
+}
+
+.dropdown {
+    overflow: visible !important;
+}
+
+.dropdown-menu {
+    overflow: visible !important;
+    position: absolute !important;
+}
+
+:root {
+    --main-color: #7c3aed;
+    --main-color-light: #ede9fe;
+    --main-color-dark: #5b21b6;
+}
+body { background: #faf8ff !important; }
+
+@media (min-width: 992px) {
+    .main-content { margin-left: 240px; }
+    .sidebar.show ~ .main-content { margin-left: 240px; }
+}
+@media (max-width: 991px) {
+    .main-content { 
+        margin-left: 0 !important; 
+        padding: 8px 0 0 0; 
+        overflow-x: hidden;
+    }
+}
+
+.card {
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    background: #fff;
+}
+
+.card-header {
+    background: #fff;
+    font-weight: 600;
+    border-bottom: none;
+    padding: 14px 20px;
+}
+
+.daftar-pegawai-section .card-header {
+    background: #fff;
+    font-weight: 600;
+    padding: 14px 20px;
+    border-bottom: 1px solid #ede9fe;
+}
+
+.card-body {
+    padding: 18px 20px;
+}
+
+.modern-table th {
+    font-weight: 700;
+    background: #f6f6fa;
+    border-bottom: 2px solid #ececec;
+    color: #5b21b6;
+    font-size: 1.05em;
+    letter-spacing: 0.01em;
+}
+.modern-table td {
+    background: #fff;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 1em;
+    padding: 12px 10px;
+}
+.modern-table tr {
+    border-radius: 8px;
+}
+.modern-table tbody tr:nth-child(even) td {
+    background: #faf8ff;
+}
+.modern-table th, .modern-table td { border: none !important; }
+.modern-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    margin-bottom: 0;
+    border: none !important;
+}
+.table-responsive {
+    overflow-x: auto !important;
+    padding: 0;
+    margin: 0;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 12px;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.badge.bg-primary {
+    background: var(--main-color, #7c3aed) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.25);
+}
+
+.badge.bg-primary:hover {
+    box-shadow: 0 3px 6px rgba(124, 58, 237, 0.35);
+}
+
+.badge.bg-danger {
+    background: #dc3545 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.25);
+}
+
+.badge.bg-danger:hover {
+    box-shadow: 0 3px 6px rgba(220, 53, 69, 0.35);
+}
+
+.badge.bg-success {
+    background: #28a745 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.25);
+}
+
+.badge.bg-success:hover {
+    box-shadow: 0 3px 6px rgba(40, 167, 69, 0.35);
+}
+
+.badge.bg-warning {
+    background: #ffc107 !important;
+    color: #000 !important;
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.25);
+}
+
+.badge.bg-warning:hover {
+    box-shadow: 0 3px 6px rgba(255, 193, 7, 0.35);
+}
+
+.badge.bg-secondary {
+    background: #6c757d !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.25);
+}
+
+.badge.bg-secondary:hover {
+    box-shadow: 0 3px 6px rgba(108, 117, 125, 0.35);
+}
+
+.badge.bg-info {
+    background: #17a2b8 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.25);
+}
+
+.badge.bg-info:hover {
+    box-shadow: 0 3px 6px rgba(23, 162, 184, 0.35);
+}
+
+.dark-mode .badge,
+html.dark-mode .badge {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-mode .badge:hover,
+html.dark-mode .badge:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .badge.bg-primary,
+html.dark-mode .badge.bg-primary {
+    background: #5b21b6 !important;
+    box-shadow: 0 2px 4px rgba(91, 33, 182, 0.35) !important;
+}
+
+.dark-mode .badge.bg-primary:hover,
+html.dark-mode .badge.bg-primary:hover {
+    box-shadow: 0 3px 6px rgba(91, 33, 182, 0.45) !important;
+}
+
+.dark-mode .badge.bg-danger,
+html.dark-mode .badge.bg-danger {
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.35) !important;
+}
+
+.dark-mode .badge.bg-danger:hover,
+html.dark-mode .badge.bg-danger:hover {
+    box-shadow: 0 3px 6px rgba(220, 53, 69, 0.45) !important;
+}
+
+.dark-mode .badge.bg-success,
+html.dark-mode .badge.bg-success {
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.35) !important;
+}
+
+.dark-mode .badge.bg-success:hover,
+html.dark-mode .badge.bg-success:hover {
+    box-shadow: 0 3px 6px rgba(40, 167, 69, 0.45) !important;
+}
+
+.dark-mode .badge.bg-warning,
+html.dark-mode .badge.bg-warning {
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.35) !important;
+}
+
+.dark-mode .badge.bg-warning:hover,
+html.dark-mode .badge.bg-warning:hover {
+    box-shadow: 0 3px 6px rgba(255, 193, 7, 0.45) !important;
+}
+
+.dark-mode .badge.bg-secondary,
+html.dark-mode .badge.bg-secondary {
+    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.35) !important;
+}
+
+.dark-mode .badge.bg-secondary:hover,
+html.dark-mode .badge.bg-secondary:hover {
+    box-shadow: 0 3px 6px rgba(108, 117, 125, 0.45) !important;
+}
+
+.dark-mode .badge.bg-info,
+html.dark-mode .badge.bg-info {
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.35) !important;
+}
+
+.dark-mode .badge.bg-info:hover,
+html.dark-mode .badge.bg-info:hover {
+    box-shadow: 0 3px 6px rgba(23, 162, 184, 0.45) !important;
+}
+.filter-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px 18px 15px 18px;
+    margin-bottom: 1rem;
+    border: none;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+}
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+.filter-col {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+.filter-btn-col {
+    flex: 0 0 120px;
+    min-width: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+.filter-section .form-label {
+    font-weight: 600;
+    color: #5b21b6;
+    margin-bottom: 8px;
+}
+.filter-section .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+.btn-filter {
+    background: var(--main-color);
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    padding: 8px 22px;
+    transition: background 0.2s;
+}
+@media (max-width: 767px) {
+    .filter-section {
+        padding: 10px 6px 12px 6px;
+        margin-bottom: 1rem;
+    }
+    
+    .daftar-pegawai-section .card {
+        margin: 0 0 1rem 0 !important;
+    }
+    .filter-row {
+        display: block !important;
+        gap: 0 !important;
+    }
+    .filter-col {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        margin-bottom: 8px;
+    }
+    .filter-btn-col {
+        width: 100%;
+        justify-content: stretch;
+        margin-top: 2px;
+    }
+    .btn-filter {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 0.9rem !important;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .modern-table, .modern-table thead, .modern-table tbody, .modern-table tr, .modern-table th, .modern-table td {
+        display: block;
+        width: 100%;
+    }
+    .modern-table thead {
+        display: none;
+    }
+    .modern-table tr {
+        margin-bottom: 8px;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        padding: 6px 0 2px 0;
+    }
+    .modern-table td {
+        border: none;
+        background: #fff;
+        position: relative;
+        padding-left: 44%;
+        min-height: 28px;
+        font-size: 0.75rem !important;
+        margin-bottom: 2px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    .modern-table td:before {
+        position: absolute;
+        left: 10px;
+        top: 7px;
+        width: 42%;
+        white-space: nowrap;
+        font-weight: 600;
+        font-size: 0.75rem !important;
+        color: #7c3aed;
+        content: attr(data-label);
+    }
+}
+.petunjuk-outline {
+    border: none !important;
+    border-radius: 12px;
+    background: #fff;
+    padding: 18px 20px;
+    font-size: 0.97em;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+}
+#pegawaiTable {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: auto !important;
+}
+#pegawaiTable th, #pegawaiTable td {
+    white-space: normal !important;
+}
+.dark-mode body, .dark-mode {
+    background: #1a1824 !important;
+    color: #e0e0e0 !important;
+}
+.dark-mode .main-content {
+    background: #181824 !important;
+}
+.dark-mode .card {
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+}
+.dark-mode .card-header {
+    background: #232336 !important;
+    border-bottom: none !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .daftar-pegawai-section .card-header,
+html.dark-mode .daftar-pegawai-section .card-header {
+    background: #232336 !important;
+    border-bottom: 1px solid #2d2d44 !important;
+    color: #e0e0e0 !important;
+}
+.dark-mode .card-body {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+}
+.dark-mode .petunjuk-outline {
+    background: #232336 !important;
+    color: #e0e6ed !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+}
+.dark-mode .petunjuk-outline .fw-semibold,
+.dark-mode .petunjuk-outline span[style*="color:#5b21b6"] {
+    color: #b7aaff !important;
+}
+.dark-mode .petunjuk-outline ul,
+.dark-mode .petunjuk-outline li {
+    color: #e0e6ed !important;
+}
+.dark-mode .filter-section {
+    background: #232336 !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+}
+.dark-mode .filter-section .form-label {
+    color: #a78bfa !important;
+}
+.dark-mode .form-control, .dark-mode .form-select {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+    border-color: #2d2d44 !important;
+}
+.dark-mode .form-control:focus, .dark-mode .form-select:focus {
+    background: #232336 !important;
+    color: #fff !important;
+}
+.dark-mode .btn-filter {
+    background: #5b21b6 !important;
+    color: #fff !important;
+}
+.dark-mode .modern-table th {
+    background: #232336 !important;
+    color: #a78bfa !important;
+    border-bottom: 2px solid #2d2d44 !important;
+}
+.dark-mode .modern-table td {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid #232336 !important;
+}
+.dark-mode .modern-table tbody tr:nth-child(even) td {
+    background: #232336 !important;
+}
+.dark-mode .table-light th {
+    background: #232336 !important;
+    color: #a78bfa !important;
+}
+.dark-mode .table-responsive {
+    background: #232336 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.dataTables_wrapper .dataTables_info {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  margin-top: 15px !important;
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: auto !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination {
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item {
+  margin: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-link {
+  border-radius: 10px;
+  border: 1px solid #e5d5ff;
+  background: #f8f4ff;
+  color: #5b21b6;
+  min-width: 38px;
+  padding: 6px 12px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-link:hover,
+.dataTables_wrapper .dataTables_paginate .page-link:focus {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+  box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.2);
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link {
+  background: #f3f0ff;
+  border-color: #e5d5ff;
+  color: #b5a7d9;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .dataTables_wrapper .row:last-child {
+    justify-content: center !important;
+  }
+
+  .dataTables_wrapper .row:last-child > div {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+}
+
+html.dark-mode .dataTables_wrapper .dataTables_paginate .pagination {
+  gap: 10px !important;
+}
+
+html.dark-mode .dataTables_wrapper .dataTables_paginate .page-link {
+  background: #232336 !important;
+  color: #c7b7ff !important;
+  border-color: #2d2d44 !important;
+}
+
+html.dark-mode .dataTables_wrapper .dataTables_paginate .page-link:hover,
+html.dark-mode .dataTables_wrapper .dataTables_paginate .page-link:focus {
+  background: #5b21b6 !important;
+  color: #fff !important;
+  border-color: #5b21b6 !important;
+  box-shadow: 0 0 0 0.2rem rgba(91, 33, 182, 0.35) !important;
+}
+
+html.dark-mode .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+  background: #5b21b6 !important;
+  color: #fff !important;
+  border-color: #5b21b6 !important;
+}
+
+html.dark-mode .dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link {
+  background: #1f1f32 !important;
+  color: #666381 !important;
+    border-color: #2d2d44 !important;
+}
+
+.dark-mode .pagination,
+.dark-mode .page-item,
+.dark-mode .page-link {
+    background: #232336 !important;
+    color: #a78bfa !important;
+    border-color: #2d2d44 !important;
+}
+.dark-mode .page-item.active .page-link {
+    background: #5b21b6 !important;
+    color: #fff !important;
+    border-color: #5b21b6 !important;
+}
+.dark-mode .page-item.disabled .page-link {
+    background: #232336 !important;
+    color: #888 !important;
+    border-color: #2d2d44 !important;
+}
+.dark-mode .border.rounded.mb-3.p-3.shadow-sm,
+.dark-mode .border.rounded.mb-3.p-3 {
+    background: #232336 !important;
+    border: none !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12) !important;
+}
+.dark-mode .modern-table {
+    border: none !important;
+}
+.dark-mode ::placeholder {
+    color: #a3a3c2 !important;
+    opacity: 1 !important;
+}
+html:not(.dark-mode) ::-webkit-scrollbar {
+    height: 10px;
+    background: #f3f0ff;
+}
+html:not(.dark-mode) ::-webkit-scrollbar-thumb {
+    background: #d1c4e9;
+    border-radius: 8px;
+}
+html:not(.dark-mode) ::-webkit-scrollbar-corner {
+    background: #f3f0ff;
+}
+html:not(.dark-mode) {
+    scrollbar-color: #d1c4e9 #f3f0ff;
+    scrollbar-width: thin;
+} 
+
+@media (max-width: 1220px) {
+    .dataTables_wrapper .dataTables_filter input {
+        width: 220px !important;
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_filter label {
+        font-size: 12px !important;
+        gap: 6px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_length label {
+        font-size: 12px !important;
+        gap: 6px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_length select {
+        font-size: 12px !important;
+        padding: 3px 6px !important;
+        min-width: 60px !important;
+        width: auto !important;
+    }
+    
+    .dataTables_wrapper .dataTables_info {
+        font-size: 12px !important;
+    }
+    
+    .modern-table th {
+        font-size: 0.9em !important;
+        padding: 8px 6px !important;
+    }
+    
+    .modern-table td {
+        font-size: 0.85em !important;
+        padding: 8px 6px !important;
+    }
+    
+    .btn-action {
+        font-size: 11px !important;
+        padding: 5px 8px !important;
+    }
+    
+    .btn-action i {
+        font-size: 10px !important;
+    }
+    
+    .card-header {
+        font-size: 0.9em !important;
+        padding: 10px 14px !important;
+    }
+    
+    .daftar-pegawai-section .card-header {
+        padding: 10px 14px !important;
+    }
+    
+    .card-body {
+        padding: 12px 14px !important;
+    }
+    
+    .daftar-pegawai-section .card-body {
+        padding: 12px 14px !important;
+    }
+    
+    .modal-title {
+        font-size: 1em !important;
+    }
+    
+    .form-label {
+        font-size: 12px !important;
+    }
+    
+    .form-control, .form-select {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+    
+    .form-text {
+        font-size: 11px !important;
+    }
+    
+    .badge {
+        font-size: 0.7rem !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+    }
+    
+    .filter-section {
+        padding: 12px 14px !important;
+    }
+    
+    .filter-section .form-label {
+        font-size: 12px !important;
+    }
+    
+    .filter-section .form-select {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+    
+    .petunjuk-outline {
+        font-size: 0.9em !important;
+        padding: 14px 16px !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm,
+    .border.rounded.mb-3.p-3 {
+        font-size: 0.9em !important;
+        padding: 12px !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .fw-bold,
+    .border.rounded.mb-3.p-3 .fw-bold {
+        font-size: 0.95em !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm b,
+    .border.rounded.mb-3.p-3 b {
+        font-size: 0.9em !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .btn,
+    .border.rounded.mb-3.p-3 .btn {
+        font-size: 11px !important;
+        padding: 5px 8px !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .btn i,
+    .border.rounded.mb-3.p-3 .btn i {
+        font-size: 10px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .dataTables_wrapper .dataTables_filter input {
+        width: 180px !important;
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_filter label {
+        font-size: 0.75rem !important;
+        gap: 4px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_length label {
+        font-size: 0.75rem !important;
+        gap: 4px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_length select {
+        font-size: 0.75rem !important;
+        padding: 2px 4px !important;
+        min-width: 50px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_info {
+        font-size: 0.7rem !important;
+    }
+    
+    .table-responsive {
+        box-shadow: none !important;
+    }
+    .modern-table th {
+        font-size: 0.85rem !important;
+        padding: 6px 4px !important;
+    }
+    
+    .modern-table td {
+        font-size: 0.75rem !important;
+        padding: 6px 4px !important;
+    }
+    
+    .btn-action {
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .btn-action i {
+        font-size: 0.65rem !important;
+    }
+    
+    .card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    }
+    .card-header {
+        font-size: 0.9rem !important;
+        padding: 8px 12px !important;
+    }
+    
+    .daftar-pegawai-section .card-header {
+        padding: 8px 12px !important;
+    }
+    
+    .card-body {
+        padding: 10px 12px !important;
+    }
+    
+    .daftar-pegawai-section .card-body {
+        padding: 10px 12px !important;
+    }
+    
+    .modal-title {
+        font-size: 0.85rem !important;
+    }
+    
+    .form-label {
+        font-size: 0.8rem !important;
+    }
+    
+    .form-control, .form-select {
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .form-text {
+        font-size: 0.7rem !important;
+    }
+    
+    .badge {
+        font-size: 0.65rem !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+    }
+
+    .d-block.d-md-none .border.rounded.mb-3.p-3.shadow-sm .fw-bold.mb-1,
+    .d-block.d-md-none .border.rounded.mb-3.p-3 .fw-bold.mb-1 {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .d-block.d-md-none .border.rounded.mb-3.p-3.shadow-sm .fw-bold.mb-1 .badge,
+    .d-block.d-md-none .border.rounded.mb-3.p-3 .fw-bold.mb-1 .badge {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .filter-section {
+        padding: 8px 10px !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .daftar-pegawai-section .card {
+        margin: 0 0 1rem 0 !important;
+    }
+    
+    .filter-section .form-label {
+        font-size: 0.8rem !important;
+    }
+    
+    .filter-section .form-select {
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .petunjuk-outline {
+        font-size: 0.85rem !important;
+        padding: 12px 14px !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm,
+    .border.rounded.mb-3.p-3 {
+        font-size: 0.85rem !important;
+        padding: 10px !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .fw-bold,
+    .border.rounded.mb-3.p-3 .fw-bold {
+        font-size: 0.85rem !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm b,
+    .border.rounded.mb-3.p-3 b {
+        font-size: 0.8rem !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .btn,
+    .border.rounded.mb-3.p-3 .btn {
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .border.rounded.mb-3.p-3.shadow-sm .btn i,
+    .border.rounded.mb-3.p-3 .btn i {
+        font-size: 0.65rem !important;
+    }
+    
+    #search_mobile_pegawai {
+        font-size: 0.75rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    #mobilePagination {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin-top: 15px !important;
+    }
+    
+    #mobilePagination .pagination {
+        display: flex !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        align-items: center !important;
+        list-style: none !important;
+        justify-content: center !important;
+    }
+    
+    #mobilePagination .pagination .page-item {
+        list-style: none !important;
+        margin: 0 !important;
+    }
+    
+    #mobilePagination .page-link {
+        border-radius: 10px !important;
+        border: 1px solid #e5d5ff !important;
+        background: #f8f4ff !important;
+        color: #5b21b6 !important;
+        min-width: 38px !important;
+        padding: 6px 12px !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+        font-size: 0.875rem !important;
+    }
+    
+    #mobilePagination .page-link:hover:not(:disabled),
+    #mobilePagination .page-link:focus:not(:disabled) {
+        background: #7c3aed !important;
+        border-color: #7c3aed !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.2) !important;
+    }
+    
+    #mobilePagination .page-link.active {
+        background: #6d28d9 !important;
+        border-color: #6d28d9 !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3) !important;
+    }
+    
+    #mobilePagination .page-link:disabled {
+        background: #f3f0ff !important;
+        border-color: #e5d5ff !important;
+        color: #b5a7d9 !important;
+        cursor: not-allowed !important;
+        opacity: 0.6 !important;
+    }
+    
+    #mobilePagination #mobilePageNumbers {
+        display: flex !important;
+        gap: 8px !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+    
+    #mobilePagination #mobilePageNumbers .page-item {
+        list-style: none !important;
+        margin: 0 !important;
+    }
+    
+    .dark-mode .card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .dark-mode .table-responsive {
+        box-shadow: none !important;
+    }
+    
+    .dark-mode .border.rounded.mb-3.p-3.shadow-sm,
+    .dark-mode .border.rounded.mb-3.p-3 {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    html.dark-mode #mobilePagination .page-link {
+        background: #232336 !important;
+        border-color: #2d2d44 !important;
+        color: #c7b7ff !important;
+    }
+    
+    html.dark-mode #mobilePagination .page-link:hover:not(:disabled),
+    html.dark-mode #mobilePagination .page-link:focus:not(:disabled) {
+        background: #5b21b6 !important;
+        border-color: #5b21b6 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(91, 33, 182, 0.35) !important;
+    }
+    
+    html.dark-mode #mobilePagination .page-link.active {
+        background: #5b21b6 !important;
+        border-color: #5b21b6 !important;
+        color: #fff !important;
+    }
+    
+    html.dark-mode #mobilePagination .page-link:disabled {
+        background: #1f1f32 !important;
+        border-color: #2d2d44 !important;
+        color: #666381 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content .container-fluid {
+        padding-right: 0;
+        padding-left: 0;
+        overflow-x: hidden;
+    }
+    
+    .card {
+        margin: 0 1rem 1rem 1rem;
+    }
+    
+    .filter-section {
+        margin-bottom: 1rem;
+    }
+    
+    .daftar-pegawai-section .card {
+        margin: 0 0 1rem 0 !important;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+.modal-dialog-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    max-width: 100%;
+    height: auto;
+    max-height: 90vh;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.modal.fade .modal-dialog-bottom-sheet {
+    transform: translateY(100%);
+}
+
+.modal.show .modal-dialog-bottom-sheet {
+    transform: translateY(0);
+}
+
+.modal-dialog-bottom-sheet .modal-content {
+    border-radius: 20px 20px 0 0;
+    border: none;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-dialog-bottom-sheet .modal-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 1.5rem;
+    border-radius: 20px 20px 0 0;
+}
+
+.modal-dialog-bottom-sheet .modal-body {
+    padding: 1.5rem;
+    max-height: calc(90vh - 140px);
+    overflow-y: auto;
+}
+
+.modal-dialog-bottom-sheet .modal-footer {
+    border-top: 1px solid #e0e0e0;
+    padding: 1rem 1.5rem;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .modal-content {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .modal-header {
+    background: #232336 !important;
+    border-bottom-color: #2d2d44 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.dark-mode .modal-dialog-bottom-sheet .modal-body {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .modal-footer {
+    background: #232336 !important;
+    border-top-color: #2d2d44 !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .form-label {
+    color: #a78bfa !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .form-select {
+    background: #232336 !important;
+    color: #e0e0e0 !important;
+    border-color: #2d2d44 !important;
+}
+
+.dark-mode .modal-dialog-bottom-sheet .form-select:focus {
+    background: #232336 !important;
+    color: #fff !important;
+    border-color: #5b21b6 !important;
+}
+
+.btn[style*="background: #7c3aed"] {
+    padding: 0.25rem 0.5rem !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn[style*="background: #7c3aed"] i {
+    font-size: 0.875rem !important;
+}
+
+@media (min-width: 768px) {
+    .btn[style*="background: #7c3aed"][data-bs-target="#filterPegawaiModal"],
+    .card-header .btn[data-bs-target="#filterPegawaiModal"],
+    .daftar-pegawai-section .card-header .btn[data-bs-target="#filterPegawaiModal"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}

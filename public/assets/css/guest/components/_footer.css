@@ -1,0 +1,36 @@
+/* =============================================================
+   COMPONENT — Footer
+   ============================================================= */
+
+.landing-footer__copyright {
+  font-size: 0.93rem;
+  color: #b7aaff;
+  margin-top: 8px;
+}
+
+.footer-link {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #b7aaff !important;
+  text-decoration: underline;
+}
+
+/* --- Footer Responsive --- */
+@media (max-width: 768px) {
+  .landing-footer__details {
+    display: none !important;
+  }
+
+  .landing-footer__copyright {
+    margin-top: 0;
+    font-size: 0.88rem;
+    color: rgba(224, 230, 237, 0.9);
+  }
+
+  .landing-footer {
+    padding: 14px 0 !important;
+  }
+}

@@ -1,0 +1,41 @@
+# Blokir akses file sensitif
+
+<Files .env>
+Order allow,deny
+Deny from all
+</Files>
+
+# Blokir akses file sensitif lainnya
+
+<FilesMatch "\.(env|log|json|lock|dist|sh|git)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+# ============================================================
+
+# HTTP Security Headers
+
+# ============================================================
+
+<IfModule mod_headers.c>
+    # HTTP Strict Transport Security: paksa HTTPS selama 1 tahun
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # Cegah clickjacking - hanya izinkan framing dari origin yang sama
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Cegah MIME-sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Kontrol informasi referrer yang dikirim
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Batasi fitur browser yang dapat digunakan halaman
+    Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
+    # Content Security Policy (CSP)
+    # Mengizinkan resource dari CDN yang digunakan: jsdelivr, jquery, datatables, cdnjs, google fonts, google maps
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' cdn.jsdelivr.net code.jquery.com cdn.datatables.net cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' cdn.jsdelivr.net fonts.googleapis.com cdnjs.cloudflare.com cdn.datatables.net 'unsafe-inline'; font-src 'self' fonts.gstatic.com cdn.jsdelivr.net cdnjs.cloudflare.com data:; img-src 'self' data: blob:; connect-src 'self' cdn.jsdelivr.net; frame-src 'self' www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+
+</IfModule>

@@ -1,0 +1,111 @@
+/* =============================================================
+   SECTION — Tentang MASSIPA (#tentang)
+   ============================================================= */
+
+#tentang.landing-section--about {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+#tentang.landing-section--about::before {
+  display: none;
+}
+
+#tentang .about-random-glow-layer {
+  display: none;
+}
+
+#tentang .about-random-glow-blob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  filter: blur(16px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  transform: translate3d(-200px, -200px, 0) scale(1);
+  transition: none;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tentang .about-random-glow-blob {
+    transition: none;
+  }
+}
+
+#tentang.landing-section--about > .container {
+  position: relative;
+  z-index: 2;
+}
+
+#tentang .section-heading,
+#tentang .section-paragraph {
+  color: var(--text-0) !important;
+}
+
+#tentang .section-paragraph {
+  color: var(--text-1) !important;
+}
+
+#tentang .section-kicker {
+  color: var(--text-0);
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: none;
+}
+
+#tentang .about-logo {
+  display: block;
+  width: 180px;
+  height: auto;
+  margin: 0.6rem auto 0.9rem auto;
+  filter: drop-shadow(0 14px 44px rgba(0, 0, 0, 0.28));
+}
+
+#tentang .about-logo:hover {
+  filter: drop-shadow(0 18px 60px rgba(0, 0, 0, 0.32));
+}
+
+#tentang .about-image {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* --- Tentang Responsive --- */
+@media (max-width: 768px) {
+  #tentang .section-kicker {
+    font-size: 0.76rem;
+    padding: 0.32rem 0.75rem;
+  }
+
+  #tentang .section-heading {
+    font-size: 1.45rem !important;
+    line-height: 1.18;
+  }
+
+  #tentang .section-paragraph {
+    font-size: 1rem !important;
+    line-height: 1.8 !important;
+  }
+
+  #tentang .section-paragraph br {
+    display: none;
+  }
+
+  #tentang .section-paragraph strong {
+    font-size: 1.2rem !important;
+  }
+
+  #tentang .section-paragraph span.badge {
+    font-size: 0.85rem !important;
+    padding: 0.3em 0.6em !important;
+    transform: translateY(-2px) !important;
+  }
+
+  #tentang .about-logo {
+    width: 135px;
+  }
+}
