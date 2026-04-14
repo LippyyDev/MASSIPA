@@ -1,7 +1,7 @@
 # 🔐 Security Fix — Patch Celah Upload Malware
 **Tanggal Ditemukan:** 14 April 2026  
 **Severity:** KRITIS  
-**Status Keseluruhan:** 🔴 BELUM DIPERBAIKI
+**Status Keseluruhan:** 🟡 SEBAGIAN SELESAI (Tahap 0 Lokal ✅ — Server & Kode Pending)
 
 ---
 
@@ -19,37 +19,77 @@ Artinya attacker yang punya akun (admin/user) bisa menanam dan mengeksekusi kode
 
 ---
 
-### ✅ TAHAP 0 — Bersih-Bersih (Lakukan Sekarang!)
+### 🟡 TAHAP 0 — Bersih-Bersih (Lokal ✅ | Server ⏳ Pending)
 
-- [ ] Hapus file `test_upload_vuln.php` dari root project
-- [ ] Hapus semua file `sk_*.php` dari folder `writable/uploads/` di server production
-- [ ] Hapus semua file `ttd_*.php` dari folder `writable/uploads/ttd/` di server production
-- [ ] Reset password semua akun admin
-- [ ] Reset password semua akun user
-- [ ] Cek log akses server: cari IP yang pernah akses `writable/uploads/*.php`
+- [x] Hapus file `test_upload_vuln.php` dari root project ✅ 14/04/2026
+- [x] Scan folder `writable/uploads/` lokal — bersih, tidak ada file PHP ✅ 14/04/2026
+- [x] Scan folder `public/` lokal — bersih ✅ 14/04/2026
+- [ ] ⏳ **[SERVER — PENDING]** Hapus semua file `sk_*.php` dari `writable/uploads/` di server production
+- [ ] ⏳ **[SERVER — PENDING]** Hapus semua file `ttd_*.php` dari `writable/uploads/ttd/` di server production
+- [ ] ⏳ **[SERVER — PENDING]** Reset password semua akun admin via cPanel/phpMyAdmin
+- [ ] ⏳ **[SERVER — PENDING]** Reset password semua akun user via cPanel/phpMyAdmin
+- [ ] ⏳ **[SERVER — PENDING]** Cek log akses Apache: cari IP yang pernah akses `writable/uploads/*.php`
 
 ---
 
-### 🔴 TAHAP 1 — Buat .htaccess Blokir Eksekusi PHP di Folder Upload
+### 🟡 TAHAP 1 — Audit .htaccess Existing + Buat Proteksi Baru (File Dibuat ✅ | Test ⏳)
 
-> **Estimasi:** 10 menit  
-> **File yang dibuat:** 3 file `.htaccess` baru
+> **Estimasi:** 15 menit  
+> **File yang diaudit:** 5 file `.htaccess` existing  
+> **File yang dibuat:** 5 file `.htaccess` baru
 
-- [ ] Buat file `writable/uploads/.htaccess`
-- [ ] Buat file `writable/uploads/ttd/.htaccess`
-- [ ] Buat file `writable/uploads/laporan/.htaccess`
-- [ ] Test: Upload `test_upload_vuln.php` → akses URL-nya → harus muncul **403 Forbidden**
+#### 📋 AUDIT .htaccess EXISTING (14/04/2026)
 
-**Isi file `.htaccess`** (sama untuk ketiganya):
+| # | Lokasi File | Status | Isi | Penilaian |
+|---|---|---|---|---|
+| 1 | `/.htaccess` (root) | ✅ Ada | Blokir `.env`, `.log`, `.json`; Security headers (HSTS, CSP, X-Frame, dll) | 🟢 Bagus — sudah lengkap untuk proteksi file sensitif |
+| 2 | `/app/.htaccess` | ✅ Ada | `Deny from all` | 🟢 Bagus — blokir akses langsung ke folder app |
+| 3 | `/public/.htaccess` | ✅ Ada | Rewrite engine CI4, gzip, caching, `Options -Indexes` | ⚠️ **Kurang** — tidak ada blokir eksekusi PHP di subfolder uploads |
+| 4 | `/tests/.htaccess` | ✅ Ada | `Deny from all` | 🟢 Bagus |
+| 5 | `/writable/.htaccess` | ✅ Ada | `Deny from all` | ⚠️ **Masalah!** — blokir ini TIDAK efektif karena di deployment cPanel, `writable/` ada di dalam `public_html/massipa/` sehingga rewrite rule CI4 bisa mem-bypass |
+
+#### ❌ FOLDER UPLOAD YANG TIDAK PUNYA .htaccess (TEREKSPOS!)
+
+| # | Folder | Status | Dipakai Untuk | Risiko |
+|---|---|---|---|---|
+| 1 | `writable/uploads/` | ❌ TIDAK ADA | Berkas SK Hukuman Disiplin | 🔴 KRITIS |
+| 2 | `writable/uploads/ttd/` | ❌ TIDAK ADA | Gambar tanda tangan | 🔴 KRITIS |
+| 3 | `writable/uploads/laporan/` | ❌ TIDAK ADA | File laporan PDF/DOC | 🟠 TINGGI |
+| 4 | `public/uploads/` | ❌ TIDAK ADA | Root folder uploads public | 🟠 TINGGI |
+| 5 | `public/uploads/profil/` | ❌ TIDAK ADA | Foto profil user (webp) | 🟡 SEDANG |
+
+#### ✅ CHECKLIST PERBAIKAN
+
+- [x] Buat file `writable/uploads/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
+- [x] Buat file `writable/uploads/ttd/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
+- [x] Buat file `writable/uploads/laporan/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
+- [x] Buat file `public/uploads/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
+- [x] Buat file `public/uploads/profil/.htaccess` — blokir eksekusi PHP ✅ 14/04/2026
+- [ ] ⏳ **Test:** akses `massipa.test/writable/uploads/test.php` → harus **403 Forbidden** (test manual oleh user)
+
+**Isi file `.htaccess`** (sama untuk semua folder upload):
 ```apache
-# Blokir semua eksekusi script PHP dan script lainnya
-Options -ExecCGI
+# ============================================================
+# SECURITY: Blokir eksekusi script di folder upload
+# Ditambahkan: 14/04/2026 — Patch celah malware
+# ============================================================
+
+# Nonaktifkan eksekusi CGI/script
+Options -ExecCGI -Indexes
 AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .pl .py .jsp .asp .sh .cgi
 
+# Blokir akses langsung ke file script
 <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# Jika pakai Apache 2.4+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
 ```
 
 ---
@@ -226,8 +266,8 @@ if ($csvExt !== 'csv' || !in_array($csvMime, $allowedCsvMimes)) {
 | Tanggal | Tahap | Status | Catatan |
 |---|---|---|---|
 | 14/04/2026 | Audit & Test | ✅ Selesai | Terbukti bocor via test_upload_vuln.php |
-| | Tahap 0 | ⏳ Pending | |
-| | Tahap 1 | ⏳ Pending | |
+| 14/04/2026 | Tahap 0 | 🟡 Parsial | Lokal ✅ bersih. Server ⏳ pending (hapus shell + reset password di production) |
+| 14/04/2026 | Tahap 1 | 🟡 Parsial | 5 file .htaccess dibuat. **Test 403 oleh user pending.** |
 | | Tahap 2 | ⏳ Pending | |
 | | Tahap 3 | ⏳ Pending | |
 | | Tahap 4 | ⏳ Pending | |

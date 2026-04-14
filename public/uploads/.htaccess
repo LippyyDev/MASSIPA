@@ -1,0 +1,21 @@
+# ============================================================
+# SECURITY: Blokir eksekusi script di folder upload
+# Ditambahkan: 14/04/2026 — Patch celah malware
+# ============================================================
+
+# Nonaktifkan eksekusi CGI/script
+Options -ExecCGI -Indexes
+AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .pl .py .jsp .asp .sh .cgi
+
+# Blokir akses langsung ke file script
+<FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Jika pakai Apache 2.4+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
