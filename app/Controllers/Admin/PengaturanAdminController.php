@@ -3,15 +3,24 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\Admin\PengaturanAdminModel;
+use App\Models\LoginHistoryModel;
 
 class PengaturanAdminController extends BaseController
 {
     public function pengaturan()
     {
         $pengaturanModel = new PengaturanAdminModel();
-        $keys = $pengaturanModel->getAllApiKeys();
+        $historyModel    = new LoginHistoryModel();
+
+        $keys    = $pengaturanModel->getAllApiKeys();
         $origins = $pengaturanModel->getAllOrigins();
-        return view('admin/Pengaturan', ['keys' => $keys, 'origins' => $origins]);
+        $riwayat = $historyModel->getAllHistory(100);
+
+        return view('admin/Pengaturan', [
+            'keys'    => $keys,
+            'origins' => $origins,
+            'riwayat' => $riwayat,
+        ]);
     }
 
     public function apiKeyList()
@@ -88,4 +97,28 @@ class PengaturanAdminController extends BaseController
         }
         return redirect()->to(base_url('admin/pengaturan'))->with('msg', $msg)->with('msg_type', $msgType);
     }
-} 
+
+    /**
+     * AJAX POST — load semua riwayat login untuk DataTable admin.
+     */
+    public function riwayatPerangkatAjax()
+    {
+        $historyModel = new LoginHistoryModel();
+        $riwayat      = $historyModel->getAllHistory(200);
+        return $this->response->setJSON([
+            'data' => $riwayat,
+        ]);
+    }
+
+    /**
+     * Hapus satu record riwayat login (hak admin).
+     */
+    public function deleteRiwayat(int $id)
+    {
+        $historyModel = new LoginHistoryModel();
+        $historyModel->deleteById($id);
+        return redirect()->to(base_url('admin/pengaturan') . '#riwayat-perangkat')
+            ->with('msg', 'Riwayat login berhasil dihapus.')
+            ->with('msg_type', 'success');
+    }
+}

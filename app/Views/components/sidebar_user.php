@@ -61,6 +61,10 @@
                     Laporan</span></a></li>
 
         <div class="sidebar-section-title">Lainnya</div>
+        <li><a href="<?= base_url('user/pengaturan') ?>"
+                class="<?= ($uri->getSegment(2) == 'pengaturan') ? 'active' : '' ?>">
+                <i class="bi <?= ($uri->getSegment(2) == 'pengaturan') ? 'bi-gear-fill' : 'bi-gear' ?>"></i>
+                <span>Pengaturan</span></a></li>
         <li><a href="<?= base_url('user/notifikasiuser') ?>"
                 class="<?= ($uri->getSegment(2) == 'notifikasiuser') ? 'active' : '' ?>">
                 <i class="bi <?= ($uri->getSegment(2) == 'notifikasiuser') ? 'bi-bell-fill' : 'bi-bell' ?>"></i>

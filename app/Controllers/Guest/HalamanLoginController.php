@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Guest;
 
+use App\Libraries\DeviceHistoryService;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 
@@ -104,6 +105,13 @@ class HalamanLoginController extends Controller
                         true,
                         'Lax'
                     );
+
+                // Catat riwayat perangkat login
+                DeviceHistoryService::record(
+                    (int) $data['id'],
+                    (string) $data['username'],
+                    $this->request
+                );
 
                 if ($data["role"] == "admin") {
                     return redirect()->to(base_url("admin/dashboard"));

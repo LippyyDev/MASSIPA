@@ -84,6 +84,8 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->post('api_keys/add', 'Admin\PengaturanAdminController::apiKeyAdd');
     $routes->get('api_keys/delete/(:num)', 'Admin\PengaturanAdminController::apiKeyDelete/$1');
     $routes->get('api_keys/toggle/(:num)', 'Admin\PengaturanAdminController::apiKeyToggleActive/$1');
+    $routes->get('pengaturan/riwayat/delete/(:num)', 'Admin\PengaturanAdminController::deleteRiwayat/$1');
+    $routes->post('pengaturan/riwayat_ajax', 'Admin\PengaturanAdminController::riwayatPerangkatAjax');
     $routes->post('addTandaTanganGambar', 'Admin\InputTandaTanganAdminController::addTandaTanganGambar');
     $routes->post('updateTandaTanganGambar', 'Admin\InputTandaTanganAdminController::updateTandaTanganGambar');
     $routes->get('deleteTandaTanganGambar/(:num)', 'Admin\InputTandaTanganAdminController::deleteTandaTanganGambar/$1');
@@ -178,6 +180,10 @@ $routes->group("user", ["filter" => "authFilter"], function ($routes) {
     $routes->post('kelola_hukuman_disiplin/searchPegawaiAjax', 'User\KelolaHukumanDisiplinController::searchPegawaiAjax');
     $routes->post('kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables', 'User\KelolaHukumanDisiplinController::getHukumanDisiplinAjaxDataTables');
     $routes->match(['get', 'post'], 'kelola_hukuman_disiplin/getFile/(:any)', 'User\KelolaHukumanDisiplinController::getFile/$1');
+    // ===== ROUTES PENGATURAN USER =====
+    $routes->get('pengaturan', 'User\PengaturanUserController::pengaturan');
+    $routes->post('pengaturan/riwayat_ajax', 'User\PengaturanUserController::riwayatPerangkatAjax');
+    $routes->post('pengaturan/hapus_riwayat', 'User\PengaturanUserController::hapusSemuaRiwayat');
 });
 
 $routes->get('user/getFile/(:any)', 'UserController::getFile/$1');

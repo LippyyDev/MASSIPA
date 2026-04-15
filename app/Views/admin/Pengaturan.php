@@ -262,8 +262,188 @@
                 </div>
             </div>
         </div>
+
+            <!-- Card Riwayat Perangkat Login (Semua User) -->
+            <div class="card mb-3" id="riwayat-perangkat">
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-clock-history me-2"></i>Riwayat Perangkat Login (Semua User)
+                </div>
+                <div class="card-body">
+                    <!-- Skeleton loader -->
+                    <div id="riwayatSkeleton" class="py-3 text-center text-muted">
+                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                        Memuat riwayat...
+                    </div>
+
+                    <!-- Desktop Table -->
+                    <div class="table-responsive d-none d-md-block" id="riwayatAdminTableWrap" style="display:none!important;">
+                        <table class="table table-hover table-borderless align-middle modern-table" id="riwayatAdminTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>User</th>
+                                    <th>Perangkat</th>
+                                    <th>OS &amp; Browser</th>
+                                    <th>IP Address</th>
+                                    <th>Lokasi</th>
+                                    <th>Waktu Login</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile Cards -->
+                    <div class="d-block d-md-none" id="riwayatAdminMobileWrap" style="display:none!important;">
+                        <div id="riwayatAdminMobileCards"></div>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div id="riwayatAdminEmpty" class="text-center text-muted py-4" style="display:none;">
+                        <i class="bi bi-clock-history fs-2 mb-2 d-block text-primary opacity-50"></i>
+                        Belum ada riwayat login tercatat.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php include(APPPATH . 'Views/components/bottom_nav_admin.php'); ?>
+
+    <script>
+    $(document).ready(function () {
+        const deleteBaseUrl = "<?= base_url('admin/pengaturan/riwayat/delete/') ?>";
+        const riwayatAjaxUrl = "<?= base_url('admin/pengaturan/riwayat_ajax') ?>";
+        const csrfToken = "<?= csrf_token() ?>";
+        const csrfHash  = "<?= csrf_hash() ?>";
+
+        // ── Render helpers ────────────────────────────────────────────────
+        function deviceIcon(type) {
+            if (type === 'Mobile') return '<i class="bi bi-phone-fill text-primary me-1"></i>';
+            if (type === 'Tablet') return '<i class="bi bi-tablet-fill text-success me-1"></i>';
+            return '<i class="bi bi-laptop-fill text-secondary me-1"></i>';
+        }
+
+        function renderLokasi(row) {
+            const c = row.location_country || '', r = row.location_region || '', ci = row.location_city || '';
+            if (c === 'Jaringan Lokal') return '<span class="badge bg-secondary">Jaringan Lokal</span>';
+            const parts = [ci, r, c].filter(Boolean);
+            if (parts.length) return parts.join(', ');
+            return '<span class="text-muted">Tidak tersedia</span>';
+        }
+
+        function formatDate(d) {
+            if (!d) return '-';
+            const dt = new Date(d.replace(' ', 'T'));
+            const pad = n => String(n).padStart(2, '0');
+            return pad(dt.getDate()) + '/' + pad(dt.getMonth()+1) + '/' + dt.getFullYear()
+                 + ' ' + pad(dt.getHours()) + ':' + pad(dt.getMinutes());
+        }
+
+        // ── Load riwayat via AJAX POST ────────────────────────────────────
+        $.ajax({
+            url: riwayatAjaxUrl,
+            type: 'POST',
+            data: { [csrfToken]: csrfHash },
+            dataType: 'json',
+            success: function(res) {
+                $('#riwayatSkeleton').hide();
+                const rows = res.data || [];
+
+                if (rows.length === 0) {
+                    $('#riwayatAdminEmpty').show();
+                    return;
+                }
+
+                // ── Desktop DataTable ─────────────────────────────────
+                const tbody = $('#riwayatAdminTable tbody');
+                $.each(rows, function(i, row) {
+                    const deleteUrl = deleteBaseUrl + row.id;
+                    tbody.append(
+                        '<tr>' +
+                        '<td>' + (i+1) + '</td>' +
+                        '<td>' +
+                            '<div class="fw-semibold" style="font-size:.9em;">' + (row.nama_lengkap || row.username || '-') + '</div>' +
+                            '<div class="text-muted" style="font-size:.8em;">' + (row.username || '') + '</div>' +
+                        '</td>' +
+                        '<td>' + deviceIcon(row.device_type) + (row.device_type || 'Desktop') + '</td>' +
+                        '<td>' +
+                            '<div class="fw-semibold" style="font-size:.88em;">' + (row.device_os || '-') + '</div>' +
+                            '<div class="text-muted" style="font-size:.8em;">' + (row.browser || '-') + '</div>' +
+                        '</td>' +
+                        '<td><code>' + (row.ip_address || '-') + '</code></td>' +
+                        '<td style="font-size:.88em;">' + renderLokasi(row) + '</td>' +
+                        '<td style="white-space:nowrap;font-size:.88em;">' + formatDate(row.created_at) + '</td>' +
+                        '<td><a href="' + deleteUrl + '" class="btn btn-danger btn-sm btn-delete-riwayat aksi-btn" title="Hapus"><i class="fas fa-trash"></i></a></td>' +
+                        '</tr>'
+                    );
+                });
+
+                // Hapus inline style display:none, biarkan class d-none d-md-block bekerja
+                $('#riwayatAdminTableWrap').attr('style', '');
+                $('#riwayatAdminTable').DataTable({
+                    language: {
+                        search: 'Cari:',
+                        lengthMenu: 'Tampilkan _MENU_ data',
+                        zeroRecords: 'Data tidak ditemukan',
+                        paginate: { previous: '&lsaquo;', next: '&rsaquo;' }
+                    },
+                    info: false,       // Sembunyikan "Menampilkan X - Y dari Z data"
+                    pageLength: 10,
+                    order: [[6, 'desc']],
+                    columnDefs: [{ orderable: false, targets: [0, 7] }]
+                });
+
+                // ── Mobile Cards ──────────────────────────────────────
+                const mc = $('#riwayatAdminMobileCards');
+                $.each(rows, function(i, row) {
+                    const deleteUrl = deleteBaseUrl + row.id;
+                    mc.append(
+                        '<div class="border rounded mb-3 p-3 shadow-sm pengaturan-card-mobile">' +
+                            '<div class="fw-bold mb-1 fs-6">' + (row.nama_lengkap || row.username || '-') + '</div>' +
+                            '<div class="mb-3 opacity-75" style="font-size:0.95em;"><i class="bi bi-person me-1"></i>Akun: ' + (row.username||'-') + '</div>' +
+                            
+                            '<div class="mb-2" style="font-size:0.95em;">' + deviceIcon(row.device_type) + (row.device_os||'-') + ' — ' + (row.browser||'-') + '</div>' +
+                            '<div class="mb-1" style="font-size:0.95em;"><b>IP:</b> <code>' + (row.ip_address||'-') + '</code></div>' +
+                            '<div class="mb-2" style="font-size:0.95em;"><b>Lokasi:</b> ' + renderLokasi(row) + '</div>' +
+                            
+                            '<hr class="my-2 opacity-50">' +
+                            
+                            '<div class="d-flex justify-content-between align-items-center mt-2">' +
+                                '<div class="opacity-75" style="font-size:0.85em;"><i class="bi bi-clock me-1"></i>' + formatDate(row.created_at) + '</div>' +
+                                '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm btn-delete-riwayat aksi-btn px-3"><i class="fas fa-trash"></i> Hapus</a>' +
+                            '</div>' +
+                        '</div>'
+                    );
+                });
+                // Hapus inline style display:none, biarkan class d-block d-md-none bekerja
+                $('#riwayatAdminMobileWrap').attr('style', '');
+            },
+            error: function() {
+                $('#riwayatSkeleton').hide();
+                $('#riwayatAdminEmpty').text('Terjadi kesalahan saat memuat data.').show();
+            }
+        });
+
+        // ── Konfirmasi hapus riwayat ──────────────────────────────────────
+        $(document).on('click', '.btn-delete-riwayat', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            Swal.fire({
+                title: 'Hapus Riwayat Ini?',
+                text: 'Data riwayat login ini akan dihapus permanen.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) window.location.href = url;
+            });
+        });
+    });
+    </script>
 </body>
 </html>
