@@ -24,12 +24,14 @@ class Database extends Config
      *
      * @var array<string, mixed>
      */
+    // Semua nilai sensitif (hostname, username, password, database)
+    // dibaca dari .env. Nilai di sini hanya fallback non-sensitif.
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'root',
+        'username'     => '',
         'password'     => '',
-        'database'     => 'disiplin_hakim',
+        'database'     => '',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

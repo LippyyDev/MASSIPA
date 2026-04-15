@@ -567,7 +567,7 @@ class KelolaHukumanDisiplinController extends BaseController
         $session = session();
         $user = (new \App\Models\UserModel())->find($session->get("user_id"));
         $satker_id = $user['satker_id'];
-        $query = $this->request->getGet('search');
+        $query = $this->request->getPost('search');
         $pegawai_ids = $this->riwayatMutasiModel
             ->where('satker_id', $satker_id)
             ->where('tanggal_mulai <=', date('Y-m-d'))
@@ -602,12 +602,12 @@ class KelolaHukumanDisiplinController extends BaseController
         $user = $userModel->find($session->get("user_id"));
         $satker_id = $user['satker_id'];
         $request = service('request');
-        $draw = $request->getGet('draw');
-        $start = $request->getGet('start');
-        $length = $request->getGet('length');
-        $search = $request->getGet('search')['value'] ?? '';
-        $order = $request->getGet('order');
-        $columns = $request->getGet('columns');
+        $draw    = $request->getPost('draw');
+        $start   = $request->getPost('start');
+        $length  = $request->getPost('length');
+        $search  = $request->getPost('search')['value'] ?? '';
+        $order   = $request->getPost('order');
+        $columns = $request->getPost('columns');
         $user_ids_satker = $userModel->where('satker_id', $satker_id)->findColumn('id');
         $riwayatMutasiModel = new \App\Models\RiwayatMutasiModel();
         $base = $this->hukumanModel

@@ -115,7 +115,7 @@ $(document).ready(function () {
     serverSide: true,
     ajax: {
       url: window.laporanAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: function (d) {
         d.bulan =
           $("#filter_bulan").val() || $("#filter_bulan_mobile").val() || "";
@@ -163,7 +163,7 @@ $(document).ready(function () {
 
     $.ajax({
       url: window.laporanAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: {
         bulan: bulan,
         tahun: tahun,

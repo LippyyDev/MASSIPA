@@ -34,27 +34,27 @@ class KelolaPegawaiController extends BaseController
     public function getPegawaiAjax()
     {
         try {
-            $start = intval($this->request->getGet('start') ?? 0);
-            $length = intval($this->request->getGet('length') ?? 10);
-            $search = $this->request->getGet('search[value]') ?? '';
-            $satker_filter = $this->request->getGet('satker') ?? '';
-            $golongan_filter = $this->request->getGet('golongan') ?? '';
-            $jabatan_filter = $this->request->getGet('jabatan') ?? '';
+            $start  = intval($this->request->getPost('start') ?? 0);
+            $length = intval($this->request->getPost('length') ?? 10);
+            $search = $this->request->getPost('search[value]') ?? '';
+            $satker_filter   = $this->request->getPost('satker')   ?? '';
+            $golongan_filter = $this->request->getPost('golongan') ?? '';
+            $jabatan_filter  = $this->request->getPost('jabatan')  ?? '';
             $total = $this->pegawaiModel->countAll();
             list($data, $recordsFiltered) = $this->pegawaiModel->getFilteredPegawai($search, $satker_filter, $golongan_filter, $jabatan_filter, $start, $length);
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
-                'recordsTotal' => $total,
+                'draw'            => intval($this->request->getPost('draw')),
+                'recordsTotal'    => $total,
                 'recordsFiltered' => $recordsFiltered,
-                'data' => $data
+                'data'            => $data
             ]);
         } catch (\Throwable $e) {
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
-                'recordsTotal' => 0,
+                'draw'            => intval($this->request->getPost('draw')),
+                'recordsTotal'    => 0,
                 'recordsFiltered' => 0,
-                'data' => [],
-                'error' => $e->getMessage()
+                'data'            => [],
+                'error'           => $e->getMessage()
             ]);
         }
     }

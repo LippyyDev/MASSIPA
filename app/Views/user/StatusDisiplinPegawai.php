@@ -153,6 +153,9 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
+    <script>
+        window.rekapBulananAjaxUrl = "<?= base_url('user/getRekapBulananAjax') ?>";
+    </script>
     <script src="<?= base_url('assets/js/user/StatusDisiplinPegawai.js') ?>"></script>
     <?php include(APPPATH . 'Views/components/bottom_nav_user.php'); ?>
 </body>

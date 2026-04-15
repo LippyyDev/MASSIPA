@@ -153,9 +153,9 @@ class InputDisiplinController extends BaseController
         $user = (new \App\Models\UserModel())->find($session->get("user_id"));
         $satker_id = $user['satker_id'];
         $riwayatMutasiModel = new RiwayatMutasiModel();
-        $filter_bulan = $this->request->getGet('bulan') ?? date('n');
-        $filter_tahun = $this->request->getGet('tahun') ?? date('Y');
-        $filter_jabatan = $this->request->getGet('jabatan') ?? [];
+        $filter_bulan   = $this->request->getPost('bulan')   ?? date('n');
+        $filter_tahun   = $this->request->getPost('tahun')   ?? date('Y');
+        $filter_jabatan = $this->request->getPost('jabatan') ?? [];
         if (!is_array($filter_jabatan)) {
             $filter_jabatan = [$filter_jabatan];
         }

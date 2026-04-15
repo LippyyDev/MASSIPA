@@ -21,6 +21,8 @@
     <meta name="color-scheme" content="dark light">
     <script>
         window.BASE_URL = "<?= base_url() ?>";
+        window.SEARCH_PEGAWAI_URL = "<?= base_url('user/kelola_hukuman_disiplin/searchPegawaiAjax') ?>";
+        window.getHukumanDisiplinAjaxDataTablesUserUrl = "<?= base_url('user/kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables') ?>";
     </script>
     <script>
         (function () {

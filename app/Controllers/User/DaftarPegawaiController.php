@@ -193,11 +193,11 @@ class DaftarPegawaiController extends BaseController
                 ->findColumn('pegawai_id');
             if (!$pegawai_ids)
                 $pegawai_ids = [0];
-            $start = intval($this->request->getGet('start') ?? 0);
-            $length = intval($this->request->getGet('length') ?? 10);
-            $search = $this->request->getGet('search[value]') ?? '';
-            $golongan_filter = $this->request->getGet('golongan') ?? '';
-            $jabatan_filter = $this->request->getGet('jabatan') ?? '';
+            $start           = intval($this->request->getPost('start') ?? 0);
+            $length          = intval($this->request->getPost('length') ?? 10);
+            $search          = $this->request->getPost('search[value]') ?? '';
+            $golongan_filter = $this->request->getPost('golongan') ?? '';
+            $jabatan_filter  = $this->request->getPost('jabatan')  ?? '';
             $total = $pegawaiModel->whereIn('id', $pegawai_ids)->countAllResults();
             $filteredBuilder = $pegawaiModel->select('id, nama, nip, pangkat, golongan, jabatan, status')
                 ->whereIn('id', $pegawai_ids);
@@ -216,18 +216,18 @@ class DaftarPegawaiController extends BaseController
             $recordsFiltered = $filteredBuilder->countAllResults(false);
             $data = $filteredBuilder->limit($length, $start)->findAll();
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
-                'recordsTotal' => $total,
+                'draw'            => intval($this->request->getPost('draw')),
+                'recordsTotal'    => $total,
                 'recordsFiltered' => $recordsFiltered,
-                'data' => $data
+                'data'            => $data
             ]);
         } catch (\Throwable $e) {
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
-                'recordsTotal' => 0,
+                'draw'            => intval($this->request->getPost('draw')),
+                'recordsTotal'    => 0,
                 'recordsFiltered' => 0,
-                'data' => [],
-                'error' => $e->getMessage()
+                'data'            => [],
+                'error'           => $e->getMessage()
             ]);
         }
     }

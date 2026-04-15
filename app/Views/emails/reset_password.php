@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <td style="padding:14px 24px 18px 24px;font-size:12px;line-height:1.6;color:#6b7280;text-align:left;">
-                            Jika Anda tidak mengenali massipa.ptamakassar@gmail.com, anda dapat mengabaikan email ini dengan aman.
+                            Jika Anda tidak mengenali <?= esc(config('Email')->fromEmail ?: 'tim MASSIPA') ?>, anda dapat mengabaikan email ini dengan aman.
                         </td>
                     </tr>
                     <tr>

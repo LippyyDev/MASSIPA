@@ -95,7 +95,7 @@ $(document).ready(function () {
     serverSide: true,
     ajax: {
       url: window.laporanAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: function (d) {
         d.user_id =
           $("#filter_user").val() || $("#filter_user_mobile").val() || "";
@@ -259,7 +259,7 @@ $(document).ready(function () {
 
     $.ajax({
       url: window.laporanAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: {
         user_id: user_id,
         bulan: bulan,

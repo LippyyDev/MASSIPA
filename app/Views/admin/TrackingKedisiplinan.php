@@ -290,7 +290,12 @@
         }
 
         function searchPegawai(query) {
-            $.get(SEARCH_PEGAWAI_URL, { q: query, limit: 10 })
+            $.ajax({
+                url: SEARCH_PEGAWAI_URL,
+                type: 'POST',
+                data: { q: query, limit: 10 },
+                dataType: 'json'
+            })
                 .done(function(data) {
                     displaySearchResults(data);
                 })
@@ -353,7 +358,12 @@
             
             showLoading();
             
-            $.get(GET_TRACK_RECORD_URL, { pegawai_id: selectedPegawaiId, tahun: selectedTahun })
+            $.ajax({
+                url: GET_TRACK_RECORD_URL,
+                type: 'POST',
+                data: { pegawai_id: selectedPegawaiId, tahun: selectedTahun },
+                dataType: 'json'
+            })
                 .done(function(response) {
                     if (response.success) {
                         if (includePegawaiInfo && response.data.pegawai) {
@@ -481,7 +491,12 @@
         function loadTahunTersedia() {
             if (!selectedPegawaiId) return;
             
-            $.get(GET_TAHUN_URL, { pegawai_id: selectedPegawaiId })
+            $.ajax({
+                url: GET_TAHUN_URL,
+                type: 'POST',
+                data: { pegawai_id: selectedPegawaiId },
+                dataType: 'json'
+            })
                 .done(function(response) {
                     let html = '<option value="">Semua Tahun</option>';
                     

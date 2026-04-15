@@ -116,11 +116,11 @@ class StatusDisiplinPegawaiController extends BaseController
 
     public function getRekapBulananAjax()
     {
-        $tahun = $this->request->getGet('tahun');
-        $start = intval($this->request->getGet('start') ?? 0);
-        $length = intval($this->request->getGet('length') ?? 10);
-        $search = $this->request->getGet('search')['value'] ?? '';
-        $draw = intval($this->request->getGet('draw') ?? 1);
+        $tahun  = $this->request->getPost('tahun');
+        $start  = intval($this->request->getPost('start')  ?? 0);
+        $length = intval($this->request->getPost('length') ?? 10);
+        $search = $this->request->getPost('search')['value'] ?? '';
+        $draw   = intval($this->request->getPost('draw')   ?? 1);
         $kedisiplinanModel = new StatusDisiplinPegawaiModel();
         $pegawaiModel = new PegawaiModel();
         $satkerModel = new SatkerModel();

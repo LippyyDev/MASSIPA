@@ -25,7 +25,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->post('updateUser', 'Admin\KelolaUserController::updateUser');
     $routes->post('deleteUser', 'Admin\KelolaUserController::deleteUser');
     $routes->get('kelola_laporan', 'Admin\KelolaLaporanController::kelolaLaporan');
-    $routes->get('kelola_laporan/getLaporanAjax', 'Admin\KelolaLaporanController::getLaporanAjax');
+    $routes->post('kelola_laporan/getLaporanAjax', 'Admin\KelolaLaporanController::getLaporanAjax');
     $routes->get('kelola_laporan/view/(:num)', 'Admin\KelolaLaporanController::viewLaporan/$1');
     $routes->get('kelola_laporan/link/(:num)', 'Admin\KelolaLaporanController::viewLink/$1');
     $routes->post('kelola_laporan/approve', 'Admin\KelolaLaporanController::approveLaporan');
@@ -42,6 +42,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->get('rekap_kedisiplinan', 'Admin\StatusDisiplinSatkerController::rekapKedisiplinan');
     $routes->match(['get', 'post'], 'exportRekapKedisiplinanPdf', 'AdminController::exportRekapKedisiplinanPdf');
     $routes->get('notifikasi', 'Admin\NotifikasiAdminController::notifikasi');
+    $routes->post('notifikasi/getNotifikasiAjax', 'Admin\NotifikasiAdminController::getNotifikasiAjax');
     $routes->post('notifikasi/delete-all', 'Admin\NotifikasiAdminController::deleteAllNotifications');
     $routes->get('profil', 'Admin\\ProfilAdminController::profil');
     $routes->post('updateProfil', 'Admin\\ProfilAdminController::updateProfil');
@@ -50,7 +51,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->post('profil/update_password', 'Admin\\ProfilAdminController::updatePassword');
     $routes->post('profil/update_foto', 'Admin\\ProfilAdminController::updateFotoProfil');
     $routes->get('input_pegawai', 'Admin\\KelolaPegawaiController::inputPegawai');
-    $routes->get('getPegawaiAjax', 'Admin\\KelolaPegawaiController::getPegawaiAjax');
+    $routes->post('getPegawaiAjax', 'Admin\\KelolaPegawaiController::getPegawaiAjax');
     $routes->get('kelola_satker', 'Admin\\KelolaSatkerController::kelolaSatker');
     $routes->post('simpanSatker', 'Admin\\KelolaSatkerController::simpanSatker');
     $routes->get('hapusSatker/(:num)', 'Admin\\KelolaSatkerController::hapusSatker/$1');
@@ -72,9 +73,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->match(['get', 'post'], 'arsip_laporan/download_zip', 'Admin\ArsipLaporanController::downloadArsipZip');
     $routes->get('arsip_laporan/serve_zip/(:any)', 'Admin\ArsipLaporanController::serveZip/$1');
     $routes->post('arsip_laporan/delete', 'Admin\ArsipLaporanController::deleteArsipLaporan');
-    $routes->get('getArsipLaporanAjax', 'Admin\ArsipLaporanController::getArsipLaporanAjax');
-    $routes->get('searchPegawaiAjax', 'Admin\ArsipLaporanController::searchPegawaiAjax');
-    $routes->get('getHukumanDisiplinAjax', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinAjax');
+    $routes->post('getArsipLaporanAjax', 'Admin\ArsipLaporanController::getArsipLaporanAjax');
+    $routes->post('searchPegawaiAjax', 'Admin\ArsipLaporanController::searchPegawaiAjax');
+    $routes->post('getHukumanDisiplinAjax', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinAjax');
     $routes->get('pengaturan', 'Admin\PengaturanAdminController::pengaturan');
     $routes->post('pengaturan/add_origin', 'Admin\PengaturanAdminController::addOrigin');
     $routes->get('pengaturan/delete_origin/(:num)', 'Admin\PengaturanAdminController::deleteOrigin/$1');
@@ -97,20 +98,20 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->get('deleteHukumanDisiplin/(:num)', 'Admin\KelolaHukumanDisiplinController::deleteHukumanDisiplin/$1');
     $routes->match(['get', 'post'], 'exportHukumanDisiplinPdf', 'Admin\KelolaHukumanDisiplinController::exportHukumanDisiplinPdf');
     $routes->match(['get', 'post'], 'exportHukumanDisiplinWord', 'Admin\KelolaHukumanDisiplinController::exportHukumanDisiplinWord');
-    $routes->get('getHukumanDisiplinDetailAjax/(:num)', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinDetailAjax/$1');
+    $routes->post('getHukumanDisiplinDetailAjax/(:num)', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinDetailAjax/$1');
     $routes->get('approveHukumanDisiplin/(:num)', 'Admin\KelolaHukumanDisiplinController::approveHukumanDisiplin/$1');
     $routes->get('rejectHukumanDisiplin/(:num)', 'Admin\KelolaHukumanDisiplinController::rejectHukumanDisiplin/$1');
-    $routes->get('getHukumanDisiplinAjaxDataTables', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinAjaxDataTables');
-    $routes->get('getPengajuanHukumanDisiplinAjax', 'Admin\KelolaHukumanDisiplinController::getPengajuanHukumanDisiplinAjax');
+    $routes->post('getHukumanDisiplinAjaxDataTables', 'Admin\KelolaHukumanDisiplinController::getHukumanDisiplinAjaxDataTables');
+    $routes->post('getPengajuanHukumanDisiplinAjax', 'Admin\KelolaHukumanDisiplinController::getPengajuanHukumanDisiplinAjax');
     $routes->match(['get', 'post'], 'kelola_hukuman_disiplin/getFile/(:any)', 'Admin\KelolaHukumanDisiplinController::getFile/$1');
     // ===== ROUTES KELOLA DISIPLIN =====
     $routes->get('kelola_disiplin', 'Admin\KelolaDisiplinController::index');
     $routes->post('kelola_disiplin/ajax', 'Admin\KelolaDisiplinController::getDataAjax');
     // ===== ROUTES TRACKING KEDISIPLINAN =====
     $routes->get('tracking', 'Admin\TrackingKedisiplinanController::index');
-    $routes->get('tracking/searchPegawaiAjax', 'Admin\TrackingKedisiplinanController::searchPegawaiAjax');
-    $routes->get('tracking/getTrackRecordAjax', 'Admin\TrackingKedisiplinanController::getTrackRecordAjax');
-    $routes->get('tracking/getTahunTersediaAjax', 'Admin\TrackingKedisiplinanController::getTahunTersediaAjax');
+    $routes->post('tracking/searchPegawaiAjax', 'Admin\TrackingKedisiplinanController::searchPegawaiAjax');
+    $routes->post('tracking/getTrackRecordAjax', 'Admin\TrackingKedisiplinanController::getTrackRecordAjax');
+    $routes->post('tracking/getTahunTersediaAjax', 'Admin\TrackingKedisiplinanController::getTahunTersediaAjax');
     $routes->match(['get', 'post'], 'tracking/exportPdfAjax', 'Admin\TrackingKedisiplinanController::exportPdfAjax');
 });
 
@@ -139,14 +140,15 @@ $routes->group("user", ["filter" => "authFilter"], function ($routes) {
     $routes->match(['get', 'post'], "rekaplaporandisiplin/export_pdf", "User\\RekapLaporanDisiplinController::exportPdf");
     $routes->match(['get', 'post'], "rekaplaporandisiplin/export_word", "User\\RekapLaporanDisiplinController::exportWord");
     $routes->get("statusdisiplinpegawai", "User\\StatusDisiplinPegawaiController::rekapBulanan");
-    $routes->get("getRekapBulananAjax", "User\\StatusDisiplinPegawaiController::getRekapBulananAjax");
+    $routes->post("getRekapBulananAjax", "User\\StatusDisiplinPegawaiController::getRekapBulananAjax");
     $routes->get("kirimlaporan", "User\\KirimLaporanController::uploadFile");
-    $routes->get("kirimlaporan/getLaporanAjax", "User\\KirimLaporanController::getLaporanAjax");
+    $routes->post("kirimlaporan/getLaporanAjax", "User\\KirimLaporanController::getLaporanAjax");
     $routes->post("kirimlaporan/add", "User\\KirimLaporanController::addFile");
     $routes->post("kirimlaporan/delete", "User\\KirimLaporanController::deleteFile");
     $routes->get("getFile/(:any)", "User\\KirimLaporanController::getFile/$1");
     $routes->post("kirimlaporan/hide", "User\\KirimLaporanController::hideLaporanFromUser");
     $routes->get("notifikasiuser", "User\NotifikasiUserController::notifikasi");
+    $routes->post("notifikasiuser/getNotifikasiAjax", "User\NotifikasiUserController::getNotifikasiAjax");
     $routes->post("notifikasiuser/mark-read", "User\NotifikasiUserController::markNotificationAsRead");
     $routes->post("notifikasiuser/delete-all", "User\NotifikasiUserController::deleteAllNotifications");
     $routes->get("profil_user", "User\\ProfilUserController::profil");
@@ -163,18 +165,18 @@ $routes->group("user", ["filter" => "authFilter"], function ($routes) {
     $routes->post("inputdisiplin/save", "User\\InputDisiplinController::saveKedisiplinanTabel");
     $routes->post('inputdisiplin/save_semua', 'User\\InputDisiplinController::saveKedisiplinanTabelSemua');
     $routes->post('inputdisiplin/save_batch', 'User\\KelolaDisiplinController::saveKedisiplinanBatch');
-    $routes->get("getPegawaiAjax", "User\\DaftarPegawaiController::getPegawaiAjax");
+    $routes->post("getPegawaiAjax", "User\\DaftarPegawaiController::getPegawaiAjax");
     $routes->get('getRekapBulananAjax', 'UserController::getRekapBulananAjax');
     $routes->post('hapus_kedisiplinan_periode', 'UserController::hapusKedisiplinanPeriode');
-    $routes->get('getPegawaiKedisiplinanAjax', 'User\\InputDisiplinController::getPegawaiKedisiplinanAjax');
+    $routes->post('getPegawaiKedisiplinanAjax', 'User\\InputDisiplinController::getPegawaiKedisiplinanAjax');
     $routes->get("input_tanda_tangan/edit_gambar/(:num)", "User\InputTandaTanganUserController::editTandaTanganGambar/$1");
     $routes->get('kelola_hukuman_disiplin', 'User\KelolaHukumanDisiplinController::index');
     $routes->post('kelola_hukuman_disiplin/addHukumanDisiplin', 'User\KelolaHukumanDisiplinController::addHukumanDisiplin');
     $routes->post('kelola_hukuman_disiplin/delete/(:num)', 'User\KelolaHukumanDisiplinController::delete/$1');
     $routes->match(['get', 'post'], 'kelola_hukuman_disiplin/exportPdf', 'User\KelolaHukumanDisiplinController::exportHukumanDisiplinPdfUser');
     $routes->match(['get', 'post'], 'kelola_hukuman_disiplin/exportWord', 'User\KelolaHukumanDisiplinController::exportHukumanDisiplinWordUser');
-    $routes->get('kelola_hukuman_disiplin/searchPegawaiAjax', 'User\KelolaHukumanDisiplinController::searchPegawaiAjax');
-    $routes->get('kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables', 'User\KelolaHukumanDisiplinController::getHukumanDisiplinAjaxDataTables');
+    $routes->post('kelola_hukuman_disiplin/searchPegawaiAjax', 'User\KelolaHukumanDisiplinController::searchPegawaiAjax');
+    $routes->post('kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables', 'User\KelolaHukumanDisiplinController::getHukumanDisiplinAjaxDataTables');
     $routes->match(['get', 'post'], 'kelola_hukuman_disiplin/getFile/(:any)', 'User\KelolaHukumanDisiplinController::getFile/$1');
 });
 

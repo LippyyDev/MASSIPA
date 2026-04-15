@@ -419,16 +419,22 @@ function loadTabelKedisiplinanAjax(bulan, tahun, jabatan = []) {
     });
   }
 
-  $.get(
-    "/user/getPegawaiKedisiplinanAjax",
-    params,
-    function (res) {
+  $.ajax({
+    url: window.getPegawaiKedisiplinanAjaxUrl,
+    type: "POST",
+    data: params,
+    dataType: "json",
+    success: function (res) {
       globalPegawaiList = res.pegawai_list;
       globalKedisiplinanMap = res.kedisiplinan_map;
       renderTabelKedisiplinan(globalPegawaiList, globalKedisiplinanMap);
     },
-    "json",
-  );
+    error: function () {
+      $("#tbodyKedisiplinanAjax").html(
+        '<tr><td colspan="14" class="text-center text-danger">Gagal memuat data. Silakan refresh.</td></tr>'
+      );
+    }
+  });
 }
 
 $(document).ready(function () {

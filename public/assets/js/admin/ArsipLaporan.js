@@ -298,7 +298,7 @@ $(document).ready(function () {
     info: false,
     ajax: {
       url: window.getArsipAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: function (d) {
         d.pengirim = $("#filterPengirim").val();
         d.bulan = $("#filterBulan").val();

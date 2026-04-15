@@ -55,7 +55,11 @@ function searchPegawai(query) {
     '<div class="p-2 text-center"><small>Mencari...</small></div>';
   resultsDiv.style.display = "block";
 
-  fetch(`${window.SEARCH_PEGAWAI_URL}?search=${encodeURIComponent(query)}`)
+  fetch(window.SEARCH_PEGAWAI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ search: query, [window.CSRF_TOKEN_NAME]: window.CSRF_HASH })
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.success && data.data.length > 0) {
@@ -260,7 +264,11 @@ window.showEditHukumanModal = function (id) {
     modalDialog.style.zIndex = "10000";
   }
 
-  fetch(`${window.BASE_URL}admin/getHukumanDisiplinDetailAjax/${id}`)
+  fetch(`${window.BASE_URL}admin/getHukumanDisiplinDetailAjax/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ [window.CSRF_TOKEN_NAME]: window.CSRF_HASH })
+  })
     .then((res) => res.json())
     .then((data) => {
       if (!data.success) {
@@ -355,7 +363,11 @@ function searchPegawaiEdit(query) {
   resultsDiv.innerHTML =
     '<div class="p-2 text-center"><small>Mencari...</small></div>';
   resultsDiv.style.display = "block";
-  fetch(`${window.SEARCH_PEGAWAI_URL}?search=${encodeURIComponent(query)}`)
+  fetch(window.SEARCH_PEGAWAI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ search: query, [window.CSRF_TOKEN_NAME]: window.CSRF_HASH })
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.success && data.data.length > 0) {
@@ -616,7 +628,8 @@ $(document).ready(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: window.location.origin + "/admin/getHukumanDisiplinAjaxDataTables",
+        url: window.getHukumanDisiplinAjaxDataTablesUrl,
+        type: "POST",
         dataSrc: function (json) {
           if (json && json.data) {
             return json.data;
@@ -712,8 +725,8 @@ $(document).ready(function () {
 
   function loadMobileHukumanCards() {
     $.ajax({
-      url: window.location.origin + "/admin/getHukumanDisiplinAjaxDataTables",
-      type: "GET",
+      url: window.getHukumanDisiplinAjaxDataTablesUrl,
+      type: "POST",
       data: {
         length: 1000,
         start: 0,

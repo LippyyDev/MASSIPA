@@ -37,8 +37,8 @@ class TrackingKedisiplinanController extends BaseController
      */
     public function searchPegawaiAjax()
     {
-        $query = $this->request->getGet('q');
-        $limit = $this->request->getGet('limit') ?? 10;
+        $query = $this->request->getPost('q');
+        $limit = $this->request->getPost('limit') ?? 10;
 
         if (empty($query) || strlen($query) < 2) {
             return $this->response->setJSON([]);
@@ -58,8 +58,8 @@ class TrackingKedisiplinanController extends BaseController
      */
     public function getTrackRecordAjax()
     {
-        $pegawai_id = $this->request->getGet('pegawai_id');
-        $tahun = $this->request->getGet('tahun');
+        $pegawai_id = $this->request->getPost('pegawai_id');
+        $tahun      = $this->request->getPost('tahun');
 
         if (empty($pegawai_id)) {
             return $this->response->setJSON([
@@ -112,7 +112,7 @@ class TrackingKedisiplinanController extends BaseController
      */
     public function getTahunTersediaAjax()
     {
-        $pegawai_id = $this->request->getGet('pegawai_id');
+        $pegawai_id = $this->request->getPost('pegawai_id');
 
         try {
             $tahun = $this->trackingModel->getTahunTersedia($pegawai_id);

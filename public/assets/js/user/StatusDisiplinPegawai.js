@@ -1,4 +1,4 @@
-const BASE_URL_REKAP_BULANAN_AJAX = '/user/getRekapBulananAjax';
+const BASE_URL_REKAP_BULANAN_AJAX = window.rekapBulananAjaxUrl || '/user/getRekapBulananAjax';
 
 $(document).ready(function() {
     const nama_bulan_singkat = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -215,7 +215,7 @@ $(document).ready(function() {
     function fetchData(callback) {
         $.ajax({
             url: BASE_URL_REKAP_BULANAN_AJAX,
-            type: 'GET',
+            type: 'POST',
             data: {
                 tahun: currentTahun,
                 start: 0,
@@ -294,7 +294,7 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": {
             "url": BASE_URL_REKAP_BULANAN_AJAX,
-            "type": "GET",
+            "type": "POST",
             "data": function(d) {
                 d.tahun = $('#tahun').val();
             }

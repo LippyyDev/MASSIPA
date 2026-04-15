@@ -246,6 +246,9 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        window.getPegawaiKedisiplinanAjaxUrl = "<?= base_url('user/getPegawaiKedisiplinanAjax') ?>";
+    </script>
     <script src="<?= base_url('assets/js/user/InputDisiplin.js') ?>"></script>
     <div class="modal fade d-md-none" id="filterDisiplinModal" tabindex="-1" aria-labelledby="filterDisiplinModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-bottom-sheet">

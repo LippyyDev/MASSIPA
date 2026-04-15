@@ -191,7 +191,7 @@ $(document).ready(function () {
     serverSide: true,
     ajax: {
       url: window.inputPegawaiAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: function (d) {
         d.satker = $("#filter_satker").val();
         d.golongan = $("#filter_golongan").val();
@@ -477,7 +477,7 @@ $(document).ready(function () {
     var start = (mobilePage - 1) * mobileLength;
     $.ajax({
       url: window.inputPegawaiAjaxUrl,
-      type: "GET",
+      type: "POST",
       data: {
         satker: satker,
         golongan: golongan,

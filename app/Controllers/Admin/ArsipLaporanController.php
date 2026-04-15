@@ -225,18 +225,18 @@ class ArsipLaporanController extends BaseController
 
     public function getArsipLaporanAjax()
     {
-        $start = $this->request->getGet('start');
-        $length = $this->request->getGet('length');
-        $search = $this->request->getGet('search')['value'] ?? '';
-        $draw = $this->request->getGet('draw');
+        $start    = $this->request->getPost('start');
+        $length   = $this->request->getPost('length');
+        $search   = $this->request->getPost('search')['value'] ?? '';
+        $draw     = $this->request->getPost('draw');
         $model = $this->arsipModel;
         $query = $model->select('laporan_file.*, users.nama_lengkap')
             ->join('users', 'users.id = laporan_file.created_by', 'left')
             ->where('laporan_file.status', 'diterima');
-        $pengirim = $this->request->getGet('pengirim');
-        $bulan = $this->request->getGet('bulan');
-        $tahun = $this->request->getGet('tahun');
-        $kategori = $this->request->getGet('kategori');
+        $pengirim = $this->request->getPost('pengirim');
+        $bulan    = $this->request->getPost('bulan');
+        $tahun    = $this->request->getPost('tahun');
+        $kategori = $this->request->getPost('kategori');
         if ($pengirim) {
             $query->where('users.nama_lengkap', $pengirim);
         }
@@ -293,7 +293,7 @@ class ArsipLaporanController extends BaseController
     {
         try {
             $pegawaiModel = $this->pegawaiModel;
-            $search = $this->request->getGet('search') ?? '';
+            $search = $this->request->getPost('search') ?? '';
             $limit = 20;
             $pegawai = $pegawaiModel
                 ->select('id, nama, nip, jabatan')

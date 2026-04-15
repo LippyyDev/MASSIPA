@@ -552,8 +552,8 @@ class KelolaHukumanDisiplinController extends BaseController
         $pegawaiModel = $this->pegawaiModel;
         $session = session();
         $current_user_id = $session->get('user_id');
-        $page = (int) ($this->request->getGet('page') ?? 1);
-        $perPage = (int) ($this->request->getGet('perPage') ?? 10);
+        $page    = (int) ($this->request->getPost('page')    ?? 1);
+        $perPage = (int) ($this->request->getPost('perPage') ?? 10);
         $offset = ($page - 1) * $perPage;
         $list = $hukumanModel
             ->select('hukuman_disiplin.*, pegawai.nama, pegawai.jabatan')
@@ -695,12 +695,12 @@ class KelolaHukumanDisiplinController extends BaseController
     public function getHukumanDisiplinAjaxDataTables()
     {
         $request = service('request');
-        $draw = $request->getGet('draw');
-        $start = $request->getGet('start');
-        $length = $request->getGet('length');
-        $search = $request->getGet('search')['value'] ?? '';
-        $order = $request->getGet('order');
-        $columns = $request->getGet('columns');
+        $draw    = $request->getPost('draw');
+        $start   = $request->getPost('start');
+        $length  = $request->getPost('length');
+        $search  = $request->getPost('search')['value'] ?? '';
+        $order   = $request->getPost('order');
+        $columns = $request->getPost('columns');
         $session = session();
         $current_user_id = $session->get('user_id');
 
@@ -739,12 +739,12 @@ class KelolaHukumanDisiplinController extends BaseController
     public function getPengajuanHukumanDisiplinAjax()
     {
         $request = service('request');
-        $draw = $request->getGet('draw');
-        $start = $request->getGet('start');
-        $length = $request->getGet('length');
-        $search = $request->getGet('search')['value'] ?? '';
-        $order = $request->getGet('order');
-        $columns = $request->getGet('columns');
+        $draw    = $request->getPost('draw');
+        $start   = $request->getPost('start');
+        $length  = $request->getPost('length');
+        $search  = $request->getPost('search')['value'] ?? '';
+        $order   = $request->getPost('order');
+        $columns = $request->getPost('columns');
 
         $base = $this->hukumanModel
             ->select('hukuman_disiplin.*, pegawai.nama, pegawai.jabatan')

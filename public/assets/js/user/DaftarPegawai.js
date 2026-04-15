@@ -168,8 +168,8 @@ $(document).ready(function () {
     processing: true,
     serverSide: true,
     ajax: {
-      url: "/user/getPegawaiAjax",
-      type: "GET",
+      url: window.daftarPegawaiAjaxUrl,
+      type: "POST",
       data: function (d) {
         d.golongan =
           $("#filter_golongan").val() ||
@@ -270,8 +270,8 @@ $(document).ready(function () {
     var search = $("#search_mobile_pegawai").val();
     var start = (mobilePage - 1) * mobileLength;
     $.ajax({
-      url: "/user/getPegawaiAjax",
-      type: "GET",
+      url: window.daftarPegawaiAjaxUrl,
+      type: "POST",
       data: {
         golongan: golongan,
         jabatan: jabatan,

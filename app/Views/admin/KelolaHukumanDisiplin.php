@@ -35,6 +35,7 @@
     </script>
     <script>
         window.SEARCH_PEGAWAI_URL = '<?= base_url('admin/searchPegawaiAjax') ?>';
+        window.getHukumanDisiplinAjaxDataTablesUrl = '<?= base_url('admin/getHukumanDisiplinAjaxDataTables') ?>';
     </script>
     <script src="<?= base_url('assets/js/admin/KelolaHukumanDisiplin.js') ?>" defer></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">

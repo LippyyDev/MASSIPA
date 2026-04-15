@@ -103,7 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       searchTimeout = setTimeout(() => {
         fetch(
-          window.SEARCH_PEGAWAI_URL + "?search=" + encodeURIComponent(query),
+          window.SEARCH_PEGAWAI_URL,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+            body: new URLSearchParams({ search: query, [window.CSRF_TOKEN_NAME]: window.CSRF_HASH })
+          }
         )
           .then((res) => res.json())
           .then((data) => {
@@ -162,8 +167,8 @@ $(document).ready(function () {
       serverSide: true,
       ajax: {
         url:
-          window.BASE_URL +
-          "user/kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables",
+          window.getHukumanDisiplinAjaxDataTablesUserUrl,
+        type: "POST",
         dataSrc: "data",
       },
       columns: [
@@ -263,9 +268,8 @@ $(document).ready(function () {
   function loadMobileHukumanCardsUser() {
     $.ajax({
       url:
-        window.BASE_URL +
-        "user/kelola_hukuman_disiplin/getHukumanDisiplinAjaxDataTables",
-      type: "GET",
+        window.getHukumanDisiplinAjaxDataTablesUserUrl,
+      type: "POST",
       data: {
         length: 1000,
         start: 0,

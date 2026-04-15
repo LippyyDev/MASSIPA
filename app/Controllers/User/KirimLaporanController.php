@@ -306,7 +306,7 @@ class KirimLaporanController extends BaseController
             
             if (!$user_id) {
                 return $this->response->setJSON([
-                    'draw' => intval($this->request->getGet('draw')),
+                    'draw' => intval($this->request->getPost('draw')),
                     'recordsTotal' => 0,
                     'recordsFiltered' => 0,
                     'data' => [],
@@ -314,12 +314,12 @@ class KirimLaporanController extends BaseController
                 ]);
             }
             
-            $start = intval($this->request->getGet('start') ?? 0);
-            $length = intval($this->request->getGet('length') ?? 10);
-            $search = $this->request->getGet('search[value]') ?? '';
-            $bulan_filter = $this->request->getGet('bulan') ?? '';
-            $tahun_filter = $this->request->getGet('tahun') ?? '';
-            $kategori_filter = $this->request->getGet('kategori') ?? '';
+            $start           = intval($this->request->getPost('start')           ?? 0);
+            $length          = intval($this->request->getPost('length')          ?? 10);
+            $search          = $this->request->getPost('search[value]')          ?? '';
+            $bulan_filter    = $this->request->getPost('bulan')    ?? '';
+            $tahun_filter    = $this->request->getPost('tahun')    ?? '';
+            $kategori_filter = $this->request->getPost('kategori') ?? '';
             
             $laporanModel = new KirimLaporanModel();
             
@@ -430,7 +430,7 @@ class KirimLaporanController extends BaseController
             }
             
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
+                'draw' => intval($this->request->getPost('draw')),
                 'recordsTotal' => $total,
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $formattedData,
@@ -438,7 +438,7 @@ class KirimLaporanController extends BaseController
             ]);
         } catch (\Throwable $e) {
             return $this->response->setJSON([
-                'draw' => intval($this->request->getGet('draw')),
+                'draw' => intval($this->request->getPost('draw')),
                 'recordsTotal' => 0,
                 'recordsFiltered' => 0,
                 'data' => [],
