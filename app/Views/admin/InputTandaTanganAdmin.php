@@ -92,6 +92,7 @@
                         <div class="tab-pane fade show active" id="ttd-biasa" role="tabpanel"
                             aria-labelledby="ttd-biasa-tab">
                             <form action="<?= base_url('admin/addTandaTangan') ?>" method="post">
+                                <?= csrf_field() ?>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="lokasi" class="form-label">Lokasi</label>
@@ -129,6 +130,7 @@
                         <div class="tab-pane fade" id="ttd-gambar" role="tabpanel" aria-labelledby="ttd-gambar-tab">
                             <form method="POST" action="<?= base_url('admin/addTandaTanganGambar') ?>"
                                 enctype="multipart/form-data">
+                                <?= csrf_field() ?>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="tempat_gambar" class="form-label">Lokasi</label>
@@ -433,6 +435,7 @@
                             <form method="POST" action="<?= base_url('admin/updateTandaTanganGambar') ?>"
                                 enctype="multipart/form-data">
                                 <div class="modal-body">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                     <div class="mb-3">
                                         <label for="tempat_edit_<?= $row['id'] ?>" class="form-label">Tempat</label>
@@ -472,6 +475,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form method="POST" action="<?= base_url('admin/updateTandaTangan') ?>">
+                                <?= csrf_field() ?>
                                 <input type="hidden" name="tanda_tangan_id" value="<?= $row['id'] ?>">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editTandaTanganModalLabel<?= $row['id'] ?>">Edit Tanda

@@ -52,6 +52,7 @@
                 </div>
                 <div class="card-body" id="formMutasiWrapper" style="display:none;">
                     <form method="POST" action="<?= base_url('admin/prosesMutasiPegawai') ?>">
+                        <?= csrf_field() ?>
                         <input type="hidden" name="pegawai_id" value="<?= $pegawai['id'] ?>">
                         <div class="mb-3">
                             <label class="form-label">Nama Pegawai</label>
@@ -149,6 +150,7 @@
                         </div>
                         <form method="POST" action="<?= base_url('admin/updateMutasiPegawai') ?>">
                             <div class="modal-body">
+                                <?= csrf_field() ?>
                                 <input type="hidden" name="mutasi_id" value="<?= $row['id'] ?>">
                                 <input type="hidden" name="pegawai_id" value="<?= $pegawai['id'] ?>">
                                 <div class="mb-3">

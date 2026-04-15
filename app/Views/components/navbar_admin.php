@@ -62,6 +62,39 @@
     window.namaLengkap = "<?= addslashes(session()->get('nama_lengkap')) ?>";
     window.BASE_URL = "<?= base_url() ?>";
     window.CSRF_HASH = "<?= csrf_hash() ?>";
+    window.CSRF_TOKEN_NAME = "<?= csrf_token() ?>";
+
+    // Global CSRF token injection — tunggu jQuery tersedia
+    (function setupCsrf() {
+        function initAjaxCsrf() {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (settings.type && settings.type.toUpperCase() === 'POST') {
+                        if (settings.data instanceof FormData) {
+                            settings.data.append(window.CSRF_TOKEN_NAME, window.CSRF_HASH);
+                        } else if (typeof settings.data === 'string') {
+                            settings.data += '&' + encodeURIComponent(window.CSRF_TOKEN_NAME) + '=' + encodeURIComponent(window.CSRF_HASH);
+                        } else {
+                            if (!settings.data) settings.data = {};
+                            if (typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
+                                settings.data[window.CSRF_TOKEN_NAME] = window.CSRF_HASH;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        if (typeof jQuery !== 'undefined') {
+            initAjaxCsrf();
+        } else {
+            var _csrfInterval = setInterval(function() {
+                if (typeof jQuery !== 'undefined') {
+                    clearInterval(_csrfInterval);
+                    initAjaxCsrf();
+                }
+            }, 50);
+        }
+    })();
 </script>
 <script src="<?= base_url('assets/js/components/navbar_admin_script.js') ?>"></script>
 <script src="<?= base_url('assets/js/components/realtime_notifications.js') ?>"></script>

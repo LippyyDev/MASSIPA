@@ -160,6 +160,7 @@
                 </div>
                 <div class="card-body">
                     <form id="arsipForm" method="post">
+                        <?= csrf_field() ?>
                         <div class="table-responsive d-none d-md-block">
                             <table id="arsipTable" class="table table-hover table-borderless align-middle modern-table">
                                 <thead class="table-light">
@@ -181,6 +182,7 @@
                         </div>
                         <div class="d-block d-md-none">
                             <form id="arsipFormMobile" method="post">
+                                <?= csrf_field() ?>
                                 <div class="mb-3">
                                     <input type="text" id="search_mobile_arsip" class="form-control"
                                         placeholder="Cari nama laporan, pengirim, atau keterangan..." autocomplete="off">

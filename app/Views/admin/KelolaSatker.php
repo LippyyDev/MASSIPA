@@ -140,6 +140,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST" action="<?= base_url('admin/simpanSatker') ?>">
+                    <?= csrf_field() ?>
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalSatkerLabel">Tambah Satker</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -168,6 +169,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="POST" action="<?= base_url('admin/simpanSatker') ?>">
+                        <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $satker['id'] ?>">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalSatkerEditLabel<?= $satker['id'] ?>">

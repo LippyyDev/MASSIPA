@@ -674,22 +674,56 @@ $(document).ready(function () {
           Swal.showLoading();
         },
       });
-      $.post(
-        "/user/inputdisiplin/save_batch",
-        {
-          data_json: JSON.stringify(batchData),
-          bulan: bulan,
-          tahun: tahun,
-        },
-        function (res) {
+      // Ambil CSRF token: utamakan window.CSRF_HASH dari navbar (paling reliable)
+      // Fallback ke DOM selector jika tidak tersedia
+      var csrfName, csrfVal;
+      if (window.CSRF_HASH) {
+        // CSRF_HASH dari navbar_user.php sudah pasti ada
+        var $csrfInput = $('#formKedisiplinanTabel input[name^="csrf_"]');
+        csrfName = $csrfInput.length > 0 ? $csrfInput.attr('name') : 'csrf_test_name';
+        csrfVal  = window.CSRF_HASH;
+      } else {
+        var $csrfInput = $('#formKedisiplinanTabel input[name^="csrf_"]');
+        if ($csrfInput.length === 0) {
+          $csrfInput = $('input[name^="csrf_"]').first();
+        }
+        csrfName = $csrfInput.attr('name');
+        csrfVal  = $csrfInput.val();
+      }
+
+      if (!csrfName || !csrfVal) {
+        console.error('[BATCH] CSRF token tidak ditemukan!');
+        Swal.fire("Gagal", "Token keamanan tidak ditemukan. Silakan refresh halaman dan coba lagi.", "error");
+        return;
+      }
+
+      var postData = {
+        data_json: JSON.stringify(batchData),
+        bulan: bulan,
+        tahun: tahun,
+      };
+      postData[csrfName] = csrfVal;
+
+      $.ajax({
+        url: (window.BASE_URL || "") + "user/inputdisiplin/save_batch",
+        type: "POST",
+        data: postData,
+        dataType: "json",
+        success: function (res) {
           if (res.success) {
             simpanBatch(batchIndex + 1);
           } else {
             Swal.fire("Gagal", res.message || "Terjadi kesalahan!", "error");
           }
         },
-        "json",
-      );
+        error: function (xhr) {
+          if (xhr.status === 403) {
+            Swal.fire("Gagal", "Akses ditolak (403). Silakan refresh halaman dan coba lagi.", "error");
+          } else {
+            Swal.fire("Gagal", "Terjadi kesalahan saat menyimpan data (HTTP " + xhr.status + ")", "error");
+          }
+        },
+      });
     }
 
     simpanBatch(0);

@@ -89,6 +89,7 @@
                     <div class="d-flex flex-wrap align-items-center gap-2 mt-3 d-none d-md-flex">
                         <form action="<?= base_url('admin/exportUserSatkerPdf') ?>" method="post"
                             class="d-inline">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="bulan" value="<?= $filter_bulan ?>">
                             <input type="hidden" name="tahun" value="<?= $filter_tahun ?>">
                             <button type="submit" class="btn btn-danger btn-md"><i class="fas fa-file-pdf"></i>
@@ -96,6 +97,7 @@
                         </form>
                         <form action="<?= base_url('admin/exportUserSatkerWord') ?>" method="post"
                             class="d-inline">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="bulan" value="<?= $filter_bulan ?>">
                             <input type="hidden" name="tahun" value="<?= $filter_tahun ?>">
                             <button type="submit" class="btn btn-primary btn-md"
@@ -117,6 +119,7 @@
                             <i class="bi bi-funnel"></i>
                         </button>
                         <form action="<?= base_url('admin/exportUserSatkerPdf') ?>" method="post" class="d-block d-md-none">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="bulan" value="<?= $filter_bulan ?>">
                             <input type="hidden" name="tahun" value="<?= $filter_tahun ?>">
                             <button type="submit" class="btn btn-danger btn-sm" title="Export PDF" style="min-width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">
@@ -124,6 +127,7 @@
                             </button>
                         </form>
                         <form action="<?= base_url('admin/exportUserSatkerWord') ?>" method="post" class="d-block d-md-none">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="bulan" value="<?= $filter_bulan ?>">
                             <input type="hidden" name="tahun" value="<?= $filter_tahun ?>">
                             <button type="submit" class="btn btn-primary btn-sm" title="Export Word" style="background:#7c3aed;border-color:#7c3aed; min-width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">

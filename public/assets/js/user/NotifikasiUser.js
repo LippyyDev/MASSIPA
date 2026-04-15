@@ -3,13 +3,11 @@ $(document).ready(function() {
         var notifId = $(this).data('notif-id');
         var isUnread = $(this).hasClass('unread');
         if (isUnread) {
+            var postData = { notif_id: notifId };
             $.ajax({
-                url: BASE_URL + 'user/notifikasiuser/mark-read',
+                url: (window.BASE_URL || '') + 'user/notifikasiuser/mark-read',
                 type: 'POST',
-                data: {
-                    notif_id: notifId,
-                    csrf_token_name: CSRF_HASH
-                },
+                data: postData,
                 success: function(response) {
                     if (response.success) {
                         $('[data-notif-id="' + notifId + '"]').removeClass('unread');
@@ -24,11 +22,9 @@ $(document).ready(function() {
 
     $('#btnHapusSemua').on('click', function() {
         $.ajax({
-            url: BASE_URL + 'user/notifikasiuser/delete-all',
+            url: (window.BASE_URL || '') + 'user/notifikasiuser/delete-all',
             type: 'POST',
-            data: {
-                csrf_token_name: CSRF_HASH
-            },
+            data: {},
             success: function(response) {
                 $('.notification-item').fadeOut(400, function() {
                     $(this).remove();
@@ -40,4 +36,4 @@ $(document).ready(function() {
             }
         });
     });
-}); 
+});

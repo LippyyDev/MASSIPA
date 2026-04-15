@@ -253,12 +253,11 @@ $(document).ready(function () {
               '<form class="form-hapus-laporan d-inline" action="' +
               hapusAction +
               '" method="POST">';
-            actions +=
-              '<input type="hidden" name="' +
-              $('meta[name="csrf-token"]').attr("content") +
-              '" value="' +
-              $('meta[name="csrf-token"]').attr("content") +
-              '">';
+            var csrfName = $('input[name^="csrf_"]').first().attr('name');
+            var csrfVal  = $('input[name^="csrf_"]').first().val();
+            if (csrfName && csrfVal) {
+              actions += '<input type="hidden" name="' + csrfName + '" value="' + csrfVal + '">';
+            }
             actions +=
               '<input type="hidden" name="laporan_id_to_' +
               hapusType +

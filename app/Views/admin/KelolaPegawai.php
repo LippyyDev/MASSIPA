@@ -202,6 +202,7 @@
                 </div>
                 <form method="POST" action="<?= base_url('admin/input_pegawai/add') ?>">
                     <div class="modal-body">
+                        <?= csrf_field() ?>
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama" autocomplete="name" oninput="this.value = this.value.replace(/[0-9]/g, '')" required>
@@ -305,6 +306,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <?= csrf_field() ?>
                         <input type="hidden" name="id" id="edit_pegawai_id">
                         <div class="mb-3">
                             <label for="edit_nama" class="form-label">Nama Lengkap</label>

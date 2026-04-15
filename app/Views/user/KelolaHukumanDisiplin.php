@@ -80,6 +80,7 @@
                 <div class="collapse-form" style="display:none;">
                     <div class="card-body">
                         <form action="<?= base_url('user/kelola_hukuman_disiplin/addHukumanDisiplin') ?>" method="post" enctype="multipart/form-data">
+                            <?= csrf_field() ?>
                             <div class="row g-3 align-items-end">
                                 <div class="col-md-6">
                                     <label class="form-label">Pegawai <span class="text-muted" style="font-weight:400;font-size:0.95em;">(Ketik nama/NIP untuk mencari)</span></label>

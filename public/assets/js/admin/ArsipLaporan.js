@@ -425,11 +425,16 @@ $(document).ready(function () {
       return false;
     }
 
+    var csrfName = $("#arsipForm input[name^='csrf_']").attr('name') || $('input[name^="csrf_"]').first().attr('name');
+    var csrfVal  = $("#arsipForm input[name^='csrf_']").val()  || $('input[name^="csrf_"]').first().val();
     var form = $(
       '<form method="post" action="' +
         window.arsipDownloadZipUrl +
         '" style="display:none;"></form>'
     );
+    if (csrfName && csrfVal) {
+      form.append('<input type="hidden" name="' + csrfName + '" value="' + csrfVal + '">');
+    }
     desktopCheckedIds.forEach(function (id) {
       form.append('<input type="hidden" name="selected[]" value="' + id + '">');
     });
@@ -462,11 +467,16 @@ $(document).ready(function () {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
+        var csrfName = $("#arsipForm input[name^='csrf_']").attr('name') || $('input[name^="csrf_"]').first().attr('name');
+        var csrfVal  = $("#arsipForm input[name^='csrf_']").val()  || $('input[name^="csrf_"]').first().val();
         var form = $(
           '<form method="post" action="' +
             window.arsipDeleteBulkUrl +
             '" style="display:none;"></form>'
         );
+        if (csrfName && csrfVal) {
+          form.append('<input type="hidden" name="' + csrfName + '" value="' + csrfVal + '">');
+        }
         desktopCheckedIds.forEach(function (id) {
           form.append(
             '<input type="hidden" name="selected[]" value="' + id + '">'
@@ -510,11 +520,16 @@ $(document).ready(function () {
       return false;
     }
 
+    var csrfName = $("#arsipFormMobile input[name^='csrf_']").attr('name') || $('input[name^="csrf_"]').first().attr('name');
+    var csrfVal  = $("#arsipFormMobile input[name^='csrf_']").val()  || $('input[name^="csrf_"]').first().val();
     var form = $(
       '<form method="post" action="' +
         window.arsipDownloadZipUrl +
         '" style="display:none;"></form>'
     );
+    if (csrfName && csrfVal) {
+      form.append('<input type="hidden" name="' + csrfName + '" value="' + csrfVal + '">');
+    }
     checkedIds.forEach(function (id) {
       form.append('<input type="hidden" name="selected[]" value="' + id + '">');
     });
@@ -547,11 +562,16 @@ $(document).ready(function () {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
+        var csrfName = $("#arsipFormMobile input[name^='csrf_']").attr('name') || $('input[name^="csrf_"]').first().attr('name');
+        var csrfVal  = $("#arsipFormMobile input[name^='csrf_']").val()  || $('input[name^="csrf_"]').first().val();
         var form = $(
           '<form method="post" action="' +
             window.arsipDeleteBulkUrl +
             '" style="display:none;"></form>'
         );
+        if (csrfName && csrfVal) {
+          form.append('<input type="hidden" name="' + csrfName + '" value="' + csrfVal + '">');
+        }
         checkedIds.forEach(function (id) {
           form.append(
             '<input type="hidden" name="selected[]" value="' + id + '">'

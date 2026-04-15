@@ -217,7 +217,7 @@ $(document).ready(function () {
             if (row.file_sk)
               aksi += `<a href='${window.BASE_URL}user/kelola_hukuman_disiplin/getFile/${encodeURIComponent(row.file_sk)}' target='_blank' class='btn btn-info btn-sm btn-action me-1'><i class='bi bi-file-earmark-pdf-fill'></i></a>`;
             if (row.status == "pending" || row.status == "rejected")
-              aksi += `<form action='${window.BASE_URL}user/kelola_hukuman_disiplin/delete/${row.id}' method='post' style='display:inline;'><button type='submit' class='btn btn-danger btn-sm btn-action btn-delete'><i class='bi bi-trash'></i></button></form>`;
+              aksi += `<form action='${window.BASE_URL}user/kelola_hukuman_disiplin/delete/${row.id}' method='post' style='display:inline;'><input type='hidden' name='${window.CSRF_TOKEN_NAME}' value='${window.CSRF_HASH}'><button type='submit' class='btn btn-danger btn-sm btn-action btn-delete'><i class='bi bi-trash'></i></button></form>`;
             return aksi;
           },
         },
@@ -445,7 +445,7 @@ $(document).ready(function () {
                         }
                         ${
                           row.status == "pending" || row.status == "rejected"
-                            ? `<form action='${window.BASE_URL}user/kelola_hukuman_disiplin/delete/${row.id}' method='post' style='display:inline;'><button type='submit' class='btn btn-danger btn-sm btn-action btn-delete-user' title='Hapus'><i class='bi bi-trash'></i></button></form>`
+                            ? `<form action='${window.BASE_URL}user/kelola_hukuman_disiplin/delete/${row.id}' method='post' style='display:inline;'><input type='hidden' name='${window.CSRF_TOKEN_NAME}' value='${window.CSRF_HASH}'><button type='submit' class='btn btn-danger btn-sm btn-action btn-delete-user' title='Hapus'><i class='bi bi-trash'></i></button></form>`
                             : ""
                         }
                     </div>

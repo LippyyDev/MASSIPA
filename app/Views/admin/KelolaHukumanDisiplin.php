@@ -73,6 +73,7 @@
                     <div class="card-body">
                         <form action="<?= base_url('admin/addHukumanDisiplin') ?>" method="post"
                             enctype="multipart/form-data">
+                            <?= csrf_field() ?>
                             <div class="row g-3 align-items-end">
                                 <div class="col-md-4">
                                     <label class="form-label">Pegawai <span class="text-muted"

@@ -162,6 +162,7 @@
             </div>
             
             <form id="formKedisiplinanTabel" method="post" action="#">
+                <?= csrf_field() ?>
                 <input type="hidden" name="bulan" id="inputBulan" value="<?= $filter_bulan ?>">
                 <input type="hidden" name="tahun" id="inputTahun" value="<?= $filter_tahun ?>">
                 <div class="card mb-3">

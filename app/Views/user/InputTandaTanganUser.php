@@ -99,6 +99,7 @@
                         <div class="tab-content" id="ttdTabContent">
                             <div class="tab-pane fade show active" id="ttd-biasa" role="tabpanel" aria-labelledby="ttd-biasa-tab">
                     <form method="POST" action="<?= base_url("user/inputtandatanganuser/add") ?>">
+                        <?= csrf_field() ?>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="lokasi" class="form-label">Lokasi</label>
@@ -133,6 +134,7 @@
                             </div>
                             <div class="tab-pane fade" id="ttd-gambar" role="tabpanel" aria-labelledby="ttd-gambar-tab">
                                 <form method="POST" action="<?= base_url('user/inputtandatanganuser/add_gambar') ?>" enctype="multipart/form-data">
+                                    <?= csrf_field() ?>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="tempat_gambar" class="form-label">Lokasi</label>
@@ -376,6 +378,7 @@
                                                     </div>
                                                     <form method="POST" action="<?= base_url('user/inputtandatanganuser/update') ?>">
                                                         <div class="modal-body">
+                                                            <?= csrf_field() ?>
                                                             <input type="hidden" name="tanda_tangan_id" value="<?= $row["id"]; ?>">
                                                             <div class="mb-3">
                                                                 <label for="lokasi" class="form-label">Lokasi</label>
@@ -474,6 +477,7 @@
                             </div>
                             <form method="POST" action="<?= base_url('user/inputtandatanganuser/update_gambar') ?>" enctype="multipart/form-data">
                                 <div class="modal-body">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                     <div class="mb-3">
                                         <label for="tempat_edit_<?= $row['id'] ?>" class="form-label">Lokasi</label>

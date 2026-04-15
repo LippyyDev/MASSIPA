@@ -156,6 +156,7 @@
                                                     <form method="POST"
                                                         action="<?= base_url('user/hapus_kedisiplinan_periode') ?>"
                                                         class="d-inline form-hapus-periode">
+                                                        <?= csrf_field() ?>
                                                         <input type="hidden" name="bulan" value="<?= $row['bulan'] ?>">
                                                         <input type="hidden" name="tahun" value="<?= $row['tahun'] ?>">
                                                         <button type="submit" class="btn btn-danger btn-sm btn-hapus-periode"

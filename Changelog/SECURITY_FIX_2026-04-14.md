@@ -182,31 +182,27 @@ $file->move(WRITEPATH . 'uploads/sk/', $newName);
 
 ---
 
-### 🟠 TAHAP 6 — Aktifkan CSRF Filter
+### ✅ TAHAP 6 — Aktifkan CSRF Filter
 
 > **Estimasi:** 5 menit  
-> **File yang diubah:** `app/Config/Filters.php`
+> **File yang diubah:** `app/Config/Filters.php` + 9 view files (27 form)
+> **Selesai:** 15/04/2026
 
-- [ ] Uncomment baris `// 'csrf',` di bagian `$globals['before']`
-- [ ] Test semua form masih berfungsi normal setelah CSRF diaktifkan
-- [ ] Test: buka form, refresh token, submit → harus tetap bisa submit
-
-**Kode di `Filters.php` (baris 76–82):**
-```php
-// SEBELUM:
-'before' => [
-    'rememberme',
-    'emailQueuePump',
-    // 'csrf',      ← Dikomentari!
-],
-
-// SESUDAH:
-'before' => [
-    'rememberme',
-    'emailQueuePump',
-    'csrf',          ← Aktifkan
-],
-```
+- [x] Uncomment `'csrf'` di `$globals['before']` di `Filters.php` ✅ 15/04/2026
+- [x] Scan semua view: ditemukan **27 form POST**, **17 tanpa csrf_field()** ✅ 15/04/2026
+- [x] Tambah `<?= csrf_field() ?>` ke semua form yang kurang: ✅ 15/04/2026
+  - `admin/ArsipLaporan.php` — 2 form (desktop + mobile)
+  - `admin/InputTandaTanganAdmin.php` — 4 form (tambah biasa, tambah gambar, edit biasa, edit gambar)
+  - `admin/KelolaPegawai.php` — 2 form (tambah + edit pegawai)
+  - `admin/KelolaSatker.php` — 2 form (tambah + edit satker)
+  - `admin/MutasiPegawai.php` — 2 form (form mutasi + modal edit)
+  - `user/InputTandaTanganUser.php` — 4 form (tambah biasa, tambah gambar, edit biasa, edit gambar)
+  - `user/InputDisiplin.php` — 1 form (tabel kedisiplinan)
+  - `user/KelolaDisiplin.php` — 1 form (hapus periode)
+  - `user/RekapLaporanDisiplin.php` — 1 form (export)
+- [x] Verifikasi akhir: **27/27 form POST** sudah memiliki `csrf_field()` ✅ 15/04/2026
+- [x] Form yang sudah ada CSRF sebelumnya: Login, ForgotPassword, ResetPassword, ProfilAdmin, ProfilUser (10 form)
+- [ ] ⏳ Test manual via browser: submit semua form utama pastikan tidak ada `419 CSRF token mismatch`
 
 ---
 

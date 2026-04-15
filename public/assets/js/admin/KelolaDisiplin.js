@@ -143,6 +143,9 @@ $(document).ready(function () {
           d.tahun = window.currentTahun;
           d.satker = window.currentSatker;
           d.pelanggaran = window.currentJenisPelanggaran;
+          if (window.CSRF_TOKEN_NAME && window.CSRF_HASH) {
+            d[window.CSRF_TOKEN_NAME] = window.CSRF_HASH;
+          }
         },
         error: function (xhr, error, thrown) {
           console.error("AJAX Error:", xhr.status, thrown, xhr.responseText);
@@ -403,6 +406,7 @@ $(document).ready(function () {
         satker: getFilterValue("satker"),
         pelanggaran: getFilterValue("pelanggaran"),
         length: -1,
+        [window.CSRF_TOKEN_NAME || 'csrf_test_name']: window.CSRF_HASH || '',
       },
       success: function (response) {
         if (response.data) {

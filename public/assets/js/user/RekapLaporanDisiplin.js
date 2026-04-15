@@ -561,6 +561,9 @@ function submitExport(action) {
     form.appendChild(input);
   };
 
+  // CSRF token
+  addHidden(window.CSRF_TOKEN_NAME || 'csrf_test_name', window.CSRF_HASH || '');
+
   addHidden("bulan", bulan);
   addHidden("tahun", tahun);
   checkedIds.forEach((id) => addHidden("selected[]", id));

@@ -207,6 +207,7 @@
                     </div>
 
                     <form id="exportForm" method="POST">
+                        <?= csrf_field() ?>
                         <input type="hidden" name="bulan" value="<?= esc($filter_bulan) ?>">
                         <input type="hidden" name="tahun" value="<?= esc($filter_tahun) ?>">
                         <div class="table-responsive d-none d-md-block">

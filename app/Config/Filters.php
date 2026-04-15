@@ -77,7 +77,7 @@ class Filters extends BaseFilters
             'rememberme',
             'emailQueuePump',
             // 'honeypot',
-            // 'csrf',
+            'csrf',
             // 'invalidchars',
         ],
         'after' => [
