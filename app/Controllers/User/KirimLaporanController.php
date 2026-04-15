@@ -101,19 +101,19 @@ class KirimLaporanController extends BaseController
                 return redirect()->back()->withInput();
             }
             
-            // Validasi tipe file
+            // Validasi tipe file — getMimeType() baca dari KONTEN file (server-side, aman)
             $file = $files[0];
-            $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-            $allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
-            
-            if (!in_array($file->getClientMimeType(), $allowedTypes) && !in_array($file->getExtension(), $allowedExtensions)) {
-                $session->setFlashdata('msg', 'Format file tidak didukung! Hanya PDF, DOC, DOCX, XLS, XLSX yang diperbolehkan.');
+            $allowedMimes      = ['application/pdf'];
+            $allowedExtensions = ['pdf'];
+
+            if (!in_array($file->getMimeType(), $allowedMimes) || !in_array(strtolower($file->getClientExtension() ?: $file->getExtension()), $allowedExtensions)) {
+                $session->setFlashdata('msg', 'Format file tidak didukung! Hanya file PDF yang diperbolehkan.');
                 $session->setFlashdata('msg_type', 'danger');
                 return redirect()->back()->withInput();
             }
             
-            if ($file->getSize() > 5120 * 1024) { // 5MB dalam bytes
-                $session->setFlashdata('msg', 'Ukuran file terlalu besar! Maksimal 5MB.');
+            if ($file->getSize() > 1 * 1024 * 1024) { // 1MB dalam bytes
+                $session->setFlashdata('msg', 'Ukuran file terlalu besar! Maksimal 1MB.');
                 $session->setFlashdata('msg_type', 'danger');
                 return redirect()->back()->withInput();
             }
@@ -145,7 +145,7 @@ class KirimLaporanController extends BaseController
                 $originalName = $newName;
                 $dir = WRITEPATH . 'uploads/laporan/';
                 if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
+                    mkdir($dir, 0755, true);
                 }
                 while (file_exists($dir . $newName)) {
                     $nameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);

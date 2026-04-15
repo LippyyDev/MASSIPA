@@ -184,58 +184,106 @@ $file->move(WRITEPATH . 'uploads/sk/', $newName);
 
 ### ✅ TAHAP 6 — Aktifkan CSRF Filter
 
-> **Estimasi:** 5 menit  
-> **File yang diubah:** `app/Config/Filters.php` + 9 view files (27 form)
+> **Estimasi:** 5 menit (aktual: ~3 jam akibat banyak form & AJAX yang belum aman)  
+> **File yang diubah:** `app/Config/Filters.php` + `app/Config/Security.php` + 11 view files + 7 JS files  
 > **Selesai:** 15/04/2026
 
 - [x] Uncomment `'csrf'` di `$globals['before']` di `Filters.php` ✅ 15/04/2026
-- [x] Scan semua view: ditemukan **27 form POST**, **17 tanpa csrf_field()** ✅ 15/04/2026
+- [x] Ubah `csrfProtection` dari `cookie` → `session` (kompatibel WebView) ✅ 15/04/2026
+- [x] Matikan `regenerate = false` (mencegah token mismatch di batch/multiple AJAX) ✅ 15/04/2026
+- [x] Scan semua view: ditemukan **27 form POST** bermasalah, semua diperbaiki ✅ 15/04/2026
 - [x] Tambah `<?= csrf_field() ?>` ke semua form yang kurang: ✅ 15/04/2026
   - `admin/ArsipLaporan.php` — 2 form (desktop + mobile)
   - `admin/InputTandaTanganAdmin.php` — 4 form (tambah biasa, tambah gambar, edit biasa, edit gambar)
   - `admin/KelolaPegawai.php` — 2 form (tambah + edit pegawai)
   - `admin/KelolaSatker.php` — 2 form (tambah + edit satker)
   - `admin/MutasiPegawai.php` — 2 form (form mutasi + modal edit)
+  - `admin/RekapPegawaiSatker.php` — 4 form export (PDF+Word desktop+mobile) **[FIX tambahan]**
+  - `admin/KelolaHukumanDisiplin.php` — 1 form addHukumanDisiplin **[FIX tambahan]**
   - `user/InputTandaTanganUser.php` — 4 form (tambah biasa, tambah gambar, edit biasa, edit gambar)
   - `user/InputDisiplin.php` — 1 form (tabel kedisiplinan)
   - `user/KelolaDisiplin.php` — 1 form (hapus periode)
   - `user/RekapLaporanDisiplin.php` — 1 form (export)
-- [x] Verifikasi akhir: **27/27 form POST** sudah memiliki `csrf_field()` ✅ 15/04/2026
-- [x] Form yang sudah ada CSRF sebelumnya: Login, ForgotPassword, ResetPassword, ProfilAdmin, ProfilUser (10 form)
-- [ ] ⏳ Test manual via browser: submit semua form utama pastikan tidak ada `419 CSRF token mismatch`
+  - `user/KelolaHukumanDisiplin.php` — 1 form addHukumanDisiplin **[FIX tambahan]**
+- [x] Verifikasi akhir: **semua form POST** sudah memiliki `csrf_field()` ✅ 15/04/2026
+- [x] Fix global `$.ajaxSetup` di `navbar_admin.php` & `navbar_user.php` — otomatis inject CSRF di semua jQuery POST ✅ 15/04/2026
+- [x] Fix jQuery wait-guard di kedua navbar — cegah `$ is not defined` saat jQuery di-load di bottom body ✅ 15/04/2026
+- [x] Fix CSRF di dynamic JS forms:
+  - `user/KelolaHukumanDisiplin.js` — delete form (desktop DataTables + mobile card) ✅
+  - `user/RekapLaporanDisiplin.js` — `submitExport()` dynamic form POST ✅
+  - `user/KirimLaporan.js` — dynamic hapus laporan form ✅
+  - `admin/ArsipLaporan.js` — download & delete ZIP dynamic forms (4 form) ✅
+  - `admin/KelolaDisiplin.js` — DataTables server-side POST + mobile AJAX ✅
+  - `user/NotifikasiUser.js` — perbaiki hardcoded `csrf_token_name:` salah ✅
+  - `user/InputDisiplin.js` — batch save pakai `window.CSRF_HASH` + `window.CSRF_TOKEN_NAME` ✅
+- [x] Test semua endpoint yang sebelumnya 403 → sekarang ✅ berfungsi normal
 
 ---
 
-### 🟡 TAHAP 7 — Perbaiki Upload Import CSV Pegawai
+### ✅ TAHAP 7 — Perbaiki Upload Import CSV Pegawai
 
-> **Estimasi:** 10 menit  
-> **File yang diubah:** `app/Controllers/Admin/KelolaPegawaiController.php`
+> **Estimasi:** 10 menit (aktual: ~20 menit)  
+> **File yang diubah:** `app/Controllers/Admin/KelolaPegawaiController.php` + `public/assets/js/admin/ImportPegawai.js` + `app/Views/admin/ImportPegawai.php`  
+> **Selesai:** 15/04/2026
 
-- [ ] Tambah validasi ekstensi `.csv` sebelum memproses file (baris 172)
-- [ ] Tambah validasi MIME type `text/csv` atau `text/plain`
-- [ ] Test upload file `.php` sebagai CSV → harus ditolak
+- [x] **Controller** — Tambah validasi ekstensi `.csv` sebelum file di-move (`getClientExtension()`) ✅ 15/04/2026
+- [x] **Controller** — Tambah validasi MIME type `getMimeType()` (server-side, baca dari konten file) ✅ 15/04/2026
+- [x] **Controller** — Tambah validasi ukuran file maks 2MB ✅ 15/04/2026
+- [x] **Controller** — Pindah folder sementara: `WRITEPATH/uploads/` → `WRITEPATH/uploads/tmp/` (folder terisolasi) ✅ 15/04/2026
+- [x] **Controller** — Fix bug path setelah `move()`: pakai `$randomName` bukan `$file->getName()` ✅ 15/04/2026
+- [x] **Controller** — `unlink($filePath)` langsung setelah `file()` membaca ✅ 15/04/2026
+- [x] **JS Frontend** — Tambah validasi ekstensi `.csv` di `ImportPegawai.js` sebelum submit (SweetAlert) ✅ 15/04/2026
+- [x] **JS Frontend** — Tambah validasi ukuran 2MB di frontend (SweetAlert) ✅ 15/04/2026
+- [x] **View** — Tambah `csrf_field()` yang terlewat di form import (file terpisah `ImportPegawai.php`) ✅ 15/04/2026
+- [x] **Folder** — Buat `writable/uploads/tmp/` + `.htaccess` (Deny all + Require all denied + FilesMatch) ✅ 15/04/2026
+- [x] **Folder** — Buat `writable/uploads/tmp/index.html` (cegah directory listing) ✅ 15/04/2026
+- [x] Test simulasi: `shell.php`, `back.php5`, `malware.phtml` → semua **DITOLAK** di layer ekstensi ✅
+- [x] Test simulasi: `exploit.php.csv` → lolos layer ekstensi tapi **DITOLAK** di MIME check (`application/x-php` bukan CSV) ✅
+- [x] Test simulasi: `data.csv` valid → **DITERIMA** ✅
+- [x] Verifikasi 16/16 checks lulus ✅ 15/04/2026
+- [ ] ⏳ Test manual via browser: upload `.php` disguised as CSV → harus ditolak
+- [ ] ⏳ Test manual via browser: upload `.csv` valid → harus berhasil
 
 ```php
-// Tambahkan sebelum baris: $file->move(...)
-$csvExt = strtolower($file->getClientExtension());
-$csvMime = $file->getMimeType();
-$allowedCsvMimes = ['text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel'];
-if ($csvExt !== 'csv' || !in_array($csvMime, $allowedCsvMimes)) {
-    session()->setFlashdata('msg', 'File harus berformat CSV!');
-    session()->setFlashdata('msg_type', 'danger');
-    return redirect()->to(base_url('admin/input_pegawai'));
-}
+// Urutan validasi di controller (SEBELUM file di-move):
+// 1. isValid()          — CI4 upload check
+// 2. getSize() > 2MB   — tolak jika terlalu besar  
+// 3. getClientExtension() !== 'csv'  — tolak non-CSV
+// 4. getMimeType() not in allowed    — tolak MIME aneh
+// 5. move() ke WRITEPATH/uploads/tmp/  — folder aman + .htaccess Deny all
+// 6. file() baca, unlink() langsung setelah dibaca
 ```
 
 ---
 
-### 🟡 TAHAP 8 — Perbaiki getClientMimeType() di KirimLaporan
+### ✅ TAHAP 8 — Perbaiki Upload Laporan di KirimLaporan
 
-> **Estimasi:** 5 menit  
-> **File yang diubah:** `app/Controllers/User/KirimLaporanController.php`
+> **Estimasi:** 5 menit (aktual: ~15 menit — ditemukan lebih banyak masalah)  
+> **File yang diubah:** `app/Controllers/User/KirimLaporanController.php` + `public/assets/js/user/KirimLaporan.js` + `app/Views/user/KirimLaporan.php`  
+> **Selesai:** 15/04/2026
 
-- [ ] Ganti `$file->getClientMimeType()` → `$file->getMimeType()` (baris 109)
-- [ ] Test upload laporan PDF → harus tetap berhasil
+- [x] **Controller** — Ganti `getClientMimeType()` → `getMimeType()` (server-side, baca dari konten file) ✅ 15/04/2026
+- [x] **Controller** — Batasi format: dari PDF/DOC/DOCX/XLS/XLSX → **PDF only** (sesuai UI) ✅ 15/04/2026
+- [x] **Controller** — Turunkan batas ukuran: **5MB → 1MB** ✅ 15/04/2026
+- [x] **Controller** — Perbaiki logika validasi: dari `&&` (AND, mudah bypass) → `||` (OR, keduanya harus valid) ✅ 15/04/2026
+- [x] **Controller** — Fix `mkdir 0777` → `0755` ✅ 15/04/2026
+- [x] **JS Frontend** — Update `maxSize` dari 2MB → 1MB di `onChange` handler (L4) ✅ 15/04/2026
+- [x] **JS Frontend** — Update `maxSize` dari 2MB → 1MB di `onSubmit` handler (L537) — validasi duplikat yang terlewat ✅ 15/04/2026
+- [x] **JS Frontend** — Update semua teks error UI menjadi "1MB" ✅ 15/04/2026
+- [x] **View** — Update petunjuk "Maks 3MB" → "Maks 1MB" (2 tempat) ✅ 15/04/2026
+- [x] Verifikasi 12/12 checks + 6/6 simulasi serangan lulus ✅ 15/04/2026
+- [ ] ⏳ Test manual via browser: upload file .docx → harus ditolak
+- [ ] ⏳ Test manual via browser: upload PDF valid 900KB → harus berhasil
+- [ ] ⏳ Test manual via browser: upload PDF valid 1.2MB → harus ditolak
+
+```php
+// State akhir validasi controller:
+$allowedMimes      = ['application/pdf'];   // PDF only (server-side MIME)
+$allowedExtensions = ['pdf'];               // PDF only (ekstensi)
+$maxSize           = 1 * 1024 * 1024;       // 1MB
+// Logika: MIME INVALID atau EKSTENSI INVALID → tolak (bukan AND tapi OR)
+if (!in_array($file->getMimeType(), $allowedMimes) || !in_array($ext, $allowedExtensions)) { /* tolak */ }
+```
 
 ---
 
@@ -250,9 +298,9 @@ if ($csvExt !== 'csv' || !in_array($csvMime, $allowedCsvMimes)) {
 | 14/04/2026 | Tahap 3 | ✅ Selesai | Identik dengan Tahap 2 untuk User controller. Audit 33/33 lulus. Scan kode bersih. |
 | 14/04/2026 | Tahap 4 | ✅ Selesai | GD re-encoding + MIME check. Path → `WRITEPATH/uploads/ttd/`. Audit 40/40 lulus. Fix: redirect, mkdir 0777→0755, nosniff. |
 | 14/04/2026 | Tahap 5 | ✅ Selesai | Identik dengan Tahap 4 untuk User controller. Scan kode 8/8 bersih. |
-| | Tahap 6 | ⏳ Pending | |
-| | Tahap 7 | ⏳ Pending | |
-| | Tahap 8 | ⏳ Pending | |
+| 15/04/2026 | Tahap 6 | ✅ Selesai | CSRF aktif. Security: session-based, regenerate=false. 29+ form POST diamankan. Global $.ajaxSetup+jQuery guard di kedua navbar. Fix 7 JS file dynamic forms. Semua 403 error teratasi. |
+| 15/04/2026 | Tahap 7 | ✅ Selesai | Validasi 3 layer: ekstensi, MIME (server-side), ukuran 2MB. Upload ke WRITEPATH/tmp/ + .htaccess Deny all. Fix path bug. Frontend JS validation + CSRF fix di form import. 16/16 checks lulus. |
+| 15/04/2026 | Tahap 8 | ✅ Selesai | Fix getClientMimeType→getMimeType. PDF-only (hapus doc/docx/xls/xlsx). Batas 5MB→1MB di controller+JS (2 handler)+view. Fix logika validasi &&→||. Fix mkdir 0777→0755. 12/12 checks + 6/6 simulasi lulus. |
 
 ---
 

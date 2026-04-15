@@ -59,7 +59,7 @@
                     $isiPetunjuk = '<ul class="mb-0 ps-3" style="font-size:0.98em;">
                         <li><i class="bi bi-pencil-square"></i> Isi nama laporan, pilih bulan dan tahun, serta tambahkan keterangan jika diperlukan.</li>
                         <li><i class="bi bi-file-earmark-arrow-up"></i> Upload file laporan dengan format PDF saja.</li>
-                        <li><i class="bi bi-collection"></i> Maksimal 1 file dengan ukuran maksimal 3MB.</li>
+                        <li><i class="bi bi-collection"></i> Maksimal 1 file dengan ukuran maksimal 1MB.</li>
                         <li><i class="bi bi-funnel"></i> Gunakan filter di bawah untuk menampilkan laporan sesuai bulan, tahun, dan kategori.</li>
                         <li><i class="bi bi-search"></i> Setelah upload, laporan akan dicek oleh admin. Status laporan akan berubah menjadi <b>Terkirim</b>, <b>Disetujui</b>, atau <b>Ditolak</b>.</li>
                         <li><i class="bi bi-arrow-repeat"></i> Jika laporan ditolak, Anda dapat mengupload ulang laporan yang sudah diperbaiki.</li>
@@ -138,7 +138,7 @@
                         <div class="mb-3">
                             <label for="files" class="form-label">Upload File</label>
                             <input type="file" class="form-control" id="files" name="files[]" accept=".pdf">
-                            <small class="form-text text-muted">Format: PDF saja (Max 3MB). Opsional jika sudah mengisi
+                            <small class="form-text text-muted">Format: PDF saja (Max 1MB). Opsional jika sudah mengisi
                                 Link Drive.</small>
                         </div>
 

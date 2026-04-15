@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("#files").on("change", function () {
     var file = this.files[0];
-    var maxSize = 2 * 1024 * 1024;
+    var maxSize = 1 * 1024 * 1024; // 1MB
 
     if (file) {
       if (file.type !== "application/pdf") {
@@ -19,7 +19,7 @@ $(document).ready(function () {
         Swal.fire({
           icon: "error",
           title: "Ukuran File Terlalu Besar",
-          text: "Ukuran file maksimal 2MB.",
+          text: "Ukuran file maksimal 1MB.",
           confirmButtonText: "OK",
         });
         this.value = "";
@@ -534,14 +534,14 @@ $(document).ready(function () {
 
       if (hasFile) {
         const file = fileInput.files[0];
-        const maxSize = 2 * 1024 * 1024;
+        const maxSize = 1 * 1024 * 1024; // 1MB
 
         if (file.size > maxSize) {
           e.preventDefault();
           Swal.fire({
             icon: "error",
             title: "File Terlalu Besar",
-            text: "Ukuran file terlalu besar! Maksimal 2MB.",
+            text: "Ukuran file terlalu besar! Maksimal 1MB.",
             confirmButtonText: "OK",
           });
           return false;

@@ -31,6 +31,7 @@
             
             <form id="importForm" action="<?= base_url('admin/import_pegawai') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <?= csrf_field() ?>
                     <!-- Step 1: File Selection -->
                     <div id="step1">
                         <div class="alert alert-info">

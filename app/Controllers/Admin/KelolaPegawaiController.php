@@ -171,10 +171,46 @@ class KelolaPegawaiController extends BaseController
         
         if ($this->request->getFile('file_csv')->isValid()) {
             $file = $this->request->getFile('file_csv');
-            $file->move(WRITEPATH . 'uploads', $file->getRandomName());
-            $filePath = WRITEPATH . 'uploads/' . $file->getName();
+
+            // ── VALIDASI 1: Ukuran file (maks 2MB) ──────────────────────────
+            $maxSize = 2 * 1024 * 1024; // 2MB
+            if ($file->getSize() > $maxSize) {
+                $session->setFlashdata('msg', 'Ukuran file terlalu besar. Maksimal 2MB.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/input_pegawai'));
+            }
+
+            // ── VALIDASI 2: Ekstensi file harus .csv ────────────────────────
+            $csvExt = strtolower($file->getClientExtension());
+            if ($csvExt !== 'csv') {
+                $session->setFlashdata('msg', 'File harus berformat CSV! File dengan ekstensi .' . esc($csvExt) . ' tidak diizinkan.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/input_pegawai'));
+            }
+
+            // ── VALIDASI 3: MIME type harus text/csv atau text/plain ─────────
+            $csvMime = $file->getMimeType(); // Baca dari konten file (server-side), bukan header client
+            $allowedCsvMimes = ['text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel'];
+            if (!in_array($csvMime, $allowedCsvMimes)) {
+                $session->setFlashdata('msg', 'MIME type tidak valid (' . esc($csvMime) . '). File harus berformat CSV.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/input_pegawai'));
+            }
+
+            // ── SIMPAN FILE SEMENTARA dengan nama acak (aman) ───────────────
+            $randomName = $file->getRandomName(); // generate nama acak .csv
+            $file->move(WRITEPATH . 'uploads/tmp/', $randomName);
+            $filePath = WRITEPATH . 'uploads/tmp/' . $randomName;
+
+            // Pastikan file berhasil dipindahkan
+            if (!file_exists($filePath)) {
+                $session->setFlashdata('msg', 'Gagal menyimpan file sementara. Coba lagi.');
+                $session->setFlashdata('msg_type', 'danger');
+                return redirect()->to(base_url('admin/input_pegawai'));
+            }
+
             $lines = file($filePath);
-            unlink($filePath);
+            unlink($filePath); // Hapus segera setelah dibaca
             
             $headerRow = null;
             $headerIndex = null;

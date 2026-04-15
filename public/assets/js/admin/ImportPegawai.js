@@ -1,4 +1,4 @@
-﻿// ===== Import CSV Progress Tracking Script =====
+// ===== Import CSV Progress Tracking Script =====
 
 // Import CSV Progress Tracking Variables
 let progressInterval;
@@ -90,6 +90,31 @@ $(document).ready(function () {
     const fileInput = $("#file_csv")[0];
     if (!fileInput.files[0]) {
       Swal.fire("Error", "Pilih file CSV terlebih dahulu!", "error");
+      return;
+    }
+
+    // Validasi ekstensi file (frontend — server juga akan validasi)
+    const selectedFile = fileInput.files[0];
+    const fileExt = selectedFile.name.split('.').pop().toLowerCase();
+    if (fileExt !== 'csv') {
+      Swal.fire({
+        icon: "error",
+        title: "Format File Tidak Valid!",
+        text: "File harus berformat CSV (.csv). File ." + fileExt + " tidak diizinkan.",
+        confirmButtonColor: "#7c3aed"
+      });
+      return;
+    }
+
+    // Validasi ukuran file (maks 2MB)
+    const maxSize = 2 * 1024 * 1024;
+    if (selectedFile.size > maxSize) {
+      Swal.fire({
+        icon: "error",
+        title: "File Terlalu Besar!",
+        text: "Ukuran file maksimal adalah 2MB. File Anda: " + (selectedFile.size / 1024 / 1024).toFixed(2) + "MB.",
+        confirmButtonColor: "#7c3aed"
+      });
       return;
     }
 
