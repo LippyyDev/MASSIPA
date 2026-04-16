@@ -91,11 +91,10 @@
                                                 <button type="button" class="btn btn-warning btn-action"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#modalSatkerEdit<?= $satker['id'] ?>"><i
-                                                        class="bi bi-pencil-square"></i> Edit</button>
+                                                        class="bi bi-pencil-square"></i> <span class="d-none d-xl-inline">Edit</span></button>
                                                 <a href="<?= base_url('admin/hapusSatker/' . $satker['id']) ?>"
                                                     class="btn btn-danger btn-action btn-delete-satker"
-                                                    data-nama="<?= esc($satker['nama']) ?>"><i class="bi bi-trash"></i>
-                                                    Hapus</a>
+                                                    data-nama="<?= esc($satker['nama']) ?>"><i class="bi bi-trash"></i> <span class="d-none d-xl-inline">Hapus</span></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
