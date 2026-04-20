@@ -57,10 +57,17 @@ class LoginHistoryModel extends Model
      */
     public function getHistoryByUser(int $userId, int $limit = 50): array
     {
-        return $this->where('user_id', $userId)
+        $rows = $this->where('user_id', $userId)
             ->orderBy('created_at', 'DESC')
             ->limit($limit)
             ->findAll();
+
+        foreach ($rows as &$row) {
+            if (!empty($row['device_os'])) {
+                $row['device_os'] = preg_replace('/^(Android|iOS|iPadOS)\s+.*/i', '$1', $row['device_os']);
+            }
+        }
+        return $rows;
     }
 
     /**
@@ -68,13 +75,20 @@ class LoginHistoryModel extends Model
      */
     public function getAllHistory(int $limit = 200): array
     {
-        return $this->db->table('login_history lh')
+        $rows = $this->db->table('login_history lh')
             ->select('lh.*, u.nama_lengkap, u.role')
             ->join('users u', 'u.id = lh.user_id', 'left')
             ->orderBy('lh.created_at', 'DESC')
             ->limit($limit)
             ->get()
             ->getResultArray();
+
+        foreach ($rows as &$row) {
+            if (!empty($row['device_os'])) {
+                $row['device_os'] = preg_replace('/^(Android|iOS|iPadOS)\s+.*/i', '$1', $row['device_os']);
+            }
+        }
+        return $rows;
     }
 
     /**

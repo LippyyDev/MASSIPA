@@ -102,12 +102,10 @@ class DeviceHistoryService
         elseif (preg_match('/windows nt 6\.2/i', $ua))       $os = 'Windows 8';
         elseif (preg_match('/windows nt 6\.1/i', $ua))       $os = 'Windows 7';
         elseif (preg_match('/windows/i', $ua))                $os = 'Windows';
-        elseif (preg_match('/android\s([\d.]+)/i', $ua, $m)) $os = 'Android ' . $m[1];
-        elseif (preg_match('/iphone os\s([\d_]+)/i', $ua, $m)) {
-            $os = 'iOS ' . str_replace('_', '.', $m[1]);
-        } elseif (preg_match('/ipad.*os\s([\d_]+)/i', $ua, $m)) {
-            $os = 'iPadOS ' . str_replace('_', '.', $m[1]);
-        } elseif (preg_match('/mac os x\s([\d_]+)/i', $ua, $m)) {
+        elseif (preg_match('/android/i', $ua))                $os = 'Android';
+        elseif (preg_match('/iphone/i', $ua))                 $os = 'iOS';
+        elseif (preg_match('/ipad/i', $ua))                   $os = 'iPadOS';
+        elseif (preg_match('/mac os x\s([\d_]+)/i', $ua, $m)) {
             $os = 'macOS ' . str_replace('_', '.', $m[1]);
         } elseif (preg_match('/linux/i', $ua))                $os = 'Linux';
         elseif (preg_match('/ubuntu/i', $ua))                 $os = 'Ubuntu';
