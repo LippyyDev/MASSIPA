@@ -28,12 +28,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        window.flashMessage     = <?= json_encode(session()->getFlashdata('msg')) ?>;
-        window.flashMessageType = <?= json_encode(session()->getFlashdata('msg_type')) ?>;
-        window.riwayatAjaxUrl   = "<?= base_url('user/pengaturan/riwayat_ajax') ?>";
-        window.hapusRiwayatUrl  = "<?= base_url('user/pengaturan/hapus_riwayat') ?>";
-        window.csrfToken        = "<?= csrf_token() ?>";
-        window.csrfHash         = "<?= csrf_hash() ?>";
+        window.flashMessage        = <?= json_encode(session()->getFlashdata('msg')) ?>;
+        window.flashMessageType    = <?= json_encode(session()->getFlashdata('msg_type')) ?>;
+        window.riwayatAjaxUrl      = "<?= base_url('user/pengaturan/riwayat_ajax') ?>";
+        window.hapusRiwayatUrl     = "<?= base_url('user/pengaturan/hapus_riwayat') ?>";
+        window.toggle2FaExemptUrl  = "<?= base_url('user/pengaturan/toggle_2fa_exempt') ?>";
+        window.revokeWhitelistBase = "<?= base_url('user/pengaturan/whitelist/revoke/') ?>";
+        window.csrfToken           = "<?= csrf_token() ?>";
+        window.csrfHash            = "<?= csrf_hash() ?>";
     </script>
 </head>
 
@@ -58,15 +60,18 @@
 
             <!-- Card Riwayat Perangkat Login -->
             <div class="card mb-3" id="riwayat-perangkat">
-                <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
                     <span><i class="bi bi-clock-history me-2"></i>Riwayat Perangkat Login</span>
-                    <button class="btn btn-danger btn-sm d-none" id="btnHapusSemuaRiwayat">
-                        <i class="bi bi-trash me-1"></i> Hapus Semua Riwayat Saya
-                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-danger btn-sm d-none" id="btnHapusSemuaRiwayat" onclick="event.stopPropagation();">
+                            <i class="bi bi-trash me-1"></i> Hapus Semua
+                        </button>
+                        <i class="bi bi-chevron-up chevron-icon opacity-75" style="transition: transform 0.2s;"></i>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body pengaturan-card-body">
                     <!-- Skeleton loader -->
-                    <div id="riwayatSkeleton" class="py-3 text-center text-muted">
+                    <div id="riwayatSkeleton" class="py-3 text-center opacity-75">
                         <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
                         Memuat riwayat...
                     </div>
@@ -94,12 +99,132 @@
                     </div>
 
                     <!-- Empty state -->
-                    <div id="riwayatEmpty" class="text-center text-muted py-4" style="display:none;">
+                    <div id="riwayatEmpty" class="text-center opacity-75 py-4" style="display:none;">
                         <i class="bi bi-clock-history fs-2 mb-2 d-block text-primary opacity-50"></i>
                         Belum ada riwayat login tercatat.
                     </div>
                 </div>
             </div>
+
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <!-- Card Pengaturan 2FA Saya                                   -->
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <div class="card mb-3" id="pengaturan-2fa-saya">
+                <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
+                    <span><i class="bi bi-shield-lock me-2"></i>Pengaturan Two-Factor Authentication (2FA)</span>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                </div>
+                <div class="card-body pengaturan-card-body">
+                    <p class="opacity-75 small mb-3">
+                        Jika 2FA global aktif, setiap login dari perangkat baru (IP berbeda) akan membutuhkan kode OTP.
+                        Anda dapat mengecualikan diri sendiri agar tidak diminta OTP.
+                    </p>
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded shadow-sm theme-card-inner">
+                        <div class="d-flex flex-column">
+                            <strong>Status 2FA Anda</strong>
+                            <span class="opacity-75" style="font-size:0.85em;">
+                                <?php if ($isExempt): ?>
+                                    Mati (Anda tidak akan dimintai OTP)
+                                <?php else: ?>
+                                    Aktif (Wajib OTP untuk perangkat baru)
+                                <?php endif; ?>
+                            </span>
+                        </div>
+                        <div class="form-check form-switch ms-3" style="font-size: 1.25rem; margin-bottom: 0;">
+                            <input class="form-check-input" type="checkbox" id="btnToggleExemptSwitch" style="cursor: pointer;" <?= !$isExempt ? 'checked' : '' ?>>
+                        </div>
+                    </div>
+                    <p class="opacity-75 mt-2" style="font-size:0.82em;">Perubahan berlaku pada login berikutnya.</p>
+                </div>
+            </div>
+
+            <!-- Card Perangkat Tepercaya Saya -->
+            <div class="card mb-3" id="perangkat-tepercaya">
+                <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
+                    <span><i class="bi bi-shield-check me-2"></i>Perangkat Tepercaya Saya</span>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                </div>
+                <div class="card-body pengaturan-card-body">
+                    <p class="opacity-75 small mb-3">
+                        Daftar alamat IP yang sudah terverifikasi OTP. Perangkat tepercaya berlaku selama <strong>7 hari</strong>.
+                        Hapus untuk memaksa verifikasi OTP saat login ulang dari perangkat tsb.
+                    </p>
+                    <?php if (!empty($whitelist)): ?>
+                        <!-- Desktop View -->
+                        <div class="table-responsive d-none d-md-block">
+                            <table class="table table-hover table-borderless align-middle modern-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>IP Address</th>
+                                        <th>Ditambahkan</th>
+                                        <th>Berlaku Hingga</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1; foreach ($whitelist as $wl): ?>
+                                        <?php $isActive = strtotime($wl['expires_at']) > time(); ?>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><code><?= esc($wl['ip_address']) ?></code></td>
+                                            <td style="font-size:.88em;"><?= date('d/m/Y H:i', strtotime($wl['created_at'])) ?></td>
+                                            <td style="font-size:.88em;"><?= date('d/m/Y H:i', strtotime($wl['expires_at'])) ?></td>
+                                            <td>
+                                                <?php if ($isActive): ?>
+                                                    <span class="badge bg-success">Aktif</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary">Expired</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?= base_url('user/pengaturan/whitelist/revoke/' . $wl['id']) ?>"
+                                                   class="btn btn-danger btn-sm btn-revoke-my-whitelist aksi-btn" title="Hapus">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Mobile View -->
+                        <div class="d-block d-md-none">
+                            <?php $no = 1; foreach ($whitelist as $wl): ?>
+                                <?php $isActive = strtotime($wl['expires_at']) > time(); ?>
+                                <div class="border rounded mb-3 p-3 shadow-sm pengaturan-card-mobile">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold fs-6">No. <?= $no++ ?></span>
+                                        <?php if ($isActive): ?>
+                                            <span class="badge bg-success">Aktif</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-secondary">Expired</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div style="font-size: 0.95em;" class="mb-1"><b>IP:</b> <code><?= esc($wl['ip_address']) ?></code></div>
+                                    <div style="font-size: 0.95em;" class="mb-1"><b>Ditambahkan:</b> <span class="opacity-75"><?= date('d/m/Y H:i', strtotime($wl['created_at'])) ?></span></div>
+                                    <div style="font-size: 0.95em;" class="mb-1"><b>Berlaku:</b> <span class="opacity-75"><?= date('d/m/Y H:i', strtotime($wl['expires_at'])) ?></span></div>
+                                    <hr class="my-2 opacity-50">
+                                    <div class="text-end mt-2">
+                                        <a href="<?= base_url('user/pengaturan/whitelist/revoke/' . $wl['id']) ?>"
+                                           class="btn btn-outline-danger btn-sm btn-revoke-my-whitelist aksi-btn" title="Hapus">
+                                            <i class="fas fa-trash me-1"></i>Hapus
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="text-center opacity-75 py-3">
+                            <i class="bi bi-shield fs-2 d-block mb-1 text-success opacity-50"></i>
+                            Belum ada perangkat tepercaya.
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -129,7 +254,7 @@
             if (c === 'Jaringan Lokal') return '<span class="badge bg-secondary">Jaringan Lokal</span>';
             const parts = [ci, r, c].filter(Boolean);
             if (parts.length) return '<span style="font-size:0.9em;">' + parts.join(', ') + '</span>';
-            return '<span class="text-muted" style="font-size:0.85em;">Tidak tersedia</span>';
+            return '<span class="opacity-75" style="font-size:0.85em;">Tidak tersedia</span>';
         }
 
         function formatDate(d) {
@@ -167,7 +292,7 @@
                         '<td>' + deviceIcon(row.device_type) + (row.device_type || 'Desktop') + '</td>' +
                         '<td>' +
                             '<div class="fw-semibold" style="font-size:.95em;">' + (row.device_os || '-') + '</div>' +
-                            '<div class="text-muted" style="font-size:.85em;">' + (row.browser || '-') + '</div>' +
+                            '<div class="opacity-75" style="font-size:.85em;">' + (row.browser || '-') + '</div>' +
                         '</td>' +
                         '<td><code>' + (row.ip_address || '-') + '</code></td>' +
                         '<td>' + renderLokasi(row) + '</td>' +
@@ -244,7 +369,87 @@
                 }
             });
         });
+
+        // ── Toggle exempt 2FA user sendiri ──────────────────────────────
+        $('#btnToggleExemptSwitch').on('change', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const isChecked = btn.prop('checked');
+            const title = isChecked ? 'Aktifkan 2FA?' : 'Matikan 2FA?';
+            const text = isChecked ? 'Perangkat baru akan diminta kode OTP.' : 'Anda dapat login tanpa OTP dari perangkat mana saja.';
+
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    btn.prop('disabled', true);
+                    $.ajax({
+                        url: window.toggle2FaExemptUrl,
+                        type: 'POST',
+                        data: { [window.csrfToken]: window.csrfHash },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.status === 'success') {
+                                Swal.fire({ icon: 'success', text: res.message, timer: 1500, showConfirmButton: false })
+                                    .then(() => location.reload());
+                            }
+                        },
+                        complete: function() { btn.prop('disabled', false); }
+                    });
+                } else {
+                    btn.prop('checked', !isChecked); // revert state
+                }
+            });
+        });
+
+        // ── Konfirmasi hapus whitelist user sendiri ──────────────────────
+        $(document).on('click', '.btn-revoke-my-whitelist', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            Swal.fire({
+                title: 'Hapus Perangkat Ini?',
+                text: 'Anda akan diminta OTP saat login ulang dari perangkat ini.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+            }).then(result => { if (result.isConfirmed) window.location.href = url; });
+        });
+
+        // ── Card Collapse Toggle ─────────────────────────────────────────
+        $(document).on('click', '.pengaturan-card-header', function(e) {
+            if ($(e.target).closest('.btn, .btn-close, input, a, form').length) return;
+            var card = $(this).closest('.card');
+            var body = card.find('.pengaturan-card-body');
+            var chevron = $(this).find('.chevron-icon');
+            if (body.is(':visible')) {
+                body.stop(true, true).slideUp(180);
+                chevron.css('transform', 'rotate(180deg)');
+            } else {
+                body.stop(true, true).slideDown(180);
+                chevron.css('transform', 'rotate(0deg)');
+            }
+        });
     });
     </script>
+    <style>
+        .theme-card-inner {
+            background-color: var(--bs-light, #f8f9fa);
+        }
+        [data-bs-theme="dark"] .theme-card-inner, .dark-mode .theme-card-inner {
+            background-color: rgba(255, 255, 255, 0.05); /* Slight highlight in dark mode */
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+    </style>
 </body>
 </html>
+
