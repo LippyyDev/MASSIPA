@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td style="padding:0 24px 16px 24px;font-size:14px;line-height:1.6;color:#4b5563;text-align:center;">
-                            Kode dan tautan reset berlaku selama <strong>10 menit</strong>.
+                            Kode dan tautan reset berlaku selama <strong>1 jam</strong>.
                         </td>
                     </tr>
                     <tr>

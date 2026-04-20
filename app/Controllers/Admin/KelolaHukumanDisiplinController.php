@@ -600,45 +600,40 @@ class KelolaHukumanDisiplinController extends BaseController
             session()->setFlashdata('msg_type', 'danger');
             return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
         }
-        $this->hukumanModel->update($id, ['status' => 'approved']);
-        // Kirim notifikasi ke user pengaju
-        if (!empty($hukuman['user_id'])) {
-            $notifikasiModel = new NotifikasiModel();
-            $judul = 'Pengajuan Hukuman Disiplin Diterima';
-            $nama_pegawai = $hukuman['nama'] ?? null;
-            if (!$nama_pegawai && !empty($hukuman['pegawai_id'])) {
-                $pegawaiModel = new \App\Models\PegawaiModel();
-                $pegawai = $pegawaiModel->find($hukuman['pegawai_id']);
-                $nama_pegawai = $pegawai['nama'] ?? '-';
-            }
-            $pesan = 'Pengajuan hukuman disiplin untuk ' . $nama_pegawai . ' telah disetujui admin.';
-            $notifikasiModel->insert([
-                'user_id' => $hukuman['user_id'],
-                'judul' => $judul,
-                'pesan' => $pesan,
-                'jenis' => 'status',
-                'referensi_id' => $id,
-                'is_read' => 0,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+
+        // Ambil nama pegawai sekali saja (dipakai dua kali di bawah)
+        $nama_pegawai = $hukuman['nama'] ?? null;
+        if (! $nama_pegawai && ! empty($hukuman['pegawai_id'])) {
+            $pegawai      = $this->pegawaiModel->find($hukuman['pegawai_id']);
+            $nama_pegawai = $pegawai['nama'] ?? '-';
         }
+
+        $this->hukumanModel->update($id, ['status' => 'approved']);
+
+        // Kirim notifikasi + queue email ke user pengaju (via createNotification → queueEmailNotification)
+        if (! empty($hukuman['user_id'])) {
+            $notifikasiModel = new NotifikasiModel();
+            $notifikasiModel->createNotification(
+                $hukuman['user_id'],
+                'Pengajuan Hukuman Disiplin Diterima',
+                'Pengajuan hukuman disiplin untuk ' . $nama_pegawai . ' telah disetujui admin.',
+                'status',
+                $id
+            );
+        }
+
         session()->setFlashdata('msg', 'Data berhasil di-approve dan notifikasi dikirim ke user.');
         session()->setFlashdata('msg_type', 'success');
 
-        // Notifikasi ke admin sendiri (log aktivitas)
+        // Notifikasi + queue email ke admin sendiri (log aktivitas)
         $notifikasiAdminModel = new \App\Models\Admin\NotifikasiAdminModel();
-        $admin_user_id = session()->get('user_id');
-        $judul = 'Pengajuan Hukuman Disiplin Diterima';
-        $nama_pegawai = $hukuman['nama'] ?? null;
-        if (!$nama_pegawai && !empty($hukuman['pegawai_id'])) {
-            $pegawaiModel = new \App\Models\PegawaiModel();
-            $pegawai = $pegawaiModel->find($hukuman['pegawai_id']);
-            $nama_pegawai = $pegawai['nama'] ?? '-';
-        }
-        $pesan = 'Anda baru saja menerima pengajuan hukuman disiplin untuk ' . $nama_pegawai . '.';
-        $jenis = 'status';
-        $referensi_id = $id;
-        $notifikasiAdminModel->insertNotifikasi($admin_user_id, $judul, $pesan, $jenis, $referensi_id);
+        $notifikasiAdminModel->insertNotifikasi(
+            session()->get('user_id'),
+            'Pengajuan Hukuman Disiplin Diterima',
+            'Anda baru saja menerima pengajuan hukuman disiplin untuk ' . $nama_pegawai . '.',
+            'status',
+            $id
+        );
         return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
     }
 
@@ -650,45 +645,40 @@ class KelolaHukumanDisiplinController extends BaseController
             session()->setFlashdata('msg_type', 'danger');
             return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
         }
-        $this->hukumanModel->update($id, ['status' => 'rejected']);
-        // Kirim notifikasi ke user pengaju
-        if (!empty($hukuman['user_id'])) {
-            $notifikasiModel = new NotifikasiModel();
-            $judul = 'Pengajuan Hukuman Disiplin Ditolak';
-            $nama_pegawai = $hukuman['nama'] ?? null;
-            if (!$nama_pegawai && !empty($hukuman['pegawai_id'])) {
-                $pegawaiModel = new \App\Models\PegawaiModel();
-                $pegawai = $pegawaiModel->find($hukuman['pegawai_id']);
-                $nama_pegawai = $pegawai['nama'] ?? '-';
-            }
-            $pesan = 'Pengajuan hukuman disiplin untuk ' . $nama_pegawai . ' ditolak admin.';
-            $notifikasiModel->insert([
-                'user_id' => $hukuman['user_id'],
-                'judul' => $judul,
-                'pesan' => $pesan,
-                'jenis' => 'status',
-                'referensi_id' => $id,
-                'is_read' => 0,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+
+        // Ambil nama pegawai sekali saja (dipakai dua kali di bawah)
+        $nama_pegawai = $hukuman['nama'] ?? null;
+        if (! $nama_pegawai && ! empty($hukuman['pegawai_id'])) {
+            $pegawai      = $this->pegawaiModel->find($hukuman['pegawai_id']);
+            $nama_pegawai = $pegawai['nama'] ?? '-';
         }
+
+        $this->hukumanModel->update($id, ['status' => 'rejected']);
+
+        // Kirim notifikasi + queue email ke user pengaju (via createNotification → queueEmailNotification)
+        if (! empty($hukuman['user_id'])) {
+            $notifikasiModel = new NotifikasiModel();
+            $notifikasiModel->createNotification(
+                $hukuman['user_id'],
+                'Pengajuan Hukuman Disiplin Ditolak',
+                'Pengajuan hukuman disiplin untuk ' . $nama_pegawai . ' telah ditolak admin.',
+                'status',
+                $id
+            );
+        }
+
         session()->setFlashdata('msg', 'Data berhasil di-reject dan notifikasi dikirim ke user.');
         session()->setFlashdata('msg_type', 'success');
 
-        // Notifikasi ke admin sendiri (log aktivitas)
+        // Notifikasi + queue email ke admin sendiri (log aktivitas)
         $notifikasiAdminModel = new \App\Models\Admin\NotifikasiAdminModel();
-        $admin_user_id = session()->get('user_id');
-        $judul = 'Pengajuan Hukuman Disiplin Ditolak';
-        $nama_pegawai = $hukuman['nama'] ?? null;
-        if (!$nama_pegawai && !empty($hukuman['pegawai_id'])) {
-            $pegawaiModel = new \App\Models\PegawaiModel();
-            $pegawai = $pegawaiModel->find($hukuman['pegawai_id']);
-            $nama_pegawai = $pegawai['nama'] ?? '-';
-        }
-        $pesan = 'Anda baru saja menolak pengajuan hukuman disiplin untuk ' . $nama_pegawai . '.';
-        $jenis = 'status';
-        $referensi_id = $id;
-        $notifikasiAdminModel->insertNotifikasi($admin_user_id, $judul, $pesan, $jenis, $referensi_id);
+        $notifikasiAdminModel->insertNotifikasi(
+            session()->get('user_id'),
+            'Pengajuan Hukuman Disiplin Ditolak',
+            'Anda baru saja menolak pengajuan hukuman disiplin untuk ' . $nama_pegawai . '.',
+            'status',
+            $id
+        );
         return redirect()->to(base_url('admin/kelola_hukuman_disiplin'));
     }
 
