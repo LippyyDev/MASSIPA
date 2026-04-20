@@ -74,7 +74,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'rememberme',
+            // 'rememberme', // Dinonaktifkan: "Ingat Saya" kini hanya pre-fill username, session tetap 2 jam
             'emailQueuePump',
             // 'honeypot',
             'csrf',

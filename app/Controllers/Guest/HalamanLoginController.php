@@ -36,6 +36,10 @@ class HalamanLoginController extends Controller
             $data['blockedUntil'] = $blockedUntil;
         }
 
+        // Baca username dari cookie "Ingat Saya" untuk pre-fill form
+        // (cookie hanya berisi username, bukan credential sensitif)
+        $data['remembered_username'] = (string) ($this->request->getCookie('remember_username') ?? '');
+
         echo view('guest/HalamanLogin', $data);
     }
 
@@ -58,10 +62,9 @@ class HalamanLoginController extends Controller
             return redirect()->to(base_url("login"));
         }
 
-        // Atur masa hidup sesi berdasarkan pilihan "ingat saya"
+        // "Ingat Saya" hanya menyimpan USERNAME untuk pre-fill form —
+        // session TIDAK diperpanjang (tetap 2 jam sesuai config default)
         $remember = (bool) $this->request->getVar("remember");
-        $sessionConfig = config('Session');
-        $sessionConfig->expiration = $remember ? 604800 : 7200; // 7 hari atau 2 jam
 
         $model = new UserModel();
         $username = $this->request->getVar("username");
@@ -82,29 +85,43 @@ class HalamanLoginController extends Controller
                 $session->regenerate(true);
 
                 $ses_data = [
-                    "user_id"       => $data["id"],
-                    "username"      => $data["username"],
-                    "nama_lengkap"  => $data["nama_lengkap"],
-                    "email"         => $data["email"],
-                    "role"          => $data["role"],
-                    "foto_profil"   => $data["foto_profil"],
-                        "isLoggedIn"    => TRUE,
-                        "remember_me"   => $remember,
+                    "user_id"      => $data["id"],
+                    "username"     => $data["username"],
+                    "nama_lengkap" => $data["nama_lengkap"],
+                    "email"        => $data["email"],
+                    "role"         => $data["role"],
+                    "foto_profil"  => $data["foto_profil"],
+                    "isLoggedIn"   => true,
                 ];
-                // JANGAN set session dulu — simpan dulu, cek 2FA terlebih dahulu
-                // Cookie "ingat saya"
-                $cookieExpire = $remember ? 60 * 60 * 24 * 7 : -3600;
-                $this->response->setCookie(
-                    'remember_me',
-                    $remember ? '1' : '',
-                    $cookieExpire,
-                    '',
-                    '/',
-                    '',
-                    $this->request->isSecure(),
-                    true,
-                    'Lax'
-                );
+
+                // "Ingat Saya": simpan HANYA username ke cookie untuk pre-fill form login.
+                // Cookie ini tidak mempengaruhi session — session tetap expire 2 jam.
+                if ($remember) {
+                    $this->response->setCookie(
+                        'remember_username',
+                        $data["username"],
+                        60 * 60 * 24 * 30, // Simpan 30 hari (hanya username, bukan credential)
+                        '',
+                        '/',
+                        '',
+                        $this->request->isSecure(),
+                        true,  // httpOnly
+                        'Lax'
+                    );
+                } else {
+                    // Hapus cookie remember_username jika tidak dicentang
+                    $this->response->setCookie(
+                        'remember_username',
+                        '',
+                        -3600,
+                        '',
+                        '/',
+                        '',
+                        $this->request->isSecure(),
+                        true,
+                        'Lax'
+                    );
+                }
 
 
                 // ── Cek 2FA ──────────────────────────────────────────────────
@@ -234,9 +251,9 @@ class HalamanLoginController extends Controller
         $session = session();
         $session->destroy();
 
-        // Hapus cookie pengingat saat logout
+        // Hapus cookie remember_username saat logout
         $this->response->setCookie(
-            'remember_me',
+            'remember_username',
             '',
             -3600,
             '',
