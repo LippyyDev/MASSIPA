@@ -61,9 +61,9 @@
             <div class="card mb-3">
                 <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
                     <span><i class="bi bi-key me-2"></i>Kelola API Key</span>
-                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s; transform: rotate(180deg);"></i>
                 </div>
-                <div class="card-body pengaturan-card-body">
+                <div class="card-body pengaturan-card-body" style="display: none;">
                     <form action="<?= base_url('admin/api_keys/add') ?>" method="post" class="row g-2 mb-4">
                         <?= csrf_field() ?>
                         <div class="col-md-8">
@@ -171,9 +171,9 @@
             <div class="card mb-3">
                 <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
                     <span><i class="bi bi-globe me-2"></i>Kelola Domain CORS (Allowed Origins)</span>
-                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s; transform: rotate(180deg);"></i>
                 </div>
-                <div class="card-body pengaturan-card-body">
+                <div class="card-body pengaturan-card-body" style="display: none;">
                     <form action="<?= base_url('admin/pengaturan/add_origin') ?>" method="post" class="row g-2 mb-4">
                         <?= csrf_field() ?>
                         <div class="col-md-8">
@@ -275,9 +275,9 @@
             <div class="card mb-3" id="riwayat-perangkat">
                 <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
                     <span><i class="bi bi-clock-history me-2"></i>Riwayat Perangkat Login (Semua User)</span>
-                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s; transform: rotate(180deg);"></i>
                 </div>
-                <div class="card-body pengaturan-card-body">
+                <div class="card-body pengaturan-card-body" style="display: none;">
                     <!-- Skeleton loader -->
                     <div id="riwayatSkeleton" class="py-3 text-center opacity-75">
                         <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
@@ -328,10 +328,10 @@
                         <?php else: ?>
                             <span class="badge bg-secondary">Nonaktif</span>
                         <?php endif; ?>
-                        <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s;"></i>
+                        <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s; transform: rotate(180deg);"></i>
                     </div>
                 </div>
-                <div class="card-body pengaturan-card-body">
+                <div class="card-body pengaturan-card-body" style="display: none;">
                     <p class="opacity-75 small mb-3">
                         Jika 2FA diaktifkan, setiap user yang login dari perangkat baru (IP berbeda) akan diminta kode OTP yang dikirim ke Gmail terdaftar.
                         Perangkat yang sudah terverifikasi akan masuk whitelist selama <strong>7 hari</strong>.
@@ -448,10 +448,19 @@
                         <?php endif; ?>
                     </div>
                     </div> <!-- /exemptSectionWrapper -->
+                </div>
+            </div>
 
-                    <!-- Whitelist 2FA -->
-                    <h6 class="fw-semibold mt-4 mb-2">Perangkat Tepercaya (Whitelist IP)</h6>
-                    <p class="opacity-75 small mb-2">Daftar IP yang sudah terverifikasi OTP. Hapus untuk memaksa user verifikasi ulang.</p>
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <!-- Card Whitelist Perangkat 2FA                               -->
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <div class="card mb-3" id="whitelist-2fa">
+                <div class="card-header d-flex align-items-center justify-content-between pengaturan-card-header" style="cursor: pointer; user-select: none;">
+                    <span><i class="bi bi-shield-check me-2"></i>Perangkat Tepercaya (Whitelist IP)</span>
+                    <i class="bi bi-chevron-up chevron-icon opacity-50" style="transition: transform 0.2s; transform: rotate(180deg);"></i>
+                </div>
+                <div class="card-body pengaturan-card-body" style="display: none;">
+                    <p class="opacity-75 small mb-3">Daftar IP yang sudah terverifikasi OTP. Hapus untuk memaksa user verifikasi ulang.</p>
                     <div id="whitelistSkeleton" class="py-2 opacity-75 text-center">
                         <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Memuat...
                     </div>
@@ -475,6 +484,13 @@
                     <!-- Mobile view Whitelist -->
                     <div class="d-block d-md-none" id="whitelistAdminMobileWrap" style="display:none!important;">
                         <div id="whitelistAdminMobileCards"></div>
+                        <div id="whitelistAdminMobilePagination" class="mt-3" style="display:none;">
+                            <ul class="pagination mobile-pagination-purple border-0 mb-0" style="justify-content: center; gap: 8px;">
+                                <li class="page-item"><button class="page-link" id="wlAdminMobilePrev" type="button">&lt;</button></li>
+                                <span id="wlAdminMobilePageNumbers"></span>
+                                <li class="page-item"><button class="page-link" id="wlAdminMobileNext" type="button">&gt;</button></li>
+                            </ul>
+                        </div>
                     </div>
                     <div id="whitelistAdminEmpty" class="text-center opacity-75 py-3" style="display:none;">
                         <i class="bi bi-shield fs-2 d-block mb-1 text-success opacity-50"></i>
@@ -626,6 +642,78 @@
         const whitelistAjaxUrl  = "<?= base_url('admin/pengaturan/whitelist_2fa_ajax') ?>";
         const revokeBaseUrl     = "<?= base_url('admin/pengaturan/whitelist_2fa/revoke/') ?>";
 
+        let adminWhitelistData = [];
+        let wlAdminMobilePage = 1;
+        const wlAdminMobileLength = 10;
+
+        function renderAdminWhitelistMobileCards() {
+            var start = (wlAdminMobilePage - 1) * wlAdminMobileLength;
+            var end = start + wlAdminMobileLength;
+            var pageData = adminWhitelistData.slice(start, end);
+
+            var mc = $('#whitelistAdminMobileCards');
+            mc.empty();
+
+            if (adminWhitelistData.length === 0) return;
+
+            var now = new Date();
+            $.each(pageData, function(i, r) {
+                var expires  = new Date(r.expires_at.replace(' ', 'T'));
+                var isActive = expires > now;
+                var badge    = isActive
+                    ? '<span class="badge bg-success">Aktif</span>'
+                    : '<span class="badge bg-secondary">Expired</span>';
+
+                mc.append(
+                    '<div class="border rounded mb-3 p-3 shadow-sm pengaturan-card-mobile">' +
+                        '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                            '<span class="fw-bold fs-6">No. ' + (start + i + 1) + ' - ' + (r.nama_lengkap || r.username || '-') + '</span>' +
+                            badge +
+                        '</div>' +
+                        '<div style="font-size: 0.95em;" class="mb-1"><span class="opacity-75">Username:</span> ' + (r.username || '') + '</div>' +
+                        '<div style="font-size: 0.95em;" class="mb-1"><b>IP:</b> <code>' + r.ip_address + '</code></div>' +
+                        '<div style="font-size: 0.95em;" class="mb-1"><b>Ditambahkan:</b> <span class="opacity-75">' + formatDate(r.created_at) + '</span></div>' +
+                        '<div style="font-size: 0.95em;" class="mb-1"><b>Berlaku:</b> <span class="opacity-75">' + formatDate(r.expires_at) + '</span></div>' +
+                        '<hr class="my-2 opacity-50">' +
+                        '<div class="text-end mt-2">' +
+                            '<a href="' + revokeBaseUrl + r.id + '" class="btn btn-outline-danger btn-sm btn-revoke-whitelist aksi-btn" title="Hapus"><i class="fas fa-trash me-1"></i>Hapus</a>' +
+                        '</div>' +
+                    '</div>'
+                );
+            });
+
+            var totalPages = Math.ceil(adminWhitelistData.length / wlAdminMobileLength);
+            if (totalPages <= 1) {
+                $('#whitelistAdminMobilePagination').hide();
+            } else {
+                $('#whitelistAdminMobilePagination').show();
+                var pageNumbersHtml = "";
+                var startPage = Math.max(1, wlAdminMobilePage - 1);
+                var endPage = Math.min(totalPages, startPage + 2);
+                if (endPage - startPage < 2) startPage = Math.max(1, endPage - 2);
+                
+                for (var j = startPage; j <= endPage; j++) {
+                    var act = (j === wlAdminMobilePage) ? "active" : "";
+                    pageNumbersHtml += '<li class="page-item"><button class="page-link wl-admin-page-number ' + act + '" data-page="' + j + '">' + j + '</button></li>';
+                }
+                $('#wlAdminMobilePageNumbers').html(pageNumbersHtml);
+                $('#wlAdminMobilePrev').prop('disabled', wlAdminMobilePage === 1);
+                $('#wlAdminMobileNext').prop('disabled', wlAdminMobilePage === totalPages);
+
+                $('.wl-admin-page-number').off('click').on('click', function() {
+                    wlAdminMobilePage = parseInt($(this).data('page'));
+                    renderAdminWhitelistMobileCards();
+                });
+            }
+        }
+
+        $('#wlAdminMobilePrev').on('click', function() {
+            if (wlAdminMobilePage > 1) { wlAdminMobilePage--; renderAdminWhitelistMobileCards(); }
+        });
+        $('#wlAdminMobileNext').on('click', function() {
+            if (wlAdminMobilePage < Math.ceil(adminWhitelistData.length / wlAdminMobileLength)) { wlAdminMobilePage++; renderAdminWhitelistMobileCards(); }
+        });
+
         $.ajax({
             url: whitelistAjaxUrl,
             type: 'POST',
@@ -634,12 +722,14 @@
             success: function(res) {
                 $('#whitelistSkeleton').hide();
                 const rows = res.data || [];
+                adminWhitelistData = rows;
+
                 if (rows.length === 0) {
                     $('#whitelistAdminEmpty').show();
                     return;
                 }
+                
                 const tbody = $('#whitelistAdminBody');
-                const mobileContainer = $('#whitelistAdminMobileCards');
                 const now   = new Date();
                 $.each(rows, function(i, r) {
                     const expires  = new Date(r.expires_at.replace(' ', 'T'));
@@ -659,28 +749,25 @@
                         '<td><a href="' + revokeBaseUrl + r.id + '" class="btn btn-danger btn-sm btn-revoke-whitelist aksi-btn" title="Hapus"><i class="fas fa-trash"></i></a></td>' +
                         '</tr>'
                     );
-                    
-                    if (mobileContainer.length) {
-                        mobileContainer.append(
-                            '<div class="border rounded mb-3 p-3 shadow-sm pengaturan-card-mobile">' +
-                                '<div class="d-flex justify-content-between align-items-center mb-2">' +
-                                    '<span class="fw-bold fs-6">No. ' + (i+1) + ' - ' + (r.nama_lengkap || r.username || '-') + '</span>' +
-                                    badge +
-                                '</div>' +
-                                '<div style="font-size: 0.95em;" class="mb-1"><span class="opacity-75">Username:</span> ' + (r.username || '') + '</div>' +
-                                '<div style="font-size: 0.95em;" class="mb-1"><b>IP:</b> <code>' + r.ip_address + '</code></div>' +
-                                '<div style="font-size: 0.95em;" class="mb-1"><b>Ditambahkan:</b> <span class="opacity-75">' + formatDate(r.created_at) + '</span></div>' +
-                                '<div style="font-size: 0.95em;" class="mb-1"><b>Berlaku:</b> <span class="opacity-75">' + formatDate(r.expires_at) + '</span></div>' +
-                                '<hr class="my-2 opacity-50">' +
-                                '<div class="text-end mt-2">' +
-                                    '<a href="' + revokeBaseUrl + r.id + '" class="btn btn-outline-danger btn-sm btn-revoke-whitelist aksi-btn" title="Hapus"><i class="fas fa-trash me-1"></i>Hapus</a>' +
-                                '</div>' +
-                            '</div>'
-                        );
-                    }
                 });
+                
                 $('#whitelistTableWrap').attr('style', '');
                 $('#whitelistAdminMobileWrap').attr('style', '');
+
+                $('#whitelistAdminTable').DataTable({
+                    language: {
+                        search: 'Cari:',
+                        lengthMenu: 'Tampilkan _MENU_ data',
+                        zeroRecords: 'Data tidak ditemukan',
+                        paginate: { previous: '&lsaquo;', next: '&rsaquo;' }
+                    },
+                    info: false,
+                    pageLength: 10,
+                    order: [],
+                    columnDefs: [{ orderable: false, targets: [0, 6] }]
+                });
+
+                renderAdminWhitelistMobileCards();
             },
             error: function() {
                 $('#whitelistSkeleton').hide();

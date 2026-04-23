@@ -1,32 +1,12 @@
 // JS extracted from HalamanLogin.php
 // Trigger animasi fade-in saat halaman selesai dimuat
 window.addEventListener('DOMContentLoaded', function() {
-    // Fitur Ingat Saya dengan Local Storage
-    const savedUsername = localStorage.getItem('rememberedUsername');
-    if (savedUsername) {
-        const usernameInput = document.getElementById('username');
-        const rememberCheckbox = document.getElementById('remember');
-        if (usernameInput) {
-            usernameInput.value = savedUsername;
-        }
-        if (rememberCheckbox) {
-            rememberCheckbox.checked = true;
-        }
-    }
-
-    // Saat form login disubmit
-    const loginForm = document.querySelector('form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function() {
-            const username = document.getElementById('username').value;
-            const remember = document.getElementById('remember').checked;
-            if (remember) {
-                localStorage.setItem('rememberedUsername', username);
-            } else {
-                localStorage.removeItem('rememberedUsername');
-            }
-        });
-    }
+    // "Ingat Saya" ditangani server-side via httpOnly cookie (remember_username).
+    // localStorage sengaja TIDAK digunakan — localStorage bisa dibaca XSS,
+    // sedangkan httpOnly cookie tidak bisa diakses JavaScript sama sekali.
+    // Username pre-fill sudah di-render langsung oleh PHP di atribut value="" form.
+    // Bersihkan data lama dari mekanisme sebelumnya (migrasi localStorage → httpOnly cookie):
+    try { localStorage.removeItem('rememberedUsername'); } catch (e) {}
 
     // Toggle password visibility
     const toggler = document.getElementById("togglePassword");
