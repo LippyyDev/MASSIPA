@@ -18,6 +18,11 @@ $routes->post("forgot-password/verify", "Guest\\ForgotPasswordController::verify
 $routes->get("reset-password", "Guest\\ForgotPasswordController::resetForm");
 $routes->post("reset-password/submit", "Guest\\ForgotPasswordController::updatePassword");
 
+// ===== ROUTES 2FA OTP =====
+$routes->get('verify-otp', 'Guest\\TwoFaController::showForm');
+$routes->post('verify-otp/submit', 'Guest\\TwoFaController::verify');
+$routes->post('verify-otp/resend', 'Guest\\TwoFaController::resend');
+
 $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilter'], function ($routes) {
     $routes->get('dashboard', 'Admin\BerandaAdminController::dashboard');
     $routes->get('kelola_user', 'Admin\KelolaUserController::kelolaUser');
@@ -86,6 +91,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'authFilt
     $routes->get('api_keys/toggle/(:num)', 'Admin\PengaturanAdminController::apiKeyToggleActive/$1');
     $routes->get('pengaturan/riwayat/delete/(:num)', 'Admin\PengaturanAdminController::deleteRiwayat/$1');
     $routes->post('pengaturan/riwayat_ajax', 'Admin\PengaturanAdminController::riwayatPerangkatAjax');
+    // ===== ROUTES 2FA ADMIN =====
+    $routes->post('pengaturan/toggle_2fa', 'Admin\PengaturanAdminController::toggle2Fa');
+    $routes->post('pengaturan/whitelist_2fa_ajax', 'Admin\PengaturanAdminController::whitelist2FaAjax');
+    $routes->get('pengaturan/whitelist_2fa/revoke/(:num)', 'Admin\PengaturanAdminController::revokeWhitelist/$1');
+    $routes->post('pengaturan/toggle_2fa_exempt/(:num)', 'Admin\PengaturanAdminController::toggleUserExempt/$1');
     $routes->post('addTandaTanganGambar', 'Admin\InputTandaTanganAdminController::addTandaTanganGambar');
     $routes->post('updateTandaTanganGambar', 'Admin\InputTandaTanganAdminController::updateTandaTanganGambar');
     $routes->get('deleteTandaTanganGambar/(:num)', 'Admin\InputTandaTanganAdminController::deleteTandaTanganGambar/$1');
@@ -184,6 +194,10 @@ $routes->group("user", ["filter" => "authFilter"], function ($routes) {
     $routes->get('pengaturan', 'User\PengaturanUserController::pengaturan');
     $routes->post('pengaturan/riwayat_ajax', 'User\PengaturanUserController::riwayatPerangkatAjax');
     $routes->post('pengaturan/hapus_riwayat', 'User\PengaturanUserController::hapusSemuaRiwayat');
+    // ===== ROUTES 2FA USER =====
+    $routes->post('pengaturan/toggle_2fa_exempt', 'User\PengaturanUserController::toggle2FaExempt');
+    $routes->post('pengaturan/whitelist_ajax', 'User\PengaturanUserController::myWhitelistAjax');
+    $routes->get('pengaturan/whitelist/revoke/(:num)', 'User\PengaturanUserController::revokeMyWhitelist/$1');
 });
 
 $routes->get('user/getFile/(:any)', 'UserController::getFile/$1');

@@ -13,6 +13,7 @@ use CodeIgniter\HTTP\IncomingRequest;
  * - Jika IP BERBEDA → buat record baru
  * - Menggunakan regex native PHP untuk parsing User-Agent (termasuk Android WebView)
  * - Menggunakan ip-api.com untuk geolocation dengan fallback lengkap
+ * - Mengirim notifikasi email login ke user & semua admin
  */
 class DeviceHistoryService
 {
@@ -45,6 +46,14 @@ class DeviceHistoryService
                     'browser'     => $deviceInfo['browser'],
                     'created_at'  => date('Y-m-d H:i:s'),
                 ]);
+
+                // Kirim notifikasi email (gunakan geo dari record yang sudah ada)
+                $geoInfo = [
+                    'country' => $existing['location_country'] ?? null,
+                    'region'  => $existing['location_region']  ?? null,
+                    'city'    => $existing['location_city']    ?? null,
+                ];
+                self::sendLoginNotifications($userId, $username, $ip, $deviceInfo, $geoInfo);
             } else {
                 // IP berbeda → tambah record baru + lookup geo
                 $geoInfo = self::lookupGeo($ip);
@@ -61,9 +70,109 @@ class DeviceHistoryService
                     'location_region'  => $geoInfo['region'],
                     'location_city'    => $geoInfo['city'],
                 ]);
+
+                // Kirim notifikasi email
+                self::sendLoginNotifications($userId, $username, $ip, $deviceInfo, $geoInfo);
             }
         } catch (\Throwable $e) {
             log_message('error', '[DeviceHistoryService] Gagal mencatat riwayat login: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Kirim notifikasi email login:
+     *  1. Ke email user yang baru login (jika bukan admin & punya email)
+     *  2. Ke semua akun admin yang terdaftar
+     *
+     * @param int    $userId     ID user yang login
+     * @param string $username   Username yang login
+     * @param string $ip         IP address saat login
+     * @param array  $deviceInfo Hasil parseDevice()
+     * @param array  $geoInfo    Hasil lookupGeo()
+     */
+    private static function sendLoginNotifications(
+        int    $userId,
+        string $username,
+        string $ip,
+        array  $deviceInfo,
+        array  $geoInfo
+    ): void {
+        try {
+            $userModel = new \App\Models\UserModel();
+
+            // --- Data user yang login ---
+            $loginUser = $userModel->find($userId);
+            if (!$loginUser) {
+                log_message('warning', "[DeviceHistoryService] User ID {$userId} tidak ditemukan untuk notifikasi login.");
+                return;
+            }
+
+            $role        = $loginUser['role'] ?? 'user';
+            $namaLengkap = $loginUser['nama_lengkap'] ?? $username;
+            $loginTime   = date('d M Y, H:i') . ' WIB';
+
+            // Susun string lokasi
+            $locationParts = array_filter([
+                $geoInfo['city']    ?? null,
+                $geoInfo['region']  ?? null,
+                $geoInfo['country'] ?? null,
+            ]);
+            $locationStr = !empty($locationParts)
+                ? implode(', ', $locationParts)
+                : 'Tidak tersedia';
+
+            // Data tampilan email (template login_alert.php)
+            $emailData = [
+                'logged_username' => $username,
+                'logged_role'     => $role,
+                'login_time'      => $loginTime,
+                'ip_address'      => $ip,
+                'device_type'     => $deviceInfo['type']    ?? '-',
+                'device_os'       => $deviceInfo['os']      ?? '-',
+                'browser'         => $deviceInfo['browser'] ?? '-',
+                'location'        => $locationStr,
+            ];
+
+            $queueModel = new \App\Models\EmailQueueModel();
+
+            // ── 1. Email ke USER yang login (hanya jika bukan admin & punya email) ──
+            if ($role !== 'admin' && !empty($loginUser['email'])) {
+                $userEmailData                    = $emailData;
+                $userEmailData['recipient']        = $namaLengkap;
+                $userEmailData['is_admin_report']  = false;
+
+                $body = view('emails/login_alert', $userEmailData);
+                $queueModel->insert([
+                    'recipient'  => $loginUser['email'],
+                    'subject'    => 'Notifikasi Login – Akun MASSIPA Anda',
+                    'body'       => $body,
+                    'is_sent'    => 0,
+                    'fail_count' => 0,
+                ]);
+            }
+
+            // ── 2. Email ke SEMUA admin yang terdaftar ──
+            $admins = $userModel->where('role', 'admin')->findAll();
+            foreach ($admins as $admin) {
+                if (empty($admin['email'])) {
+                    continue;
+                }
+
+                $adminEmailData                   = $emailData;
+                $adminEmailData['recipient']       = $admin['nama_lengkap'] ?? $admin['username'] ?? 'Administrator';
+                $adminEmailData['is_admin_report'] = true;
+
+                $body = view('emails/login_alert', $adminEmailData);
+                $queueModel->insert([
+                    'recipient'  => $admin['email'],
+                    'subject'    => '[MASSIPA] Login Baru – ' . $username . ' (' . ucfirst($role) . ')',
+                    'body'       => $body,
+                    'is_sent'    => 0,
+                    'fail_count' => 0,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            log_message('error', '[DeviceHistoryService] Gagal mengirim notifikasi login: ' . $e->getMessage());
         }
     }
 
@@ -102,12 +211,10 @@ class DeviceHistoryService
         elseif (preg_match('/windows nt 6\.2/i', $ua))       $os = 'Windows 8';
         elseif (preg_match('/windows nt 6\.1/i', $ua))       $os = 'Windows 7';
         elseif (preg_match('/windows/i', $ua))                $os = 'Windows';
-        elseif (preg_match('/android\s([\d.]+)/i', $ua, $m)) $os = 'Android ' . $m[1];
-        elseif (preg_match('/iphone os\s([\d_]+)/i', $ua, $m)) {
-            $os = 'iOS ' . str_replace('_', '.', $m[1]);
-        } elseif (preg_match('/ipad.*os\s([\d_]+)/i', $ua, $m)) {
-            $os = 'iPadOS ' . str_replace('_', '.', $m[1]);
-        } elseif (preg_match('/mac os x\s([\d_]+)/i', $ua, $m)) {
+        elseif (preg_match('/android/i', $ua))                $os = 'Android';
+        elseif (preg_match('/iphone/i', $ua))                 $os = 'iOS';
+        elseif (preg_match('/ipad/i', $ua))                   $os = 'iPadOS';
+        elseif (preg_match('/mac os x\s([\d_]+)/i', $ua, $m)) {
             $os = 'macOS ' . str_replace('_', '.', $m[1]);
         } elseif (preg_match('/linux/i', $ua))                $os = 'Linux';
         elseif (preg_match('/ubuntu/i', $ua))                 $os = 'Ubuntu';

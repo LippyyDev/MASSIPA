@@ -75,7 +75,10 @@
         <?= csrf_field() ?>
         <div class="mb-3">
           <label for="username" class="form-label">Nama Pengguna</label>
-          <input type="text" class="form-control" id="username" name="username" value="<?= old('username') ?>" required placeholder="Masukkan nama pengguna" <?= (isset($isBlocked) && $isBlocked) ? 'disabled' : '' ?>>
+          <input type="text" class="form-control" id="username" name="username"
+            value="<?= esc($remembered_username ?? old('username') ?? '') ?>"
+            required placeholder="Masukkan nama pengguna"
+            <?= (isset($isBlocked) && $isBlocked) ? 'disabled' : '' ?>>
         </div>
         
         <div class="mb-3">
@@ -91,7 +94,9 @@
         <div class="row align-items-center mb-3">
           <div class="col-7">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember" <?= (isset($isBlocked) && $isBlocked) ? 'disabled' : '' ?>>
+              <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember"
+                <?= !empty($remembered_username) ? 'checked' : '' ?>
+                <?= (isset($isBlocked) && $isBlocked) ? 'disabled' : '' ?>>
               <label class="form-check-label login-inline-help" for="remember">
                 Ingat saya
               </label>

@@ -70,7 +70,8 @@ class ForgotPasswordController extends Controller
         $token   = bin2hex(random_bytes(16));
         $payload = [
             'email'      => $email,
-            'code'       => $code,
+            // Simpan hash bcrypt, bukan plaintext — konsisten dengan pola OTP 2FA (H-07 fix)
+            'code_hash'  => password_hash($code, PASSWORD_BCRYPT),
             'token'      => $token,
             'expires_at' => time() + self::CODE_EXPIRE_SECONDS,
             'last_send'  => time(),
@@ -110,7 +111,7 @@ class ForgotPasswordController extends Controller
             return redirect()->back()->withInput();
         }
 
-        if (!hash_equals($data['code'], $inputCode)) {
+        if (!password_verify($inputCode, $data['code_hash'] ?? '')) {
             $session->setFlashdata('error', 'Kode tidak sesuai.');
             return redirect()->back()->withInput();
         }

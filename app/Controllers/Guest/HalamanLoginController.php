@@ -3,6 +3,7 @@
 namespace App\Controllers\Guest;
 
 use App\Libraries\DeviceHistoryService;
+use App\Models\TwoFaModel;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 
@@ -35,6 +36,10 @@ class HalamanLoginController extends Controller
             $data['blockedUntil'] = $blockedUntil;
         }
 
+        // Baca username dari cookie "Ingat Saya" untuk pre-fill form
+        // (cookie hanya berisi username, bukan credential sensitif)
+        $data['remembered_username'] = (string) ($this->request->getCookie('remember_username') ?? '');
+
         echo view('guest/HalamanLogin', $data);
     }
 
@@ -57,10 +62,9 @@ class HalamanLoginController extends Controller
             return redirect()->to(base_url("login"));
         }
 
-        // Atur masa hidup sesi berdasarkan pilihan "ingat saya"
+        // "Ingat Saya" hanya menyimpan USERNAME untuk pre-fill form —
+        // session TIDAK diperpanjang (tetap 2 jam sesuai config default)
         $remember = (bool) $this->request->getVar("remember");
-        $sessionConfig = config('Session');
-        $sessionConfig->expiration = $remember ? 604800 : 7200; // 7 hari atau 2 jam
 
         $model = new UserModel();
         $username = $this->request->getVar("username");
@@ -81,23 +85,35 @@ class HalamanLoginController extends Controller
                 $session->regenerate(true);
 
                 $ses_data = [
-                    "user_id"       => $data["id"],
-                    "username"      => $data["username"],
-                    "nama_lengkap"  => $data["nama_lengkap"],
-                    "email"         => $data["email"],
-                    "role"          => $data["role"],
-                    "foto_profil"   => $data["foto_profil"],
-                        "isLoggedIn"    => TRUE,
-                        "remember_me"   => $remember,
+                    "user_id"      => $data["id"],
+                    "username"     => $data["username"],
+                    "nama_lengkap" => $data["nama_lengkap"],
+                    "email"        => $data["email"],
+                    "role"         => $data["role"],
+                    "foto_profil"  => $data["foto_profil"],
+                    "isLoggedIn"   => true,
                 ];
-                $session->set($ses_data);
 
-                    // Simpan cookie pengingat login selama 7 hari, atau hapus jika tidak dipilih
-                    $cookieExpire = $remember ? 60 * 60 * 24 * 7 : -3600;
+                // "Ingat Saya": simpan HANYA username ke cookie untuk pre-fill form login.
+                // Cookie ini tidak mempengaruhi session — session tetap expire 2 jam.
+                if ($remember) {
                     $this->response->setCookie(
-                        'remember_me',
-                        $remember ? '1' : '',
-                        $cookieExpire,
+                        'remember_username',
+                        $data["username"],
+                        60 * 60 * 24 * 30, // Simpan 30 hari (hanya username, bukan credential)
+                        '',
+                        '/',
+                        '',
+                        $this->request->isSecure(),
+                        true,  // httpOnly
+                        'Lax'
+                    );
+                } else {
+                    // Hapus cookie remember_username jika tidak dicentang
+                    $this->response->setCookie(
+                        'remember_username',
+                        '',
+                        -3600,
                         '',
                         '/',
                         '',
@@ -105,14 +121,67 @@ class HalamanLoginController extends Controller
                         true,
                         'Lax'
                     );
+                }
 
-                // Catat riwayat perangkat login
+
+                // ── Cek 2FA ──────────────────────────────────────────────────
+                $twoFaModel = new TwoFaModel();
+                $needOtp    = false;
+
+                if ($twoFaModel->isGlobal2FaEnabled()) {
+                    // Cek apakah user dikecualikan
+                    if (! $twoFaModel->isUserExempt((int) $data['id'])) {
+                        // Cek apakah IP sudah di whitelist
+                        if (! $twoFaModel->isIpWhitelisted((int) $data['id'], $ipAddress)) {
+                            $needOtp = true;
+                        }
+                    }
+                }
+
+                if ($needOtp) {
+                    // Cek email tersedia
+                    if (empty($data['email'])) {
+                        // Tidak ada email, tidak bisa kirim OTP — paksa logout dan tampilkan error
+                        $session->setFlashdata('msg', 'Akun Anda tidak memiliki alamat email terdaftar. Hubungi administrator untuk mengaktifkan 2FA.');
+                        $session->setFlashdata('msg_type', 'error');
+                        return redirect()->to(base_url('login'));
+                    }
+
+                    // Generate OTP, hash sebelum disimpan di session (keamanan)
+                    $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+                    $session->set('pending_2fa', [
+                        'user_id'      => $data['id'],
+                        'username'     => $data['username'],
+                        'ip'           => $ipAddress,
+                        'otp'          => password_hash($otp, PASSWORD_BCRYPT), // disimpan sebagai hash
+                        'expires_at'   => time() + 300, // 5 menit
+                        'last_send'    => time(),
+                        'attempts'     => 0,
+                        'session_data' => $ses_data,
+                        'user_agent'   => $this->request->getHeaderLine('User-Agent'),
+                    ]);
+
+                    // Kirim email OTP
+                    TwoFaController::queueOtpEmail(
+                        $data['email'],
+                        $otp,
+                        $data['nama_lengkap'] ?? $data['username'] ?? ''
+                    );
+
+                    // JANGAN set session isLoggedIn — arahkan ke verifikasi OTP
+                    // DeviceHistoryService::record() akan dipanggil di TwoFaController::verify() setelah OTP berhasil
+                    return redirect()->to(base_url('verify-otp'));
+                }
+
+                // ── Tidak perlu OTP — set session dan login langsung ─────────
+                // Catat riwayat perangkat login (hanya di sini karena tidak butuh OTP)
                 DeviceHistoryService::record(
                     (int) $data['id'],
                     (string) $data['username'],
                     $this->request
                 );
-
+                $session->set($ses_data);
                 if ($data["role"] == "admin") {
                     return redirect()->to(base_url("admin/dashboard"));
                 } else {
@@ -182,9 +251,9 @@ class HalamanLoginController extends Controller
         $session = session();
         $session->destroy();
 
-        // Hapus cookie pengingat saat logout
+        // Hapus cookie remember_username saat logout
         $this->response->setCookie(
-            'remember_me',
+            'remember_username',
             '',
             -3600,
             '',
