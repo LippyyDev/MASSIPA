@@ -2,11 +2,9 @@
 
 namespace App\Controllers\Guest;
 
+use App\Libraries\EmailQueueService;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 
 class ForgotPasswordController extends Controller
 {
@@ -219,58 +217,33 @@ class ForgotPasswordController extends Controller
         return redirect()->to(base_url('login'));
     }
 
+    /**
+     * Masukkan email reset password ke antrean pengiriman.
+     * Menggunakan EmailQueueService::queueRaw() agar konsisten dengan
+     * mekanisme email queue yang dipakai seluruh sistem (fire-and-forget,
+     * dikirim oleh EmailQueuePumpFilter di request berikutnya).
+     */
     private function sendResetEmail(string $email, string $code, string $token, string $fullName = ''): bool
     {
-        $config    = config('Email');
         $resetLink = base_url('reset-password?token=' . $token);
-        // Gunakan URL eksternal agar logo tampil di klien email
         $logoUrl   = 'https://image2url.com/images/1765888884783-6cee7d44-4b71-4c6b-92c5-952557da5156.png';
         $recipient = $fullName !== '' ? $fullName : $email;
 
         try {
-            $mail = new PHPMailer(true);
-
-            if (! empty($config->SMTPHost)) {
-                $mail->isSMTP();
-                $mail->Host       = $config->SMTPHost;
-                $mail->Port       = $config->SMTPPort ?: 587;
-                $mail->SMTPAuth   = ! empty($config->SMTPUser) || ! empty($config->SMTPPass);
-
-                if ($mail->SMTPAuth) {
-                    $mail->Username = $config->SMTPUser;
-                    $mail->Password = $config->SMTPPass;
-                }
-
-                if ($config->SMTPCrypto === 'ssl') {
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                } elseif ($config->SMTPCrypto === 'tls') {
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                }
-            } else {
-                $mail->isMail();
-            }
-
-            $fromEmail = $config->fromEmail ?: ($config->SMTPUser ?? 'no-reply@example.com');
-            $fromName  = $config->fromName ?: 'MASSIPA';
-
-            $mail->setFrom($fromEmail, $fromName);
-            $mail->addAddress($email);
-
-            $mail->CharSet = 'UTF-8';
-            $mail->isHTML(true);
-            $mail->Subject = 'Kode Reset Password MASSIPA';
-            $mail->Body    = view('emails/reset_password', [
+            $body = view('emails/reset_password', [
                 'code'      => $code,
                 'resetLink' => $resetLink,
                 'recipient' => $recipient,
                 'logoUrl'   => $logoUrl,
             ]);
-            $mail->AltBody = "Halo {$recipient},\n\nKode reset Anda: {$code}\nGunakan dalam 1 jam.\nLink reset: {$resetLink}";
 
-            $mail->send();
-            return true;
-        } catch (Exception $e) {
-            log_message('error', 'Gagal mengirim email reset password: ' . $e->getMessage());
+            return EmailQueueService::queueRaw(
+                $email,
+                'Kode Reset Password MASSIPA',
+                $body
+            );
+        } catch (\Throwable $th) {
+            log_message('error', 'Gagal memasukkan email reset password ke antrian: ' . $th->getMessage());
             return false;
         }
     }

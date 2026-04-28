@@ -65,33 +65,10 @@ class NotifikasiModel extends Model
 
     /**
      * Masukkan email notifikasi ke antrean.
+     * Didelegasikan ke EmailQueueService agar tidak ada duplikasi kode.
      */
     protected function queueEmailNotification(int $userId, string $subject, string $message): void
     {
-        try {
-            $userModel = new \App\Models\UserModel();
-            $user = $userModel->find($userId);
-
-            if (! $user || empty($user['email'])) {
-                return;
-            }
-
-            $queueModel = new \App\Models\EmailQueueModel();
-            $body = view('emails/notification', [
-                'recipient' => $user['nama_lengkap'] ?? $user['username'] ?? 'Pengguna',
-                'subject'   => $subject,
-                'message'   => $message,
-            ]);
-
-            $queueModel->insert([
-                'recipient'  => $user['email'],
-                'subject'    => $subject,
-                'body'       => $body,
-                'is_sent'    => 0,
-                'fail_count' => 0,
-            ]);
-        } catch (\Throwable $th) {
-            log_message('error', 'Exception queue email notifikasi: ' . $th->getMessage());
-        }
+        \App\Libraries\EmailQueueService::queueForUser($userId, $subject, $message);
     }
 }
